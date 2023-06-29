@@ -21,6 +21,7 @@ const AddSpotForm = () => {
     register,
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
   } = useForm<FormData>();
   const { position } = useNewSpotStore((store) => store);
@@ -48,7 +49,10 @@ const AddSpotForm = () => {
       className="flex w-full flex-col gap-4 bg-primary p-4 text-3xl"
     >
       <h3>Wskaż miejsce</h3>
-      <PositionMap />
+      <PositionMap
+        setCity={(city: string) => setValue("city", city)}
+        setProvince={(province: string) => setValue("province", province)}
+      />
       <Input
         label="Województwo"
         error={!!errors.province}

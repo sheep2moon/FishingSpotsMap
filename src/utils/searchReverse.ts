@@ -13,7 +13,8 @@ export const searchReverse = async (position: Position) => {
   if (result?.address) {
     if (result.address.state) province = result.address.state as string;
     if (result.address.city) city = result.address.city as string;
-    else if (result.address.village) city = result.address.city as string;
+    else if (result.address.village) city = result.address.village as string;
+    else if (result.address.town) city = result.address.town as string;
   }
   return { province, city };
 };

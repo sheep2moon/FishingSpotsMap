@@ -2,15 +2,31 @@ import React from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 import MapPin from "./MapPin";
 import { useNewSpotStore } from "../../zustand/new-spot-store";
+import { searchReverse } from "../../utils/searchReverse";
 
 type PositionMapProps = {
   //   position: Position | null;
   //   setPosition: (p: Position) => void;
   disabled?: boolean;
+  setCity: (c: string) => void;
+  setProvince: (p: string) => void;
 };
 
-const PositionMap = ({ disabled }: PositionMapProps) => {
+const PositionMap = ({ disabled, setCity, setProvince }: PositionMapProps) => {
   const { position, setPosition } = useNewSpotStore((store) => store);
+
+  const onPositionChange = async (position: Position) => {
+    setPosition(position);
+    const { province, city } = await searchReverse(position);
+    setCity(city);
+    let formattedProvince = province.split(" ")[1];
+    if (formattedProvince) {
+      formattedProvince =
+        formattedProvince.charAt(0).toUpperCase() + formattedProvince.slice(1);
+      setProvince(formattedProvince);
+    }
+  };
+
   return (
     <div className="small:aspect relative aspect-square w-full">
       <MapContainer
@@ -25,7 +41,7 @@ const PositionMap = ({ disabled }: PositionMapProps) => {
         <MapPin
           disabled={disabled}
           position={position}
-          setPosition={setPosition}
+          onPositionChange={onPositionChange}
         />
       </MapContainer>
     </div>
