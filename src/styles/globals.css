@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  margin-top: auto;
+  cursor: crosshair;
+  }
+  
+  * {
+    margin: 0;
+    box-sizing: border-box;
+  }
+  .leaflet-div-icon {
+    background: none;
+    border: none;
+  }
+  
+  .leaflet-popup-content-wrapper {
+    padding: 0;
+  }
+  .leaflet-popup-content {
+    margin: 0;
+  }
+  .leaflet-popup-close-button {
+    z-index: 99;
+    font-size: 1.4rem !important;
+    color: #fff !important;
+  }
+  
+  .leaflet-control-attribution {
+    display: none;
+  }
