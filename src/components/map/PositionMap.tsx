@@ -13,10 +13,10 @@ type PositionMapProps = {
 };
 
 const PositionMap = ({ disabled, setCity, setProvince }: PositionMapProps) => {
-  const { position, setPosition } = useNewSpotStore((store) => store);
+  const { position, setField } = useNewSpotStore((store) => store);
 
   const onPositionChange = async (position: Position) => {
-    setPosition(position);
+    setField("position", position);
     const { province, city } = await searchReverse(position);
     setCity(city);
     let formattedProvince = province.split(" ")[1];

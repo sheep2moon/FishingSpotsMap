@@ -2,7 +2,7 @@ import clsx from "clsx";
 import React from "react";
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
-  label: string;
+  label?: string;
 };
 
 const ChoiceInput = React.forwardRef<HTMLInputElement, InputProps>(
