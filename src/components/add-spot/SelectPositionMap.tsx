@@ -4,31 +4,27 @@ import MapPin from "../map/MapPin";
 import { useNewSpotStore } from "../../zustand/new-spot-store";
 import { searchReverse } from "../../utils/searchReverse";
 
-type PositionMapProps = {
-  //   position: Position | null;
-  //   setPosition: (p: Position) => void;
+type SelectPositionMapProps = {
   disabled?: boolean;
-  setCity: (c: string) => void;
-  setProvince: (p: string) => void;
 };
 
-const PositionMap = ({ disabled, setCity, setProvince }: PositionMapProps) => {
+const SelectPositionMap = ({ disabled }: SelectPositionMapProps) => {
   const { position, setField } = useNewSpotStore((store) => store);
 
   const onPositionChange = async (position: Position) => {
     setField("position", position);
     const { province, city } = await searchReverse(position);
-    setCity(city);
+    setField("city", city);
     let formattedProvince = province.split(" ")[1];
     if (formattedProvince) {
       formattedProvince =
         formattedProvince.charAt(0).toUpperCase() + formattedProvince.slice(1);
-      setProvince(formattedProvince);
+      setField("province", formattedProvince);
     }
   };
 
   return (
-    <div className="small:aspect relative aspect-square w-full">
+    <div className="relative aspect-square w-full small:aspect-video">
       <MapContainer
         scrollWheelZoom={!disabled}
         center={position ? [position.lat, position.lng] : [52.09, 19.09]}
@@ -48,4 +44,4 @@ const PositionMap = ({ disabled, setCity, setProvince }: PositionMapProps) => {
   );
 };
 
-export default PositionMap;
+export default SelectPositionMap;

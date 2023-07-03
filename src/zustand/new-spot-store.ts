@@ -3,19 +3,19 @@ import { boolean } from "zod";
 import { create } from "zustand";
 
 export type NewSpotFields = {
-  name: "";
+  name: string;
   position: Position | null;
-  city: "";
-  province: "";
+  city: string;
+  province: string;
   accommodation: boolean;
   tent: boolean;
-  contact: "";
+  contact: string;
   night_fishing: boolean;
-  description: "";
-  area: "";
+  description: string;
+  area: string;
   isPaid: boolean;
   prices: { title: string; value: string }[];
-  fish_types: "";
+  fish_types: string;
 };
 
 type NewSpotState = NewSpotFields & {
