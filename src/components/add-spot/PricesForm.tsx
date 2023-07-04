@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useRef, useState } from "react";
+import React, { type ChangeEvent, useCallback, useState } from "react";
 import { useNewSpotStore } from "../../zustand/new-spot-store";
 import { Input } from "../common/Input";
 import Button from "../common/Button";
