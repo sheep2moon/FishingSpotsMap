@@ -4,6 +4,7 @@ import {
   publicProcedure,
   protectedProcedure,
 } from "~/server/api/trpc";
+import { fishTypes } from "../../../const/fish-types";
 
 export const fisheryRouter = createTRPCRouter({
   addFishery: publicProcedure
@@ -12,7 +13,7 @@ export const fisheryRouter = createTRPCRouter({
         name: z.string(),
         province: z.string(),
         city: z.string(),
-        fish_types: z.string(),
+        fish_types: z.array(z.enum(fishTypes)),
         area: z.string(),
         contact: z.string(),
         night_fishing: z.boolean(),
@@ -25,21 +26,22 @@ export const fisheryRouter = createTRPCRouter({
         description: z.string(),
       })
     )
-    .query(async ({ input, ctx }) => {
+    .mutation(async ({ input, ctx }) => {
       let published = false;
       let acceptedBy = "";
       if (ctx.session?.user.role === "MODERATOR") {
         published = true;
         acceptedBy = ctx.session.user.id;
       }
-      await ctx.prisma.fishingSpot.create({
+      const res = await ctx.prisma.fishingSpot.create({
         data: {
           id: input.name.replace(" ", "-"),
           ...input,
+          fish_types: input.fish_types.join(","),
           published,
           acceptedBy,
         },
       });
-      return {};
+      return res;
     }),
 });

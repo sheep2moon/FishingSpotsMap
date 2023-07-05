@@ -1,6 +1,7 @@
 import { FishingSpot } from "@prisma/client";
 import { boolean } from "zod";
 import { create } from "zustand";
+import { fishTypes } from "../const/fish-types";
 
 export type NewSpotFields = {
   name: string;
@@ -11,11 +12,12 @@ export type NewSpotFields = {
   tent: boolean;
   contact: string;
   night_fishing: boolean;
+  spinning: boolean;
   description: string;
   area: string;
   isPaid: boolean;
   prices: { title: string; value: string }[];
-  fish_types: string;
+  fish_types: (typeof fishTypes)[number][];
 };
 
 type NewSpotState = NewSpotFields & {
@@ -35,11 +37,12 @@ export const useNewSpotStore = create<NewSpotState>((set) => ({
   accommodation: false,
   tent: false,
   night_fishing: false,
+  spinning: false,
   contact: "",
   lat: 0,
   lng: 0,
   area: "",
   description: "",
-  fish_types: "",
+  fish_types: [],
   setField: (key, value) => set((state) => ({ ...state, [key]: value })),
 }));

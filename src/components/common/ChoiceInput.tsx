@@ -21,7 +21,7 @@ const ChoiceInput = React.forwardRef<HTMLInputElement, InputProps>(
           <span className="z-10 ">TAK</span>
           <span
             className={clsx(
-              "absolute left-0.5 top-0.5 h-7 w-9 translate-x-0 transform rounded-md bg-accent/40 transition-transform duration-300",
+              "absolute left-0 h-8 w-10 translate-x-0 transform rounded-md bg-accent/40 transition-transform duration-300",
               { "translate-x-0": !checked, "translate-x-10": checked }
             )}
           ></span>

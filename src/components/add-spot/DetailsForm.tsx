@@ -28,6 +28,7 @@ const DetailsForm = () => {
     night_fishing,
     province,
     setField,
+    spinning,
   } = useNewSpotStore((store) => store);
 
   const handleInputChange = <K extends keyof NewSpotFields>(
@@ -73,6 +74,12 @@ const DetailsForm = () => {
         label="Można rozłożyć namiot"
         onChange={() => setField("tent", !tent)}
         checked={tent}
+      />
+      <NewSpotToggle
+        name="spinning"
+        label="Można rozłożyć namiot"
+        onChange={() => setField("spinning", !spinning)}
+        checked={spinning}
       />
       <NewSpotToggle
         name="night_fishing"

@@ -1,6 +1,6 @@
 import React from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
-import MapPin from "../map/MapPin";
+import MapPin from "./MapPin";
 import { useNewSpotStore } from "../../zustand/new-spot-store";
 import { searchReverse } from "../../utils/searchReverse";
 
