@@ -1,7 +1,14 @@
 import React from "react";
 import { IconList, IconMoodSmile } from "@tabler/icons-react";
+import { useNewSpotStore } from "../../zustand/new-spot-store";
 
 const DescriptionEditor = () => {
+  const { description, setField } = useNewSpotStore((store) => store);
+
+  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setField("description", e.target.value);
+  };
+
   return (
     <div className="flex flex-col gap-2 p-1">
       <label htmlFor="editor" className="text-xl">
@@ -32,6 +39,8 @@ const DescriptionEditor = () => {
         </div>
         <div className="rounded-b-lg">
           <textarea
+            value={description}
+            onChange={handleTextChange}
             id="editor"
             rows={8}
             className="block w-full border-0 bg-white px-4 py-2 text-base text-gray-800 focus:ring-0 dark:bg-dark dark:text-white dark:placeholder-gray-400"

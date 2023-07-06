@@ -1,9 +1,5 @@
 import { z } from "zod";
-import {
-  createTRPCRouter,
-  publicProcedure,
-  protectedProcedure,
-} from "~/server/api/trpc";
+import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { fishTypes } from "../../../const/fish-types";
 
 export const fisheryRouter = createTRPCRouter({
@@ -13,7 +9,6 @@ export const fisheryRouter = createTRPCRouter({
         name: z.string(),
         province: z.string(),
         city: z.string(),
-        fish_types: z.array(z.enum(fishTypes)),
         area: z.string(),
         contact: z.string(),
         night_fishing: z.boolean(),
@@ -22,7 +17,9 @@ export const fisheryRouter = createTRPCRouter({
         spinning: z.boolean(),
         lat: z.number(),
         lng: z.number(),
-        prices: z.string(),
+        fish_types: z.array(z.enum(fishTypes)),
+        prices: z.array(z.object({ title: z.string(), value: z.string() })),
+        imagesId: z.array(z.string()),
         description: z.string(),
       })
     )
@@ -37,7 +34,9 @@ export const fisheryRouter = createTRPCRouter({
         data: {
           id: input.name.replace(" ", "-"),
           ...input,
-          fish_types: input.fish_types.join(","),
+          prices: JSON.stringify(input.prices),
+          imagesId: JSON.stringify(input.imagesId),
+          fish_types: JSON.stringify(input.fish_types),
           published,
           acceptedBy,
         },

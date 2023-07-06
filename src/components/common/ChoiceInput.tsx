@@ -17,8 +17,8 @@ const ChoiceInput = React.forwardRef<HTMLInputElement, InputProps>(
           className="hidden"
         />
         <span className="relative flex h-8 w-20 items-center justify-around rounded-md border border-gray-600 bg-primary text-base transition-colors duration-300">
-          <span className="z-10 ">NIE</span>
-          <span className="z-10 ">TAK</span>
+          <span className="z-10">NIE</span>
+          <span className="z-10">TAK</span>
           <span
             className={clsx(
               "absolute left-0 h-8 w-10 translate-x-0 transform rounded-md bg-accent/40 transition-transform duration-300",

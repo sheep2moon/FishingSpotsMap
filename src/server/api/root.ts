@@ -1,5 +1,6 @@
 import { fisheryRouter } from "~/server/api/routers/fishery";
 import { createTRPCRouter } from "~/server/api/trpc";
+import { imagesRouter } from "./routers/images";
 
 /**
  * This is the primary router for your server.
@@ -8,6 +9,7 @@ import { createTRPCRouter } from "~/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
   fishery: fisheryRouter,
+  images: imagesRouter,
 });
 
 // export type definition of API

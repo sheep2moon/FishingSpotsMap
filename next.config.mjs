@@ -14,6 +14,9 @@ const config = {
    *
    * @see https://github.com/vercel/next.js/issues/41980
    */
+  images: {
+    domains: ["fishery-spots.s3.eu-central-1.amazonaws.com"],
+  },
   i18n: {
     locales: ["en"],
     defaultLocale: "en",

@@ -69,14 +69,14 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
-model Image {
-    id            String       @id @default(cuid())
-    url           String?
-    FishingSpot   FishingSpot? @relation(fields: [fishingSpotId], references: [id], onDelete: Cascade)
-    fishingSpotId String?
+// model Image {
+//     id            String       @id @default(cuid())
+//     url           String?
+//     FishingSpot   FishingSpot? @relation(fields: [fishingSpotId], references: [id], onDelete: Cascade)
+//     fishingSpotId String?
 
-    @@index([fishingSpotId])
-}
+//     @@index([fishingSpotId])
+// }
 
 model UserLibrary {
     id       String        @id @default(cuid())
@@ -108,7 +108,7 @@ model FishingSpot {
     visitedBy    UserLibrary[] @relation("Visited")
     published    Boolean
     reviews      Review[]
-    images       Image[]
+    imagesId     String
 
     prices        String
     lat           Float

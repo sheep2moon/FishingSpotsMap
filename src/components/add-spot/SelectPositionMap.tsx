@@ -24,23 +24,26 @@ const SelectPositionMap = ({ disabled }: SelectPositionMapProps) => {
   };
 
   return (
-    <div className="relative aspect-square w-full small:aspect-video">
-      <MapContainer
-        scrollWheelZoom={!disabled}
-        center={position ? [position.lat, position.lng] : [52.09, 19.09]}
-        zoom={position ? 13 : 6}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <MapPin
-          disabled={disabled}
-          position={position}
-          onPositionChange={onPositionChange}
-        />
-      </MapContainer>
-    </div>
+    <>
+      <h3>Wskaż lokalizacje łowiska</h3>
+      <div className="relative aspect-square w-full small:aspect-video">
+        <MapContainer
+          scrollWheelZoom={!disabled}
+          center={position ? [position.lat, position.lng] : [52.09, 19.09]}
+          zoom={position ? 13 : 6}
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          <MapPin
+            disabled={disabled}
+            position={position}
+            onPositionChange={onPositionChange}
+          />
+        </MapContainer>
+      </div>
+    </>
   );
 };
 

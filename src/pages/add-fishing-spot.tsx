@@ -6,6 +6,7 @@ import { useNewSpotStore } from "../zustand/new-spot-store";
 import DescriptionEditor from "../components/add-spot/DescriptionEditor";
 import { api } from "../utils/api";
 import FishTypeSelector from "../components/add-spot/FishTypeSelector";
+import ImagesGallery from "../components/add-spot/ImagesGallery";
 
 const AddFishingSpot = () => {
   const { mutate: addFishery } = api.fishery.addFishery.useMutation();
@@ -31,9 +32,10 @@ const AddFishingSpot = () => {
       position,
       prices,
       description,
+      imagesId,
     } = useNewSpotStore.getState();
     if (!position) return;
-    addFishery({
+    const newFisherySpotData = {
       name,
       province,
       city,
@@ -47,16 +49,21 @@ const AddFishingSpot = () => {
       lat: position?.lat,
       lng: position?.lng,
       description,
-      prices: JSON.stringify(prices),
-    });
+      prices,
+      imagesId,
+    };
+    console.log(newFisherySpotData);
+
+    addFishery(newFisherySpotData);
   };
 
   return (
-    <div className="mt-12 flex w-full max-w-4xl flex-col gap-3 p-2 pb-6">
+    <div className="mt-12 flex w-full max-w-4xl flex-col gap-3 p-2 pb-6 text-xl">
       <SelectPositionMap />
       <DetailsForm />
       <PricesForm />
       <FishTypeSelector />
+      <ImagesGallery />
       <DescriptionEditor />
       <Button onClick={handleSubmit} className="mt-12" variant="secondary">
         Potwierdź

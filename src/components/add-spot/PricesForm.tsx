@@ -94,7 +94,7 @@ const PricesForm = () => {
           <Button
             onClick={handleAddNewPrice}
             className=" text-lg"
-            variant="secondary"
+            variant="outline"
           >
             {prices.length > 0 ? (
               <span className="flex items-center gap-2">Dodaj opcje</span>
