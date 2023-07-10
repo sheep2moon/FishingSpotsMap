@@ -32,7 +32,7 @@ export const fisheryRouter = createTRPCRouter({
       }
       const res = await ctx.prisma.fishingSpot.create({
         data: {
-          id: input.name.replace(" ", "-"),
+          id: encodeURIComponent(input.name.replace(" ", "-").toLowerCase()),
           ...input,
           prices: JSON.stringify(input.prices),
           imagesId: JSON.stringify(input.imagesId),
