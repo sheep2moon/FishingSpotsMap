@@ -1,7 +1,6 @@
 import React from "react";
 import dynamic from "next/dynamic";
-import Script from "next/script";
-import Head from "next/head";
+import FishingSpotSidebar from "../components/fishing-spot-sidebar/FishingSpotSidebar";
 
 const MapPage = () => {
   const FishingSpotsMap = dynamic(
@@ -9,10 +8,10 @@ const MapPage = () => {
     { ssr: false }
   );
   return (
-    <>
-      <div className="mt-auto h-16 w-full bg-black"></div>
+    <div className="h-calc-screen w-full">
+      <FishingSpotSidebar />
       <FishingSpotsMap />
-    </>
+    </div>
   );
 };
 

@@ -3,6 +3,18 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { fishTypes } from "../../../const/fish-types";
 
 export const fisheryRouter = createTRPCRouter({
+  getFishingSpot: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const fishingSpot = await ctx.prisma.fishingSpot.findFirst({
+        where: { id: input.id },
+      });
+      return fishingSpot;
+    }),
+  getFisheries: publicProcedure.query(async ({ ctx }) => {
+    const res = await ctx.prisma.fishingSpot.findMany();
+    return res;
+  }),
   addFishery: publicProcedure
     .input(
       z.object({

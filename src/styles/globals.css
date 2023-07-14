@@ -2,8 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
+.h-calc-screen {
+  height: calc(100vh - 4rem);
+}
 .leaflet-container {
   height: 100%;
   width: 100%;
