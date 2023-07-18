@@ -73,7 +73,7 @@ const SidebarContent = ({
           />
         )}
       </div>
-      <div className="relative -top-3 flex flex-col items-center justify-center divide-x-2 rounded-t-2xl bg-light px-2 pb-2 pt-4 leading-3">
+      <div className="relative -top-3 flex flex-col items-center justify-center rounded-t-2xl bg-light px-2 pb-2 pt-4 leading-3">
         <h2 className="text-xl font-bold">{fishingSpot.name}</h2>
         <span className="flex items-center gap-2 text-dark/60">
           <IconMapPinPin className="" />

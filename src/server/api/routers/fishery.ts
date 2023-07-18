@@ -23,7 +23,14 @@ export const fisheryRouter = createTRPCRouter({
       };
     }),
   getFisheries: publicProcedure.query(async ({ ctx }) => {
-    const res = await ctx.prisma.fishingSpot.findMany();
+    const res = await ctx.prisma.fishingSpot.findMany({
+      select: {
+        id: true,
+        lat: true,
+        lng: true,
+        name: true,
+      },
+    });
     return res;
   }),
   addFishery: publicProcedure
