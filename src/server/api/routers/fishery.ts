@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { fishTypes } from "../../../const/fish-types";
+import { json } from "stream/consumers";
 
 export const fisheryRouter = createTRPCRouter({
   getFishingSpot: publicProcedure
@@ -9,7 +10,17 @@ export const fisheryRouter = createTRPCRouter({
       const fishingSpot = await ctx.prisma.fishingSpot.findFirst({
         where: { id: input.id },
       });
-      return fishingSpot;
+      const fish_types = fishingSpot?.fish_types
+        ? (JSON.parse(fishingSpot.fish_types) as string[])
+        : [];
+      const imagesId = fishingSpot?.imagesId
+        ? (JSON.parse(fishingSpot.imagesId) as string[])
+        : [];
+      return {
+        ...fishingSpot,
+        imagesId,
+        fish_types,
+      };
     }),
   getFisheries: publicProcedure.query(async ({ ctx }) => {
     const res = await ctx.prisma.fishingSpot.findMany();

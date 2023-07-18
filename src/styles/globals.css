@@ -1,6 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Montserrat:ital,wght@0,300;0,400;0,500;0,700;1,500&display=swap');
+
+
 
 .h-calc-screen {
   height: calc(100vh - 4rem);
@@ -12,9 +15,17 @@
   cursor: crosshair;
   }
   
+  .font-montserrat{
+    font-family: 'Lato', sans-serif;
+    font-family: 'Montserrat', sans-serif;
+  }
+
   * {
+    font-family: 'Lato', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     margin: 0;
     box-sizing: border-box;
+    
   }
   .leaflet-div-icon {
     background: none;
