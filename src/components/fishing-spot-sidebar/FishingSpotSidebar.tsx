@@ -1,13 +1,13 @@
 import clsx from "clsx";
 import React, { useEffect } from "react";
 import useSpotSidebarStore from "../../zustand/spot-sidebar-store";
-import { RouterOutputs, api } from "../../utils/api";
+import { type RouterOutputs, api } from "../../utils/api";
 import { IconCaretRight, IconMapPinPin } from "@tabler/icons-react";
 import Image from "next/image";
 import { getSpotImageSrc } from "../../utils/getImageSrc";
-import { FishingSpot } from "@prisma/client";
-import { inferProcedureOutput } from "@trpc/server";
 import LoadingSpinner from "../common/LoadingSpinner";
+import { useSession } from "next-auth/react";
+import AddReview from "./AddReview";
 
 const FishingSpotSidebar = () => {
   const { spotId, isOpen, toggleIsOpen } = useSpotSidebarStore(
@@ -25,6 +25,10 @@ const FishingSpotSidebar = () => {
   return (
     <aside
       id="default-sidebar"
+      // className={clsx("z-[999] h-screen bg-gray-800 transition-all", {
+      //   "w-[800px]": isOpen,
+      //   "w-0": !isOpen,
+      // })}
       className={clsx(
         "fixed right-0 top-16 z-[999] h-screen w-[800px] bg-gray-800 transition-transform",
         { "translate-x-0": isOpen, "translate-x-full": !isOpen }
@@ -44,7 +48,7 @@ const FishingSpotSidebar = () => {
           />
         </button>
       )}
-      <div className="dark: h-full overflow-y-auto border-l-2 border-primary bg-light text-dark">
+      <div className="h-full w-full overflow-y-auto border-l-2 border-primary bg-light text-dark">
         {fishingSpotQuery.data && (
           <SidebarContent fishingSpot={fishingSpotQuery.data} />
         )}
@@ -60,10 +64,11 @@ const SidebarContent = ({
 }: {
   fishingSpot: RouterOutputs["fishery"]["getFishingSpot"];
 }) => {
+  const session = useSession();
   if (!fishingSpot) return <LoadingSpinner />;
 
   return (
-    <div className=" ">
+    <div className=" pb-24 ">
       <div className="relative h-96 w-full">
         {fishingSpot.imagesId[0] && (
           <Image
@@ -86,7 +91,7 @@ const SidebarContent = ({
         <h5 className="mt-4 font-bold uppercase text-dark/60">
           Występujące typy ryb
         </h5>
-        <div className="flex gap-1">
+        <div className="flex flex-wrap gap-1">
           {fishingSpot.fish_types.map((fishType) => (
             <div
               className="rounded-sm border border-gray-600/20 bg-primary/10 p-2 shadow shadow-primary/20"
@@ -129,6 +134,7 @@ const SidebarContent = ({
           {fishingSpot.description}
         </pre>
       </div>
+      {session.data?.user && <AddReview spotId={fishingSpot?.id || ""} />}
     </div>
   );
 };

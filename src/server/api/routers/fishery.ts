@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 import { fishTypes } from "../../../const/fish-types";
 import { json } from "stream/consumers";
 
@@ -72,5 +76,23 @@ export const fisheryRouter = createTRPCRouter({
         },
       });
       return res;
+    }),
+  addReview: protectedProcedure
+    .input(
+      z.object({
+        rate: z.number(),
+        comment: z.string(),
+        spotId: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      await ctx.prisma.review.create({
+        data: {
+          comment: input.comment,
+          rate: input.rate,
+          fishingSpotId: input.spotId,
+          createdBy: ctx.session.user.id,
+        },
+      });
     }),
 });

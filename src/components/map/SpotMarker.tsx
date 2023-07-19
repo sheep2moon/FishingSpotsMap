@@ -13,28 +13,10 @@ const SpotMarker = ({
   handleDisplayDetails: (id: string) => void;
 }) => {
   const markerRef = useRef<L.CircleMarker>(null);
-  // const { setSpotId } = useSpotSidebarStore((store) => store);
-  // const router = useRouter();
-  const placeIcon = L.icon({
-    iconUrl: "/pin.svg",
-    iconSize: [22, 22],
-  });
-  console.log("rerender");
-
-  // const handleDisplayDetails = () => {
-  //   const newQuery = new URLSearchParams({
-  //     ...router.query,
-  //     spotId: fishingSpot.id,
-  //   }).toString();
-  //   const newUrl = `${router.pathname}?${newQuery}`;
-  //   window.history.replaceState(
-  //     { ...window.history.state, as: newUrl, url: newUrl },
-  //     "",
-  //     newUrl
-  //   );
-  //   setSpotId(fishingSpot.id);
-  //   // void router.push(newUrl, undefined, { shallow: true });
-  // };
+  // const placeIcon = L.icon({
+  //   iconUrl: "/pin.svg",
+  //   iconSize: [22, 22],
+  // });
 
   return (
     <CircleMarker

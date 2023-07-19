@@ -8,9 +8,9 @@ const MapPage = () => {
     { ssr: false }
   );
   return (
-    <div className="h-calc-screen w-full">
-      <FishingSpotSidebar />
+    <div className="h-calc-screen flex w-full">
       <FishingSpotsMap />
+      <FishingSpotSidebar />
     </div>
   );
 };
