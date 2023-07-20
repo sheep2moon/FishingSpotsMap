@@ -9,6 +9,8 @@ import LoadingSpinner from "../common/LoadingSpinner";
 import { useSession } from "next-auth/react";
 import AddReview from "./AddReview";
 import Reviews from "./Reviews";
+import EditableBlock from "./EditableBlock";
+import PricingTable from "./PricingTable";
 
 const FishingSpotSidebar = () => {
   const { spotId, isOpen, toggleIsOpen } = useSpotSidebarStore(
@@ -79,61 +81,79 @@ const SidebarContent = ({
           />
         )}
       </div>
-      <div className="relative -top-3 flex flex-col items-center justify-center rounded-t-2xl bg-light px-2 pb-2 pt-4 leading-3">
-        <h2 className="text-xl font-bold">{fishingSpot.name}</h2>
-        <span className="flex items-center gap-2 text-dark/60">
-          <IconMapPinPin className="" />
-          {fishingSpot.city}
-          {", woj. "}
-          {fishingSpot.province}
-        </span>
-      </div>
+      <div className="relative -top-3  rounded-t-2xl bg-light px-2 pt-4 leading-3" />
       <div className="px-3 pr-6">
-        <h5 className="mt-4 font-bold uppercase text-dark/60">
-          Występujące typy ryb
-        </h5>
-        <div className="flex flex-wrap gap-1">
-          {fishingSpot.fish_types.map((fishType) => (
-            <div
-              className="rounded-sm border border-gray-600/20 bg-primary/10 p-2 shadow shadow-primary/20"
-              key={fishType}
-            >
-              {fishType}
+        <EditableBlock target="">
+          <div className="flex flex-col items-center justify-center pb-2">
+            <h2 className="text-xl font-bold">{fishingSpot.name}</h2>
+            <span className="flex items-center gap-2 text-dark/60">
+              <IconMapPinPin className="" />
+              {fishingSpot.city}
+              {", woj. "}
+              {fishingSpot.province}
+            </span>
+          </div>
+        </EditableBlock>
+        <EditableBlock target="">
+          <h5 className="mt-4 font-bold uppercase text-dark/60">
+            Występujące typy ryb
+          </h5>
+          <div className="flex flex-wrap gap-1">
+            {fishingSpot.fish_types.map((fishType) => (
+              <div
+                className="rounded-sm border border-gray-600/20 bg-primary/10 p-2 shadow shadow-primary/20"
+                key={fishType}
+              >
+                {fishType}
+              </div>
+            ))}
+          </div>
+        </EditableBlock>
+
+        <EditableBlock target="">
+          <div className="mt-4 grid grid-cols-4 gap-2 divide-x-2 ">
+            <div className="flex flex-col items-center justify-center gap-3 rounded-sm  py-1">
+              <span>Nocleg</span>
+              <span className="font-bold">
+                {fishingSpot.accommodation ? "TAK" : "NIE"}
+              </span>
             </div>
-          ))}
-        </div>
+            <div className="flex flex-col items-center justify-center gap-3 rounded-sm   py-1">
+              <span>Spinning</span>
+              <span className="font-bold">
+                {fishingSpot.spinning ? "TAK" : "NIE"}
+              </span>
+            </div>
+            <div className="flex flex-col items-center justify-center gap-3 rounded-sm   py-2">
+              <span className="text-center">Możliwość rozłożenia namiotu</span>
+              <span className="font-bold">
+                {fishingSpot.tent ? "TAK" : "NIE"}
+              </span>
+            </div>
+            <div className="flex flex-col items-center justify-center gap-3 rounded-sm   py-1">
+              <span className="text-center">Łowienie w nocy</span>
+              <span className="font-bold">
+                {fishingSpot.night_fishing ? "TAK" : "NIE"}
+              </span>
+            </div>
+          </div>
+        </EditableBlock>
 
-        <div className="mt-4 grid grid-cols-4 gap-2 divide-x-2 ">
-          <div className="flex flex-col items-center justify-center gap-3 rounded-sm  py-1">
-            <span>Nocleg</span>
-            <span className="font-bold">
-              {fishingSpot.accommodation ? "TAK" : "NIE"}
-            </span>
-          </div>
-          <div className="flex flex-col items-center justify-center gap-3 rounded-sm   py-1">
-            <span>Spinning</span>
-            <span className="font-bold">
-              {fishingSpot.spinning ? "TAK" : "NIE"}
-            </span>
-          </div>
-          <div className="flex flex-col items-center justify-center gap-3 rounded-sm   py-2">
-            <span className="text-center">Możliwość rozłożenia namiotu</span>
-            <span className="font-bold">
-              {fishingSpot.tent ? "TAK" : "NIE"}
-            </span>
-          </div>
-          <div className="flex flex-col items-center justify-center gap-3 rounded-sm   py-1">
-            <span className="text-center">Łowienie w nocy</span>
-            <span className="font-bold">
-              {fishingSpot.night_fishing ? "TAK" : "NIE"}
-            </span>
-          </div>
-        </div>
+        <EditableBlock target="">
+          <h5 className="mt-4 font-bold uppercase text-dark/60">Opis</h5>
+          <pre className="font-montserrat whitespace-pre-wrap leading-5 ">
+            {fishingSpot.description}
+          </pre>
+        </EditableBlock>
 
-        <h5 className="mt-4 font-bold uppercase text-dark/60">Opis</h5>
-        <pre className="font-montserrat whitespace-pre-wrap leading-5 ">
-          {fishingSpot.description}
-        </pre>
+        <EditableBlock target="">
+          <h5 className="py-2 font-bold uppercase text-dark/60">
+            {fishingSpot.prices.length > 0
+              ? "Cennik"
+              : "To miejsce nie posiada cennika"}
+          </h5>
+          <PricingTable prices={fishingSpot.prices} />
+        </EditableBlock>
       </div>
       {session.data?.user && <AddReview spotId={fishingSpot?.id || ""} />}
       {fishingSpot.reviews && <Reviews reviews={fishingSpot.reviews} />}

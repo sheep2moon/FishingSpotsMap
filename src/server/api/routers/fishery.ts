@@ -22,10 +22,17 @@ export const fisheryRouter = createTRPCRouter({
       const imagesId = fishingSpot?.imagesId
         ? (JSON.parse(fishingSpot.imagesId) as string[])
         : [];
+      const prices = fishingSpot?.prices
+        ? (JSON.parse(fishingSpot?.prices) as {
+            title: string;
+            value: string;
+          }[])
+        : [];
       return {
         ...fishingSpot,
         imagesId,
         fish_types,
+        prices,
       };
     }),
   // getFishingSpotReviews: publicProcedure.input(z.object({spotId: z.string()})).query(async ({input,ctx}) => {

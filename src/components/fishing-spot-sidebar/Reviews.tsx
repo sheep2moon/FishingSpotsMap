@@ -40,7 +40,7 @@ const Review = ({ review }: { review: Review }) => {
           <span className="font-bold">{userQuery.data?.name || "anonim"}</span>
           <span>{review.createdAt.toUTCString()}</span>
         </div>
-        <div className="ml-auto flex items-center">
+        <div className="mb-auto ml-auto flex items-center">
           <p>opcje</p>
         </div>
       </div>
