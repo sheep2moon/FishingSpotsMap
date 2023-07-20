@@ -7,7 +7,6 @@ import { useRouter } from "next/router";
 import useSpotSidebarStore from "../../zustand/spot-sidebar-store";
 
 const FishingSpotsMap = () => {
-  const isLoading = false;
   const fisheries = api.fishery.getFisheries.useQuery();
   const { setSpotId } = useSpotSidebarStore((store) => store);
   const router = useRouter();
@@ -28,7 +27,7 @@ const FishingSpotsMap = () => {
   };
 
   return (
-    <MapContainer preferCanvas={true} center={[52.09, 19.09]} zoom={6}>
+    <MapContainer preferCanvas={true} center={[52.09, 19.09]} zoom={7}>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

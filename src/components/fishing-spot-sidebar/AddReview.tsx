@@ -9,15 +9,22 @@ type AddReviewProps = {
 };
 
 const AddReview = ({ spotId }: AddReviewProps) => {
+  const ctx = api.useContext();
   const [comment, setComment] = useState<string>("");
   const [rate, setRate] = useState<number>(0);
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
-  const addReviewMutation = api.fishery.addReview.useMutation();
+  const addReviewMutation = api.fishery.addReview.useMutation({
+    onSuccess: () => {
+      void ctx.fishery.getFishingSpot.invalidate();
+      setComment("");
+      setRate(0);
+      setIsSubmitDisabled(false);
+    },
+  });
 
-  const handleAddReview = async () => {
+  const handleAddReview = () => {
     setIsSubmitDisabled(true);
-    await addReviewMutation.mutateAsync({ comment, rate, spotId });
-    setIsSubmitDisabled(false);
+    void addReviewMutation.mutateAsync({ comment, rate, spotId });
   };
 
   return (
@@ -37,8 +44,9 @@ const AddReview = ({ spotId }: AddReviewProps) => {
       </div>
 
       <Button
-        onClick={void handleAddReview}
-        className="ml-auto mt-1 w-fit "
+        isLoading={addReviewMutation.isLoading}
+        onClick={handleAddReview}
+        className="ml-auto mt-2 w-fit "
         variant="filled"
         disabled={isSubmitDisabled}
       >

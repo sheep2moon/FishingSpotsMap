@@ -32,27 +32,24 @@ const StarRating = (props: StarRatingProps) => {
     }
   };
   return (
-    <div className="flex items-center gap-2 ">
-      <span className="text-sm">Twoja ocena</span>
-      <div className="my-2 flex text-amber-400">
-        {[1, 2, 3, 4, 5].map((starIndex) => (
-          <button
-            style={{ pointerEvents: props.disabled ? "none" : "all" }}
-            disabled={props.disabled}
-            className=" px-1 text-xl "
-            key={`rating-star-${starIndex}`}
-            onClick={() => handleClick(starIndex)}
-            onMouseOver={() => handleMouseOver(starIndex)}
-            onMouseOut={handleMouseOut}
-          >
-            {(hoveredStars || props.rate) >= starIndex ? (
-              <IconStarFilled />
-            ) : (
-              <IconStar />
-            )}
-          </button>
-        ))}
-      </div>
+    <div className="my-2 flex text-amber-400">
+      {[1, 2, 3, 4, 5].map((starIndex) => (
+        <button
+          style={{ pointerEvents: props.disabled ? "none" : "all" }}
+          disabled={props.disabled}
+          className=" px-1 text-xl "
+          key={`rating-star-${starIndex}`}
+          onClick={() => handleClick(starIndex)}
+          onMouseOver={() => handleMouseOver(starIndex)}
+          onMouseOut={handleMouseOut}
+        >
+          {(hoveredStars || props.rate) >= starIndex ? (
+            <IconStarFilled />
+          ) : (
+            <IconStar />
+          )}
+        </button>
+      ))}
     </div>
   );
 };

@@ -8,6 +8,7 @@ import { getSpotImageSrc } from "../../utils/getImageSrc";
 import LoadingSpinner from "../common/LoadingSpinner";
 import { useSession } from "next-auth/react";
 import AddReview from "./AddReview";
+import Reviews from "./Reviews";
 
 const FishingSpotSidebar = () => {
   const { spotId, isOpen, toggleIsOpen } = useSpotSidebarStore(
@@ -30,7 +31,7 @@ const FishingSpotSidebar = () => {
       //   "w-0": !isOpen,
       // })}
       className={clsx(
-        "fixed right-0 top-16 z-[999] h-screen w-[800px] bg-gray-800 transition-transform",
+        "fixed right-0 top-16 z-[999] h-screen w-full bg-gray-800 transition-transform small:w-[800px]",
         { "translate-x-0": isOpen, "translate-x-full": !isOpen }
       )}
       aria-label="Sidebar"
@@ -135,6 +136,7 @@ const SidebarContent = ({
         </pre>
       </div>
       {session.data?.user && <AddReview spotId={fishingSpot?.id || ""} />}
+      {fishingSpot.reviews && <Reviews reviews={fishingSpot.reviews} />}
     </div>
   );
 };
