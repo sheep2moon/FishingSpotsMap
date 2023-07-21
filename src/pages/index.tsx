@@ -1,7 +1,8 @@
 import Head from "next/head";
 import Script from "next/script";
+import React from "react";
 
-export default function Home() {
+const Home = () => {
   return (
     <>
       <Head>
@@ -20,9 +21,13 @@ export default function Home() {
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
         crossOrigin=""
       ></Script>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16"></div>
+      <main className="flex min-h-screen flex-col items-center justify-center bg-white ">
+        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
+          fds
+        </div>
       </main>
     </>
   );
-}
+};
+
+export default Home;

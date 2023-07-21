@@ -23,7 +23,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       ></Script>
 
       <Nav />
-      <main className="flex min-h-screen flex-col items-center pt-16 dark:bg-dark dark:text-light">
+      <main className="flex min-h-screen flex-col items-center bg-light text-dark dark:text-light">
         {children}
       </main>
     </>

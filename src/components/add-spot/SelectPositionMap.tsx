@@ -37,7 +37,7 @@ const SelectPositionMap = ({ disabled }: SelectPositionMapProps) => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           <MapPin
-            disabled={disabled}
+            disabled={false}
             position={position}
             onPositionChange={onPositionChange}
           />

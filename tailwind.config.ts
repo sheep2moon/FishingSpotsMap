@@ -12,9 +12,9 @@ export default {
           "rgba(0, 0, 0, 0.12) 0px 2px 4px 0px, rgba(0, 0, 0, 0.32) 0px 2px 16px 0px;",
       },
       colors: {
-        primary: "#151235",
-        secondary: "#FAECD6",
-        light: "#F9F9F9",
+        primary: "#3D8361",
+        secondary: "#1C6758",
+        light: "#EEF2E6",
         dark: "#0f0d26",
         accent: "#646FD4",
       },

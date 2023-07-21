@@ -1,3 +1,4 @@
+"use client";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -17,7 +18,7 @@ const links = [
 const Nav = () => {
   const session = useSession();
   return (
-    <header className="fixed inset-x-0 top-0 z-[999999] flex h-16 items-center border-b bg-primary px-2 text-light shadow-md dark:text-light dark:shadow-black/40 lg:px-4">
+    <header className="fixed inset-x-0 top-0 z-[999999] flex h-16 items-center border-b bg-indigo-950 px-2 text-light shadow-md dark:text-light dark:shadow-black/40 lg:px-4">
       <ul className="flex w-full items-center gap-4 text-lg font-semibold">
         {links.map((link) => (
           <li key={link.href}>

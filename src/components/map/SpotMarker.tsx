@@ -4,6 +4,7 @@ React.useLayoutEffect = React.useEffect;
 import { CircleMarker, Marker, Popup } from "react-leaflet";
 import { type FishingSpot } from "@prisma/client";
 import Button from "../common/Button";
+import Link from "next/link";
 
 const SpotMarker = ({
   fishingSpot,
@@ -29,6 +30,9 @@ const SpotMarker = ({
       <Popup>
         <div className="relative flex h-[140px] w-[180px] flex-col overflow-hidden rounded-md">
           <h4>{fishingSpot.name}</h4>
+          <Link className="text-dark" href={`/fishing-spot/${fishingSpot.id}`}>
+            Zobacz
+          </Link>
           <Button
             onClick={() => handleDisplayDetails(fishingSpot.id)}
             className="mt-auto"

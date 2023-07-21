@@ -7,15 +7,16 @@ import Image from "next/image";
 import { getSpotImageSrc } from "../../utils/getImageSrc";
 import LoadingSpinner from "../common/LoadingSpinner";
 import { useSession } from "next-auth/react";
-import AddReview from "./AddReview";
-import Reviews from "./Reviews";
-import EditableBlock from "./EditableBlock";
-import PricingTable from "./PricingTable";
+import AddReview from "../fishing-spot/AddReview";
+import Reviews from "../fishing-spot/Reviews";
+import PricingTable from "../fishing-spot/PricingTable";
+import EditableBlock from "../fishing-spot/EditableBlock";
 
 const FishingSpotSidebar = () => {
   const { spotId, isOpen, toggleIsOpen } = useSpotSidebarStore(
     (store) => store
   );
+
   const fishingSpotQuery = api.fishery.getFishingSpot.useQuery(
     { id: spotId },
     { enabled: !!spotId }
@@ -28,10 +29,6 @@ const FishingSpotSidebar = () => {
   return (
     <aside
       id="default-sidebar"
-      // className={clsx("z-[999] h-screen bg-gray-800 transition-all", {
-      //   "w-[800px]": isOpen,
-      //   "w-0": !isOpen,
-      // })}
       className={clsx(
         "fixed right-0 top-16 z-[999] h-screen w-full bg-gray-800 transition-transform small:w-[800px]",
         { "translate-x-0": isOpen, "translate-x-full": !isOpen }
@@ -94,6 +91,7 @@ const SidebarContent = ({
             </span>
           </div>
         </EditableBlock>
+
         <EditableBlock target="">
           <h5 className="mt-4 font-bold uppercase text-dark/60">
             Występujące typy ryb

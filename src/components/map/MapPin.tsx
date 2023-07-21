@@ -2,38 +2,32 @@ import React, { useRef } from "react";
 import { Marker, useMapEvent } from "react-leaflet";
 import { searchReverse } from "../../utils/searchReverse";
 
-type MapPinProps = {
-  position: Position | null;
-  onPositionChange: (p: Position) => Promise<void>;
-  disabled?: boolean;
-};
+type MapPinProps =
+  | {
+      disabled: false;
+      position: Position | null;
+      onPositionChange: (p: Position) => Promise<void>;
+    }
+  | {
+      disabled: true;
+      position: Position | null;
+    };
 
-const MapPin = ({
-  position,
-  onPositionChange,
-  disabled = false,
-}: MapPinProps) => {
+const MapPin = (props: MapPinProps) => {
   const markerRef = useRef(null);
 
-  const markerEventHandlers = {
-    click: () => {
-      console.log("click");
-    },
-  };
-
   useMapEvent("click", async (e) => {
-    if (!disabled) {
+    if (!props.disabled) {
       const position: Position = e.latlng;
-      await onPositionChange(position);
+      await props.onPositionChange(position);
     }
   });
 
-  if (!position) return <></>;
+  if (!props.position) return <></>;
   return (
     <Marker
       ref={markerRef}
-      position={[position.lat, position.lng]}
-      eventHandlers={markerEventHandlers}
+      position={[props.position.lat, props.position.lng]}
     />
   );
 };
