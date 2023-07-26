@@ -21,9 +21,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
         crossOrigin=""
       ></Script>
-
       <Nav />
-      <main className="flex min-h-screen flex-col items-center bg-light text-dark dark:text-light">
+      <main className="mt-16 flex min-h-screen flex-col items-center bg-emerald-950 text-dark dark:text-light">
         {children}
       </main>
     </>

@@ -35,6 +35,9 @@ export const fisheryRouter = createTRPCRouter({
         prices,
       };
     }),
+  getFishingSpotsCount: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.fishingSpot.count();
+  }),
   // getFishingSpotReviews: publicProcedure.input(z.object({spotId: z.string()})).query(async ({input,ctx}) => {
   //   const reviewsData = ctx.prisma.r
   // }),

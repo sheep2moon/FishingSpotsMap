@@ -43,7 +43,7 @@ const FishingSpot = () => {
           onClick={() => setMediaSrcId("position-map")}
           className="relative grid aspect-square w-20 place-items-center rounded-md border-2 border-gray-400 bg-gray-300 text-xl text-dark small:w-28"
         >
-          <Image alt="widok" fill src={mapIconSrc} />
+          <Image alt="widok" fill src={mapIconSrc as string} />
         </div>
         {data.imagesId.map((imageId) => (
           <div
