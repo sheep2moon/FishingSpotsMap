@@ -26,7 +26,7 @@ const FishingSpot = () => {
   );
   if (!data || isLoading) return <div>skeleton</div>;
   return (
-    <div className="max-w-large flex min-h-screen flex-col bg-light pb-24 pt-16 shadow-md shadow-dark">
+    <div className="max-w-large flex min-h-screen flex-col bg-light pb-24 shadow-md shadow-dark">
       <div className="relative aspect-video w-full">
         {mediaSrcId === "position-map" ? (
           <>

@@ -6,6 +6,9 @@ import Link from "next/link";
 import { Tab } from "@headlessui/react";
 import clsx from "clsx";
 import { getSpotImageSrc } from "../utils/getImageSrc";
+import { IconClock, IconFishHook, IconMoonFilled } from "@tabler/icons-react";
+import { IconTent } from "@tabler/icons-react";
+import { IconBoxPadding } from "@tabler/icons-react";
 
 const Home = () => {
   const fishingSpotsCountQuery = api.fishery.getFishingSpotsCount.useQuery();
@@ -33,67 +36,113 @@ const Home = () => {
           </Link>
         </div>
       </div>
-      <div>
-        <Tab.Group>
-          <Tab.List className="flex items-center gap-2 p-1 text-light">
+      <div className="mt-8 w-full max-w-screen-xl px-2">
+        <h2 className="flex gap-2 p-2 text-xl font-semibold ">
+          <IconClock className="text-accent" />
+          Ostatnio dodane łowiska
+        </h2>
+        <div className="">
+          <div className="grid grid-cols-4 gap-2">
+            {recentFishingSpotsQuery.data &&
+              recentFishingSpotsQuery.data.map((spot) => (
+                <Link
+                  href={`/fishing-spot/${spot.id}`}
+                  key={`recent-${spot.id}`}
+                  className="flex cursor-pointer flex-col justify-start rounded-md bg-accent/20 transition-all hover:scale-[101%] hover:bg-accent/10 hover:outline hover:outline-2 hover:outline-accent/40 hover:transition-all"
+                >
+                  <div className="relative aspect-video w-full">
+                    <Image
+                      className="rounded-md"
+                      src={getSpotImageSrc(spot.imagesId[0] || "")}
+                      alt="podgląd łowiska"
+                      fill
+                    />
+                  </div>
+
+                  <div className="px-2">
+                    <h4 className="overflow-ellipsis whitespace-nowrap text-base font-bold">
+                      {spot.name}
+                    </h4>
+                    <p className="-mt-2 whitespace-nowrap text-xs text-dark/90">{`${spot.city}, woj. ${spot.province}`}</p>
+                  </div>
+                  <div className="mb-1 mt-2 grid grid-cols-2 gap-1 divide-x-2 px-1">
+                    <div className="flex flex-col items-center">
+                      <div className="flex items-center justify-center">
+                        <IconBoxPadding className="text-accent" />
+                        <p className="text-center">powierzchnia</p>
+                      </div>
+                      <span className="text-sm font-semibold">
+                        {parseFloat(spot.area)}ha
+                      </span>
+                    </div>
+                    <div className="grid place-items-center">
+                      <div className="flex items-center">
+                        <IconFishHook className="text-accent" />
+                        <p>spinning</p>
+                      </div>
+                      <span className="text-sm font-semibold">
+                        {spot.spinning ? "TAK" : "NIE"}
+                      </span>
+                    </div>
+                    {/* <div className="grid place-items-center">
+                        <IconTent className="text-accent" />
+                        <span>{spot.tent ? "TAK" : "NIE"}</span>
+                      </div> */}
+                  </div>
+                </Link>
+              ))}
+          </div>
+        </div>
+
+        {/* <Tab.List className="mt-4 grid grid-cols-3 gap-2 p-1">
             <Tab as={Fragment}>
               {({ selected }) => (
                 <button
-                  className={clsx("rounded-sm  p-2 px-2 text-lg", {
-                    "bg-light/30": !!selected,
-                    "bg-light/10": !selected,
-                  })}
+                  className={clsx(
+                    "flex items-center justify-center gap-2 rounded-sm rounded-t-lg border-accent bg-light/5 p-2 px-2 text-lg",
+                    {
+                      "border-b-2 text-accent": !!selected,
+                      "border-b-0 ": !selected,
+                    }
+                  )}
                 >
+                  <IconClock />
                   Ostatnio dodane
                 </button>
               )}
             </Tab>
 
-            <Tab>
+            <Tab as={Fragment}>
               {({ selected }) => (
                 <button
-                  className={clsx("rounded-sm  p-2 px-2 text-lg", {
-                    "bg-light/30": !!selected,
-                    "bg-light/10": !selected,
-                  })}
+                  className={clsx(
+                    "rounded-sm rounded-t-lg border-accent bg-light/5  p-2 px-2 text-lg",
+                    {
+                      "border-b-2 text-accent": !!selected,
+                      "border-b-0 ": !selected,
+                    }
+                  )}
                 >
                   Najnowsze
                 </button>
               )}
             </Tab>
-            <Tab>
+            <Tab as={Fragment}>
               {({ selected }) => (
                 <button
-                  className={clsx("rounded-sm  p-2 px-2 text-lg", {
-                    "bg-light/30": !!selected,
-                    "bg-light/10": !selected,
-                  })}
+                  className={clsx(
+                    "rounded-sm rounded-t-lg border-accent bg-light/5 p-2 px-2 text-lg",
+                    {
+                      "border-b-2 text-accent": !!selected,
+                      "border-b-0": !selected,
+                    }
+                  )}
                 >
                   S
                 </button>
               )}
             </Tab>
-          </Tab.List>
-          <Tab.Panels>
-            <Tab.Panel className="grid grid-cols-4 text-light">
-              {recentFishingSpotsQuery.data &&
-                recentFishingSpotsQuery.data.map((spot) => (
-                  <div key={`recent-${spot.id}`}>
-                    <div className="relative aspect-video w-28">
-                      <Image
-                        src={getSpotImageSrc(spot.imagesId[0] || "")}
-                        alt="podgląd łowiska"
-                        fill
-                      />
-                    </div>
-                    <h4>{spot.name}</h4>
-                  </div>
-                ))}
-            </Tab.Panel>
-            <Tab.Panel>Content 2</Tab.Panel>
-            <Tab.Panel>Content 3</Tab.Panel>
-          </Tab.Panels>
-        </Tab.Group>
+          </Tab.List> */}
       </div>
     </div>
   );
