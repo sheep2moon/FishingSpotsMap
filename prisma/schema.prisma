@@ -108,8 +108,8 @@ model FishingSpot {
     visitedBy    UserLibrary[] @relation("Visited")
     published    Boolean
     reviews      Review[]
-    imagesId     String
 
+    imagesId      String
     prices        String
     lat           Float
     lng           Float

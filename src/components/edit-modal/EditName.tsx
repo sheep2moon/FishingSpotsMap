@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { Input } from "../common/Input";
-import { EditFieldProps } from "./EditModalTemplate";
+import { type EditFieldProps } from "./EditModalTemplate";
+import SubmitEdit, { type HandleSubmitArgs } from "./SubmitEdit";
 
-interface EditNameProps extends EditFieldProps {
-  name: string;
-}
+const EditName = ({ spot }: EditFieldProps) => {
+  const [currentName, setCurrentName] = useState(spot.name);
 
-const EditName = ({ name }: EditNameProps) => {
-  const [currentName, setCurrentName] = useState(name);
+  const onSubmit = (): false | HandleSubmitArgs => {
+    if (currentName.length < 3) return false;
+    return { key: "name", value: currentName };
+  };
   return (
     <>
       <Input
@@ -16,6 +18,7 @@ const EditName = ({ name }: EditNameProps) => {
         onChange={(e) => setCurrentName(e.target.value)}
         type="text"
       />
+      <SubmitEdit onSubmit={onSubmit} spotId={spot.id} />
     </>
   );
 };

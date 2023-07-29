@@ -2,70 +2,36 @@ import { Dialog, Transition } from "@headlessui/react";
 import React, { Fragment } from "react";
 import { api } from "../../utils/api";
 import { type FishingSpot } from "@prisma/client";
+import EditName from "./EditName";
 
 type EditModalProps = {
   isOpen: boolean;
   close: () => void;
-  fieldName: string;
+  editingField:
+    | "images"
+    | "prices"
+    | "address"
+    | "position"
+    | "name"
+    | "description"
+    | "area"
+    | "contact"
+    | "features";
   fieldKey: string;
   spot: FishingSpot;
   children: React.ReactNode;
 };
 
-export type HandleSubmitArgs =
-  | {
-      key:
-        | "imagesId"
-        | "prices"
-        | "name"
-        | "description"
-        | "province"
-        | "city"
-        | "fish_types"
-        | "area"
-        | "contact";
-      value: string;
-    }
-  | {
-      key: "night_fishing" | "tent" | "accommodation";
-      value: boolean;
-    }
-  | {
-      key: "position";
-      value: Position;
-    };
-
 export interface EditFieldProps {
-  handleSubmit: (args: HandleSubmitArgs) => void;
+  spot: FishingSpot;
 }
 
-const EditModal = ({
+const EditModalTemplate = ({
   isOpen,
   close,
-  fieldKey,
-  fieldName,
+  editingField,
   spot,
-  children,
 }: EditModalProps) => {
-  const { mutateAsync: updateFieldValue } =
-    api.moderator.editStringField.useMutation();
-
-  const handleConfirm = async (args: HandleSubmitArgs) => {
-    if (typeof args.value === "string") {
-      await updateFieldValue({
-        fieldKey: args.key,
-        fieldValue: args.value,
-        spotId: spot.id,
-      });
-    }
-    if (typeof args.value === "boolean") {
-      console.log("boolean");
-    }
-    if (args.key === "position") {
-      console.log("pos");
-    }
-  };
-
   return (
     <div>
       <Transition appear show={isOpen} as={Fragment}>
@@ -93,9 +59,11 @@ const EditModal = ({
             <Dialog.Panel>
               <Dialog.Title>Edycja</Dialog.Title>
               <Dialog.Description>
-                {`Edytujesz pole ${fieldName} - ${spot.name}`}
+                {`Edytujesz pole ${editingField}`}
               </Dialog.Description>
-              <div className="flex flex-col">{children}</div>
+              <div className="flex flex-col">
+                {editingField === "name" && <EditName spot={spot} />}
+              </div>
             </Dialog.Panel>
           </Transition.Child>
         </Dialog>
@@ -104,4 +72,4 @@ const EditModal = ({
   );
 };
 
-export default EditModal;
+export default EditModalTemplate;
