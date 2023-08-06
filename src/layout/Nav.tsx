@@ -29,25 +29,25 @@ const links: { text: string; href: string; icon: React.ReactNode }[] = [
 
 const Nav = () => {
   const session = useSession();
-  const [scrollPosition, setScrollPosition] = useState(0);
+  // const [scrollPosition, setScrollPosition] = useState(0);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollPosition(window.scrollY);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     setScrollPosition(window.scrollY);
+  //   };
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, []);
   return (
     <header
       className={clsx(
-        "duration-400 fixed inset-x-0 top-0 z-[999999] mt-2 flex items-center bg-black text-light transition-all",
-        {
-          "bg-opacity-0": scrollPosition === 0,
-          "bg-opacity-70": scrollPosition > 0,
-        }
+        "duration-400 fixed inset-x-0 top-0 z-[999999] mt-2 flex items-center text-light transition-all"
+        // {
+        //   "bg-opacity-0": scrollPosition === 0,
+        //   "bg-opacity-70": scrollPosition > 0,
+        // }
       )}
     >
       <Menu as="div" className="relative ml-2">

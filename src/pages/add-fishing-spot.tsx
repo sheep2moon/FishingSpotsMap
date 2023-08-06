@@ -58,7 +58,8 @@ const AddFishingSpot = () => {
   };
 
   return (
-    <div className="mt-12 flex w-full max-w-4xl flex-col gap-3 p-2 pb-6 text-xl">
+    <div className="mt-6 flex w-full max-w-4xl flex-col gap-3 p-2 pb-6 text-xl">
+      <h1 className="mx-auto text-2xl font-bold">Dodaj nowe łowisko</h1>
       <SelectPositionMap />
       <DetailsForm />
       <PricesForm />
