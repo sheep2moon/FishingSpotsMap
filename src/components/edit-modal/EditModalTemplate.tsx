@@ -2,7 +2,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import React, { Fragment } from "react";
 import { api } from "../../utils/api";
 import { type FishingSpot } from "@prisma/client";
-import EditName from "./EditName";
+import EditBasics from "./EditBasics";
 
 type EditModalProps = {
   isOpen: boolean;
@@ -10,11 +10,9 @@ type EditModalProps = {
   editingField:
     | "images"
     | "prices"
-    | "address"
+    | "basics"
     | "position"
-    | "name"
     | "description"
-    | "area"
     | "contact"
     | "features";
   fieldKey: string;
@@ -62,7 +60,7 @@ const EditModalTemplate = ({
                 {`Edytujesz pole ${editingField}`}
               </Dialog.Description>
               <div className="flex flex-col">
-                {editingField === "name" && <EditName spot={spot} />}
+                {editingField === "basics" && <EditBasics spot={spot} />}
               </div>
             </Dialog.Panel>
           </Transition.Child>

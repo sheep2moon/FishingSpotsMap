@@ -8,7 +8,7 @@ const MapPage = () => {
     { ssr: false }
   );
   return (
-    <div className="h-calc-screen flex w-full">
+    <div className="flex h-screen w-full">
       <FishingSpotsMap />
       <FishingSpotSidebar />
     </div>

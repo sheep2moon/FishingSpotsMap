@@ -50,3 +50,7 @@
   .leaflet-control-attribution {
     display: none;
   }
+  .leaflet-top{
+    top: auto;
+    bottom: 20px;
+  }
