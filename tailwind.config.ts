@@ -12,11 +12,11 @@ export default {
           "rgba(0, 0, 0, 0.12) 0px 2px 4px 0px, rgba(0, 0, 0, 0.32) 0px 2px 16px 0px;",
       },
       colors: {
-        primary: "#3D8361",
+        primary: "#025464",
         secondary: "#1C6758",
-        light: "#EEF2E6",
+        light: "#DDE6ED",
         dark: "#0f0d26",
-        accent: "#646FD4",
+        accent: "#FFD95A",
       },
       screens: {
         "3xsmall": "320px",

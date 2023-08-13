@@ -26,7 +26,7 @@ const FishingSpot = () => {
   );
   if (!data || isLoading) return <div>skeleton</div>;
   return (
-    <div className="max-w-large flex min-h-screen flex-col bg-light pb-24 shadow-md shadow-dark">
+    <div className="max-w-large flex min-h-screen flex-col pb-24 shadow-md shadow-dark">
       <div className="relative aspect-video w-full">
         {mediaSrcId === "position-map" ? (
           <>
@@ -38,33 +38,12 @@ const FishingSpot = () => {
           <Image alt="widok" fill src={getSpotImageSrc(mediaSrcId)} />
         )}
       </div>
-      <div className="relative -top-10 z-[99999] flex gap-1 px-1 small:-top-16">
-        <div
-          onClick={() => setMediaSrcId("position-map")}
-          className="relative grid aspect-square w-20 place-items-center rounded-md border-2 border-gray-400 bg-gray-300 text-xl text-dark small:w-28"
-        >
-          <Image alt="widok" fill src={mapIconSrc as string} />
-        </div>
-        {data.imagesId.map((imageId) => (
-          <div
-            onClick={() => setMediaSrcId(imageId)}
-            className="relative aspect-square w-20 small:w-28 "
-            key={imageId}
-          >
-            <Image
-              className="rounded-md border-2 border-gray-400"
-              alt="widok"
-              fill
-              src={getSpotImageSrc(imageId)}
-            />
-          </div>
-        ))}
-      </div>
+
       {/* <HorizontalLine className="mb-2" /> */}
       {/* <div className=" rounded-t-2xl border-t-2 border-t-secondary bg-light px-2 pt-4 leading-3 text-dark" /> */}
-      <div className="-mt-6 px-3 pr-6 small:-mt-12">
+      <div className="mt-2 px-3 pr-6">
         <EditableBlock target="">
-          <div className="flex flex-col items-center justify-center pb-2 text-dark">
+          <div className="flex flex-col justify-center pb-2 text-dark">
             <h2 className="text-xl font-bold">{data.name}</h2>
             <span className="flex items-center gap-2 text-dark/60">
               <IconMapPinPin className="" />
@@ -74,10 +53,32 @@ const FishingSpot = () => {
             </span>
             <div className="flex items-center gap-1 text-dark/60">
               <IconRuler />
-              <span>{data.area}ha</span>
+              <span>powierzchnia {data.area}ha</span>
             </div>
           </div>
         </EditableBlock>
+        <div className="flex gap-1 px-1">
+          <div
+            onClick={() => setMediaSrcId("position-map")}
+            className="relative grid aspect-square w-20 place-items-center rounded-md border-2 border-gray-400 bg-gray-300 text-xl text-dark small:w-28"
+          >
+            <Image alt="widok" fill src={mapIconSrc as string} />
+          </div>
+          {data.imagesId.map((imageId) => (
+            <div
+              onClick={() => setMediaSrcId(imageId)}
+              className="relative aspect-square w-20 small:w-28 "
+              key={imageId}
+            >
+              <Image
+                className="rounded-md border-2 border-gray-400"
+                alt="widok"
+                fill
+                src={getSpotImageSrc(imageId)}
+              />
+            </div>
+          ))}
+        </div>
         <EditableBlock target="">
           <h5 className="mt-4 text-lg font-bold uppercase text-dark/80">
             Występujące typy ryb
