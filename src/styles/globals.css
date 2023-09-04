@@ -50,7 +50,14 @@
   .leaflet-control-attribution {
     display: none;
   }
-  .leaflet-top{
-    top: auto;
-    bottom: 20px;
+  .leaflet-left{
+    @apply mt-14
   }
+
+
+.custom-marker-cluster{
+  @apply bg-dark w-10 aspect-square rounded-full text-light font-bold 
+}
+.custom-marker-cluster span{
+  @apply flex justify-center w-full h-full items-center
+}

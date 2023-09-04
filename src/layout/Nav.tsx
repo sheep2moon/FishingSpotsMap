@@ -43,14 +43,14 @@ const Nav = () => {
   return (
     <header
       className={clsx(
-        "duration-400 fixed inset-x-0 top-0 z-[999999] mt-2 flex items-center text-light transition-all"
+        "duration-400 fixed inset-x-0 top-0 z-[999999] mx-auto flex max-w-screen-xl items-center bg-light py-2 text-light shadow-md shadow-dark/40 transition-all lg:rounded-b-md"
         // {
         //   "bg-opacity-0": scrollPosition === 0,
         //   "bg-opacity-70": scrollPosition > 0,
         // }
       )}
     >
-      <Menu as="div" className="relative ml-2">
+      <Menu as="div" className="relative ml-2 ">
         <div className="grid place-items-center rounded-full bg-dark p-2 text-xl">
           <Menu.Button>
             <IconMenu2 className="" />
@@ -66,12 +66,12 @@ const Nav = () => {
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items className="absolute mt-2 w-52 ">
-            <div className="flex flex-col gap-2 rounded-md border-2 border-dark/20 bg-light px-1 py-2  text-lg text-dark">
+            <div className="flex flex-col gap-2 rounded-md border-2 border-dark/20 bg-white px-1 py-2  text-lg text-dark/70">
               {links.map((link) => (
                 <Menu.Item key={link.href}>
                   <Link
                     href={link.href}
-                    className="flex items-center gap-2 rounded-sm p-2 transition-all hover:bg-accent hover:text-light"
+                    className="flex items-center gap-2 rounded-sm p-2 hover:bg-light hover:text-dark "
                   >
                     {link.icon}
                     {link.text}

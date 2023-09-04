@@ -25,7 +25,7 @@ const HeroBanner = () => {
           />
           <Link
             href="/fishing-spots-map"
-            className="absolute left-1/2 top-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 items-center gap-3 whitespace-nowrap rounded-md bg-accent p-2 text-xl font-bold text-dark shadow-sm shadow-dark transition-all hover:bg-primary/70"
+            className="absolute left-1/2 top-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 items-center gap-3 whitespace-nowrap rounded-md bg-accent/90 p-2 text-xl font-bold text-dark shadow-sm shadow-dark transition-all hover:bg-accent"
           >
             <IconMap2 />
             Przejdź do mapy

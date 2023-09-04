@@ -7,9 +7,9 @@ const SignIn = () => {
 
   if (session.data?.user)
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-4 text-light">
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4 text-dark">
         Jesteś zalogowany
-        <Button variant="outline" onClick={() => void signOut()}>
+        <Button variant="filled" onClick={() => void signOut()}>
           wyloguj
         </Button>
       </div>
@@ -17,7 +17,7 @@ const SignIn = () => {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center">
-      <Button variant="outline" onClick={() => void signIn("discord")}>
+      <Button variant="filled" onClick={() => void signIn("discord")}>
         Sign In with Discord
       </Button>
     </div>

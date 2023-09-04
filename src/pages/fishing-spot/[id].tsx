@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { api } from "../../utils/api";
 import Image from "next/image";
 import { getSpotImageSrc } from "../../utils/getImageSrc";
@@ -15,76 +15,109 @@ import mapIconSrc from "../../assets/map-icon.svg";
 const FishingSpot = () => {
   const router = useRouter();
   const { id } = router.query as { id: string };
-  const { data, isLoading } = api.fishery.getFishingSpot.useQuery({ id });
-  const [mediaSrcId, setMediaSrcId] = useState<"position-map" | string>(
-    "position-map"
-  );
-  const session = useSession();
-  const PositionMap = dynamic(
-    () => import("../../components/map/PositionMap"),
-    { ssr: false }
-  );
-  if (!data || isLoading) return <div>skeleton</div>;
-  return (
-    <div className="max-w-large flex min-h-screen flex-col pb-24 shadow-md shadow-dark">
-      <div className="relative aspect-video w-full">
-        {mediaSrcId === "position-map" ? (
-          <>
-            {data.lat && data.lng && (
-              <PositionMap position={{ lat: data.lat, lng: data.lng }} />
-            )}
-          </>
-        ) : (
-          <Image alt="widok" fill src={getSpotImageSrc(mediaSrcId)} />
-        )}
-      </div>
+  const spotQuery = api.fishery.getFishingSpot.useQuery({ id });
 
+  // const [mediaSrcId, setMediaSrcId] = useState<"position-map" | string>(
+  //   "position-map"
+  // );
+  const [selectedImage, setSelectedImage] = useState("");
+  const session = useSession();
+  useEffect(() => {
+    if (spotQuery.data?.imagesId[0]) {
+      setSelectedImage(spotQuery.data?.imagesId[0]);
+    }
+  }, [spotQuery.data]);
+  // const PositionMap = dynamic(
+  //   () => import("../../components/map/PositionMap"),
+  //   { ssr: false }
+  // );
+  if (!spotQuery.data || spotQuery.isLoading) return <div>skeleton</div>;
+  return (
+    <div className="mt-16 flex min-h-screen w-full max-w-7xl flex-col pb-24 shadow-lg shadow-dark/40">
+      <div className="flex flex-col justify-center px-4 pb-2 text-dark">
+        <h1 className="text-3xl font-bold">{spotQuery.data.name}</h1>
+        <span className="flex items-center gap-2 text-dark/60">
+          <IconMapPinPin className="" />
+          {spotQuery.data.city}
+          {", woj. "}
+          {spotQuery.data.province}
+        </span>
+        {/* <div className="flex items-center gap-1 text-dark/60">
+              <IconRuler />
+              <span>powierzchnia {spotQuery.data.area}ha</span>
+            </div> */}
+      </div>
+      <div className="mt-4 w-full sm:grid sm:grid-cols-4">
+        <div className="relative aspect-video max-h-[500px] w-full object-cover sm:col-span-3">
+          <Image
+            alt="widok"
+            className="rounded-md"
+            fill
+            src={getSpotImageSrc(selectedImage)}
+          />
+        </div>
+        <div className="flex flex-col justify-center">
+          <div className="flex items-center justify-center gap-2">
+            <span>ocena</span>
+            <span className="text-lg font-bold">8.8</span>
+          </div>
+          <div className="mx-auto mt-4 flex gap-2 border-b-2 border-dark/60">
+            <span>0</span>
+            <span>opini użytkowników</span>
+          </div>
+          <div className="mx-auto mt-8 flex w-48 flex-col gap-1 text-dark ">
+            <div className="flex items-center justify-between gap-3 rounded-sm  py-1">
+              <span className="text-center text-sm">Nocleg</span>
+              <span className="font-bold">
+                {spotQuery.data.accommodation ? "TAK" : "NIE"}
+              </span>
+            </div>
+            <div className="flex items-center justify-between gap-3 rounded-sm   py-1">
+              <span className="text-center text-sm">Spinning</span>
+              <span className="font-bold">
+                {spotQuery.data.spinning ? "TAK" : "NIE"}
+              </span>
+            </div>
+            <div className="flex items-center justify-between gap-3 rounded-sm   py-2">
+              <span className="text-center text-sm">Miejsce namiotowe</span>
+              <span className="font-bold">
+                {spotQuery.data.tent ? "TAK" : "NIE"}
+              </span>
+            </div>
+            <div className="flex  items-center justify-between gap-3 rounded-sm   py-1">
+              <span className="text-center text-sm">Łowienie w nocy</span>
+              <span className="font-bold">
+                {spotQuery.data.night_fishing ? "TAK" : "NIE"}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="flex gap-2">
+        {spotQuery.data.imagesId.map((imageId) => (
+          <div
+            onClick={() => setSelectedImage(imageId)}
+            className="relative aspect-square w-28"
+            key={imageId}
+          >
+            <Image
+              className="rounded-md border-2 border-gray-400 object-cover"
+              alt="widok"
+              fill
+              src={getSpotImageSrc(imageId)}
+            />
+          </div>
+        ))}
+      </div>
       {/* <HorizontalLine className="mb-2" /> */}
       {/* <div className=" rounded-t-2xl border-t-2 border-t-secondary bg-light px-2 pt-4 leading-3 text-dark" /> */}
       <div className="mt-2 px-3 pr-6">
-        <EditableBlock target="">
-          <div className="flex flex-col justify-center pb-2 text-dark">
-            <h2 className="text-xl font-bold">{data.name}</h2>
-            <span className="flex items-center gap-2 text-dark/60">
-              <IconMapPinPin className="" />
-              {data.city}
-              {", woj. "}
-              {data.province}
-            </span>
-            <div className="flex items-center gap-1 text-dark/60">
-              <IconRuler />
-              <span>powierzchnia {data.area}ha</span>
-            </div>
-          </div>
-        </EditableBlock>
-        <div className="flex gap-1 px-1">
-          <div
-            onClick={() => setMediaSrcId("position-map")}
-            className="relative grid aspect-square w-20 place-items-center rounded-md border-2 border-gray-400 bg-gray-300 text-xl text-dark small:w-28"
-          >
-            <Image alt="widok" fill src={mapIconSrc as string} />
-          </div>
-          {data.imagesId.map((imageId) => (
-            <div
-              onClick={() => setMediaSrcId(imageId)}
-              className="relative aspect-square w-20 small:w-28 "
-              key={imageId}
-            >
-              <Image
-                className="rounded-md border-2 border-gray-400"
-                alt="widok"
-                fill
-                src={getSpotImageSrc(imageId)}
-              />
-            </div>
-          ))}
-        </div>
         <EditableBlock target="">
           <h5 className="mt-4 text-lg font-bold uppercase text-dark/80">
             Występujące typy ryb
           </h5>
           <div className="flex flex-wrap gap-1 text-dark">
-            {data.fish_types.map((fishType) => (
+            {spotQuery.data.fish_types.map((fishType) => (
               <div
                 className="rounded-sm border border-gray-600/20 bg-white p-2 shadow shadow-primary/20"
                 key={fishType}
@@ -96,50 +129,25 @@ const FishingSpot = () => {
         </EditableBlock>
 
         <EditableBlock target="">
-          <div className="mt-4 grid grid-cols-4 gap-2 divide-x-2 text-dark ">
-            <div className="flex flex-col items-center justify-center gap-3 rounded-sm  py-1">
-              <span>Nocleg</span>
-              <span className="font-bold">
-                {data.accommodation ? "TAK" : "NIE"}
-              </span>
-            </div>
-            <div className="flex flex-col items-center justify-center gap-3 rounded-sm   py-1">
-              <span>Spinning</span>
-              <span className="font-bold">{data.spinning ? "TAK" : "NIE"}</span>
-            </div>
-            <div className="flex flex-col items-center justify-center gap-3 rounded-sm   py-2">
-              <span className="text-center">Możliwość rozłożenia namiotu</span>
-              <span className="font-bold">{data.tent ? "TAK" : "NIE"}</span>
-            </div>
-            <div className="flex flex-col items-center justify-center gap-3 rounded-sm   py-1">
-              <span className="text-center">Łowienie w nocy</span>
-              <span className="font-bold">
-                {data.night_fishing ? "TAK" : "NIE"}
-              </span>
-            </div>
-          </div>
-        </EditableBlock>
-
-        <EditableBlock target="">
           <h5 className="mt-4 text-lg font-bold uppercase text-dark/80">
             Opis
           </h5>
           <pre className="font-montserrat whitespace-pre-wrap text-base leading-5 text-gray-600 ">
-            {data.description}
+            {spotQuery.data.description}
           </pre>
         </EditableBlock>
 
         <EditableBlock target="">
           <h5 className="py-2 text-lg font-bold uppercase text-dark/80">
-            {data.prices.length > 0
+            {spotQuery.data.prices.length > 0
               ? "Cennik"
               : "To miejsce nie posiada cennika"}
           </h5>
-          <PricingTable prices={data.prices} />
+          <PricingTable prices={spotQuery.data.prices} />
         </EditableBlock>
       </div>
       {session.data?.user && <AddReview spotId={id} />}
-      {data.reviews && <Reviews reviews={data.reviews} />}
+      {spotQuery.data.reviews && <Reviews reviews={spotQuery.data.reviews} />}
     </div>
   );
 };
