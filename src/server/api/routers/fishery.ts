@@ -35,6 +35,21 @@ export const fisheryRouter = createTRPCRouter({
         prices,
       };
     }),
+  searchFishingSpots: publicProcedure
+    .input(
+      z.object({
+        searchQuery: z.string(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      const res = await ctx.prisma.fishingSpot.findMany({
+        where: {
+          name: { contains: input.searchQuery },
+        },
+        take: 8,
+      });
+      return res;
+    }),
   getRecentFishingSpots: publicProcedure.query(async ({ ctx }) => {
     const spots = await ctx.prisma.fishingSpot.findMany({
       orderBy: { createdAt: "desc" },

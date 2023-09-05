@@ -34,7 +34,7 @@ const FishingSpot = () => {
   if (!spotQuery.data || spotQuery.isLoading) return <div>skeleton</div>;
   return (
     <div className="mt-16 flex min-h-screen w-full max-w-7xl flex-col pb-24 shadow-lg shadow-dark/40">
-      <div className="flex flex-col justify-center px-4 pb-2 text-dark">
+      <div className="flex flex-col justify-center px-4 py-2 text-dark">
         <h1 className="text-3xl font-bold">{spotQuery.data.name}</h1>
         <span className="flex items-center gap-2 text-dark/60">
           <IconMapPinPin className="" />
@@ -51,7 +51,7 @@ const FishingSpot = () => {
         <div className="relative aspect-video max-h-[500px] w-full object-cover sm:col-span-3">
           <Image
             alt="widok"
-            className="rounded-md"
+            className="rounded-md object-cover"
             fill
             src={getSpotImageSrc(selectedImage)}
           />

@@ -1,11 +1,7 @@
 import clsx from "clsx";
 import React from "react";
 
-type LoadingSpinnerType = {
-  size?: "small" | "medium" | "large";
-};
-
-const LoadingSpinner = ({ size = "medium" }: LoadingSpinnerType) => {
+const LoadingSpinner = () => {
   return (
     <div
       role="status"
@@ -13,12 +9,7 @@ const LoadingSpinner = ({ size = "medium" }: LoadingSpinnerType) => {
     >
       <svg
         className={clsx(
-          "mr-2 inline animate-spin text-gray-200 dark:text-gray-600",
-          {
-            "h-6 w-6": size === "small",
-            "h-10 w-10": size === "medium",
-            "h-14 w-14": size === "large",
-          }
+          "mr-2 inline aspect-square w-full animate-spin text-gray-200 dark:text-gray-600"
         )}
         viewBox="0 0 100 101"
         fill="none"
