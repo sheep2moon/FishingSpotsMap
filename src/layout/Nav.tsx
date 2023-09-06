@@ -1,12 +1,6 @@
 "use client";
 import { Combobox, Menu, Transition } from "@headlessui/react";
-import {
-  IconCheck,
-  IconChevronDown,
-  IconChevronsDown,
-  IconMap2,
-  IconSearch,
-} from "@tabler/icons-react";
+import { IconMap2, IconSearch } from "@tabler/icons-react";
 import { IconMapPinPlus } from "@tabler/icons-react";
 import { IconHome, IconMenu2 } from "@tabler/icons-react";
 import clsx from "clsx";
@@ -14,10 +8,9 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { Fragment, useEffect, useState } from "react";
-import { Input } from "../components/common/Input";
 import useDebounce from "../hooks/useDebounce";
 import { api } from "../utils/api";
-import { FishingSpot } from "@prisma/client";
+import type { FishingSpot } from "@prisma/client";
 import { useRouter } from "next/router";
 import LoadingSpinner from "../components/common/LoadingSpinner";
 
@@ -35,6 +28,11 @@ const links: { text: string; href: string; icon: React.ReactNode }[] = [
   {
     text: "Mapa miejsc",
     href: "/fishing-spots-map",
+    icon: <IconMap2 />,
+  },
+  {
+    text: "Lista miejsc",
+    href: "/fishing-spot/spot-search",
     icon: <IconMap2 />,
   },
 ];

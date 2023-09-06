@@ -1,5 +1,5 @@
-import React from "react";
-import { MapContainer, TileLayer } from "react-leaflet";
+import React, { useEffect } from "react";
+import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import L, { MarkerCluster } from "leaflet";
 import LoadingSpinner from "../common/LoadingSpinner";
 import { api } from "../../utils/api";
@@ -64,6 +64,7 @@ const FishingSpotsMap = () => {
           </p>
         </div>
       )}
+      <FlyToHandler />
       <MarkerClusterGroup
         onClick={(e) => console.log("onClick", e)}
         iconCreateFunction={createClusterCustomIcon}
@@ -87,3 +88,20 @@ const FishingSpotsMap = () => {
 };
 
 export default FishingSpotsMap;
+
+const FlyToHandler = () => {
+  const map = useMap();
+  const router = useRouter();
+  useEffect(() => {
+    const positionParams = router.query.flyTo as string;
+    if (positionParams) {
+      const [lat, lng] = positionParams.split(",");
+      console.log(lat, lng);
+
+      if (lat && lng) {
+        map.flyTo({ lat: parseFloat(lat), lng: parseFloat(lng) }, 14);
+      }
+    }
+  }, [router.query, map]);
+  return null;
+};

@@ -33,9 +33,13 @@ const Button = ({
         className
       )}
     >
-      <div className="relative h-full w-full">
-        {isLoading ? <LoadingSpinner size="small" /> : children}
-      </div>
+      {isLoading ? (
+        <div className="h-full` relative aspect-square">
+          <LoadingSpinner />{" "}
+        </div>
+      ) : (
+        children
+      )}
     </button>
   );
 };

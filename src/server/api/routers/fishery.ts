@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { z } from "zod";
 import {
   createTRPCRouter,
@@ -49,6 +50,35 @@ export const fisheryRouter = createTRPCRouter({
         take: 8,
       });
       return res;
+    }),
+  getFilteredFishingSpots: publicProcedure
+    .input(
+      z.object({
+        limit: z.number(),
+        cursor: z.string().nullish(),
+        orderByParam: z.enum(["createdAt", "rating", "ratingCount"]),
+        orderBy: z.enum(["asc", "desc"]),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      const limit = input.limit ?? 25;
+      const spots = await ctx.prisma.fishingSpot.findMany({
+        orderBy: { [input.orderByParam]: input.orderBy },
+        take: limit + 1,
+        cursor: input.cursor ? { id: input.cursor } : undefined,
+      });
+      let nextCursor: typeof input.cursor | undefined = undefined;
+      if (spots.length > limit) {
+        const lastSpot = spots.pop();
+        nextCursor = lastSpot!.id;
+      }
+      const parsedSpots = spots.map((spot) => {
+        return {
+          ...spot,
+          imagesId: JSON.parse(spot.imagesId) as string[],
+        };
+      });
+      return { spots: parsedSpots, nextCursor };
     }),
   getRecentFishingSpots: publicProcedure.query(async ({ ctx }) => {
     const spots = await ctx.prisma.fishingSpot.findMany({

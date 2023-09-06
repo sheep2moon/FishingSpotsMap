@@ -11,6 +11,9 @@ import { IconMapPinPin, IconRuler } from "@tabler/icons-react";
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import mapIconSrc from "../../assets/map-icon.svg";
+import Button from "../../components/common/Button";
+import { IconMapSearch } from "@tabler/icons-react";
+import Link from "next/link";
 
 const FishingSpot = () => {
   const router = useRouter();
@@ -34,18 +37,25 @@ const FishingSpot = () => {
   if (!spotQuery.data || spotQuery.isLoading) return <div>skeleton</div>;
   return (
     <div className="mt-16 flex min-h-screen w-full max-w-7xl flex-col pb-24 shadow-lg shadow-dark/40">
-      <div className="flex flex-col justify-center px-4 py-2 text-dark">
-        <h1 className="text-3xl font-bold">{spotQuery.data.name}</h1>
-        <span className="flex items-center gap-2 text-dark/60">
-          <IconMapPinPin className="" />
-          {spotQuery.data.city}
-          {", woj. "}
-          {spotQuery.data.province}
-        </span>
-        {/* <div className="flex items-center gap-1 text-dark/60">
-              <IconRuler />
-              <span>powierzchnia {spotQuery.data.area}ha</span>
-            </div> */}
+      <div className="flex justify-between px-4">
+        <div className="flex flex-col justify-center py-2 text-dark">
+          <h1 className="text-3xl font-bold">{spotQuery.data.name}</h1>
+          <span className="flex items-center gap-2 text-dark/60">
+            <IconMapPinPin className="" />
+            {spotQuery.data.city}
+            {", woj. "}
+            {spotQuery.data.province}
+          </span>
+        </div>
+        {spotQuery.data.lat && spotQuery.data.lng && (
+          <Link
+            href={`/fishing-spots-map?flyTo=${spotQuery.data.lat},${spotQuery.data.lng}`}
+            className="flex items-center gap-2 self-center rounded-md bg-accent px-3 py-2 shadow-sm shadow-dark/40"
+          >
+            <IconMapSearch />
+            <span>Zobacz na mapie</span>
+          </Link>
+        )}
       </div>
       <div className="mt-4 w-full sm:grid sm:grid-cols-4">
         <div className="relative aspect-video max-h-[500px] w-full object-cover sm:col-span-3">
