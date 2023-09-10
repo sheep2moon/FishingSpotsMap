@@ -1,6 +1,5 @@
 import { Input, type InputProps } from "../common/Input";
 import ChoiceInput from "../common/ChoiceInput";
-import dynamic from "next/dynamic";
 import {
   type NewSpotFields,
   useNewSpotStore,

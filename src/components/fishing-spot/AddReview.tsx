@@ -28,7 +28,7 @@ const AddReview = ({ spotId }: AddReviewProps) => {
   };
 
   return (
-    <div className="mx-2 mt-2 rounded-sm border-2 border-gray-400/20 bg-gray-200 p-2 shadow-sm shadow-dark/30">
+    <div className="shadow-dark/30 mx-2 mt-2 rounded-sm border-2 border-gray-400/20 bg-gray-200 p-2 shadow-sm">
       <span className="text-base ">
         Widziałeś to miejsce? Przekaż swoją opinie.
       </span>

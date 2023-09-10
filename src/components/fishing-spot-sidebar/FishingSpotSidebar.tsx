@@ -30,14 +30,14 @@ const FishingSpotSidebar = () => {
     <aside
       id="default-sidebar"
       className={clsx(
-        "fixed right-0 top-16 z-[999] h-screen w-full bg-gray-800 transition-transform small:w-[800px]",
+        "small:w-[800px] fixed right-0 top-16 z-[999] h-screen w-full bg-gray-800 transition-transform",
         { "translate-x-0": isOpen, "translate-x-full": !isOpen }
       )}
       aria-label="Sidebar"
     >
       {fishingSpotQuery.data && (
         <button
-          className="absolute top-1/2 w-fit -translate-x-full -translate-y-16 rounded-l-md border-2 border-r-0 border-dark bg-accent p-2 py-4"
+          className="border-dark absolute top-1/2 w-fit -translate-x-full -translate-y-16 rounded-l-md border-2 border-r-0 bg-accent p-2 py-4"
           onClick={toggleIsOpen}
         >
           <IconCaretRight
@@ -48,7 +48,7 @@ const FishingSpotSidebar = () => {
           />
         </button>
       )}
-      <div className="h-full w-full overflow-y-auto border-l-2 border-primary bg-light text-dark">
+      <div className="bg-light text-dark h-full w-full overflow-y-auto border-l-2 border-primary">
         {fishingSpotQuery.data && (
           <SidebarContent fishingSpot={fishingSpotQuery.data} />
         )}
@@ -78,12 +78,12 @@ const SidebarContent = ({
           />
         )}
       </div>
-      <div className="relative -top-3  rounded-t-2xl bg-light px-2 pt-4 leading-3" />
+      <div className="bg-light relative  -top-3 rounded-t-2xl px-2 pt-4 leading-3" />
       <div className="px-3 pr-6">
         <EditableBlock target="">
           <div className="flex flex-col items-center justify-center pb-2">
             <h2 className="text-xl font-bold">{fishingSpot.name}</h2>
-            <span className="flex items-center gap-2 text-dark/60">
+            <span className="text-dark/60 flex items-center gap-2">
               <IconMapPinPin className="" />
               {fishingSpot.city}
               {", woj. "}
@@ -93,7 +93,7 @@ const SidebarContent = ({
         </EditableBlock>
 
         <EditableBlock target="">
-          <h5 className="mt-4 font-bold uppercase text-dark/60">
+          <h5 className="text-dark/60 mt-4 font-bold uppercase">
             Występujące typy ryb
           </h5>
           <div className="flex flex-wrap gap-1">
@@ -138,14 +138,14 @@ const SidebarContent = ({
         </EditableBlock>
 
         <EditableBlock target="">
-          <h5 className="mt-4 font-bold uppercase text-dark/60">Opis</h5>
+          <h5 className="text-dark/60 mt-4 font-bold uppercase">Opis</h5>
           <pre className="font-montserrat whitespace-pre-wrap leading-5 ">
             {fishingSpot.description}
           </pre>
         </EditableBlock>
 
         <EditableBlock target="">
-          <h5 className="py-2 font-bold uppercase text-dark/60">
+          <h5 className="text-dark/60 py-2 font-bold uppercase">
             {fishingSpot.prices.length > 0
               ? "Cennik"
               : "To miejsce nie posiada cennika"}

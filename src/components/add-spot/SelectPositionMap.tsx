@@ -26,7 +26,7 @@ const SelectPositionMap = ({ disabled }: SelectPositionMapProps) => {
   return (
     <>
       <h3>Wskaż lokalizacje łowiska</h3>
-      <div className="relative aspect-square w-full small:aspect-video">
+      <div className="small:aspect-video relative aspect-square w-full">
         <MapContainer
           scrollWheelZoom={!disabled}
           center={position ? [position.lat, position.lng] : [52.09, 19.09]}

@@ -81,10 +81,10 @@ const ImageInput = ({ onUpload, bucketFolderName }: ImageInputProps) => {
   };
 
   return (
-    <div className="aspect-square w-full rounded-md bg-light/5">
+    <div className="bg-light/5 aspect-square w-full rounded-md">
       <label
         htmlFor="image-upload"
-        className="flex h-full cursor-pointer ring-light focus:ring-2"
+        className="ring-light flex h-full cursor-pointer focus:ring-2"
       >
         {file ? (
           <div className="relative aspect-square w-full border">
@@ -103,7 +103,7 @@ const ImageInput = ({ onUpload, bucketFolderName }: ImageInputProps) => {
               type="file"
               onChange={handleFileChange}
             />
-            <div className="flex h-full w-full flex-col items-center justify-center border-slate-50 ring-light peer-focus:border-2">
+            <div className="ring-light flex h-full w-full flex-col items-center justify-center border-slate-50 peer-focus:border-2">
               <svg
                 aria-hidden="true"
                 className="mb-3 h-8 w-8 text-gray-400"

@@ -14,7 +14,7 @@ const ChoiceInput = React.forwardRef<HTMLInputElement, InputProps>(
           {...props}
           ref={ref}
           type="checkbox"
-          className="hidden "
+          className="hidden"
         />
         <span
           className={clsx(

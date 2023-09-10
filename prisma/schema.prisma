@@ -59,6 +59,7 @@ model User {
     sessions      Session[]
     UserLibrary   UserLibrary?
     Review        Review[]
+    Image         Image[]
 }
 
 model VerificationToken {
@@ -77,6 +78,16 @@ model VerificationToken {
 
 //     @@index([fishingSpotId])
 // }
+
+model Image {
+    id            String       @id @default(cuid())
+    addedBy       User?        @relation(fields: [userId], references: [id])
+    source        String?
+    userId        String?
+    comment       String?
+    FishingSpot   FishingSpot? @relation(fields: [fishingSpotId], references: [id])
+    fishingSpotId String?
+}
 
 model UserLibrary {
     id       String        @id @default(cuid())
@@ -101,23 +112,23 @@ model Review {
 }
 
 model FishingSpot {
-    id           String        @id @default(cuid())
-    createdAt    DateTime      @default(now())
-    acceptedBy   String?
-    wishlistedBy UserLibrary[] @relation("Wishlist")
-    visitedBy    UserLibrary[] @relation("Visited")
-    published    Boolean
-    reviews      Review[]
-
+    id            String        @id @default(cuid())
+    createdAt     DateTime      @default(now())
+    acceptedBy    String?
+    wishlistedBy  UserLibrary[] @relation("Wishlist")
+    visitedBy     UserLibrary[] @relation("Visited")
+    published     Boolean
+    reviews       Review[]
+    images        Image[]
     imagesId      String
     prices        String
     lat           Float
     lng           Float
     name          String
-    description   String  @db.Text
+    description   String        @db.Text
     province      String
     city          String
-    fish_types    String  @db.Text
+    fish_types    String        @db.Text
     area          String
     contact       String
     night_fishing Boolean

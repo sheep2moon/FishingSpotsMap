@@ -10,7 +10,7 @@ import LoadingSpinner from "../../components/common/LoadingSpinner";
 const SpotSearchList = () => {
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage } =
     api.fishery.getFilteredFishingSpots.useInfiniteQuery(
-      { limit: 16, orderBy: "asc", orderByParam: "createdAt" },
+      { limit: 16, orderBy: "desc", orderByParam: "createdAt" },
       { getNextPageParam: (lastPage) => lastPage.nextCursor }
     );
   return (
@@ -21,22 +21,23 @@ const SpotSearchList = () => {
             {page.spots.map((spot) => (
               <Link
                 href={`/fishing-spot/${spot.id}`}
-                className="w-full max-w-md rounded-md p-2 hover:shadow-sm hover:shadow-dark/60 sm:max-w-xs"
+                className="hover:shadow-dark/60 w-full max-w-md rounded-md p-2 hover:shadow-sm sm:max-w-xs"
                 key={spot.id}
               >
-                <div className="w-full rounded-md bg-dark/5 transition-all hover:bg-white ">
+                <div className="bg-dark/5 w-full rounded-md transition-all hover:bg-white ">
                   <div className="relative aspect-video w-full ">
                     <Image
                       alt="widok"
                       className="rounded-md object-cover"
                       fill
                       src={getSpotImageSrc(spot.imagesId[0] || "")}
+                      sizes="(max-width: 640px) 448px, 320px"
                     />
                   </div>
                   <div className="flex flex-col px-1 py-2">
                     <span className="truncate">{spot.name}</span>
                     <span className="text-xs font-semibold text-gray-700">
-                      {spot.province}
+                      {spot.city}, {spot.province}
                     </span>
                   </div>
                 </div>

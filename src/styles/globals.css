@@ -3,9 +3,15 @@
 @tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Montserrat:ital,wght@0,300;0,400;0,500;0,700;1,500&display=swap');
 
-/* body{
-  @apply 
-} */
+@layer base {
+  * {
+    @apply border-primary-950;
+  }
+  body {
+    @apply bg-primary dark:bg-primary-dark text-primary-dark dark:text-primary;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
 
 .h-calc-screen {
   height: calc(100vh - 4rem);
@@ -56,8 +62,16 @@
 
 
 .custom-marker-cluster{
-  @apply bg-dark w-10 aspect-square rounded-full text-light font-bold 
+  @apply bg-accent text-primary  w-10 aspect-square rounded-full font-bold 
 }
 .custom-marker-cluster span{
   @apply flex justify-center w-full h-full items-center
+}
+
+.ql-editor{
+  min-height:200px;
+  @apply bg-primary
+}
+.ql-container{
+  @apply bg-primary
 }

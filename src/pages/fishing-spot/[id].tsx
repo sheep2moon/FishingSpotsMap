@@ -14,6 +14,7 @@ import mapIconSrc from "../../assets/map-icon.svg";
 import Button from "../../components/common/Button";
 import { IconMapSearch } from "@tabler/icons-react";
 import Link from "next/link";
+import ReactQuill from "react-quill";
 
 const FishingSpot = () => {
   const router = useRouter();
@@ -36,11 +37,11 @@ const FishingSpot = () => {
   // );
   if (!spotQuery.data || spotQuery.isLoading) return <div>skeleton</div>;
   return (
-    <div className="mt-16 flex min-h-screen w-full max-w-7xl flex-col pb-24 shadow-lg shadow-dark/40">
+    <div className="shadow-dark/40 mt-16 flex min-h-screen w-full max-w-7xl flex-col pb-24 shadow-lg">
       <div className="flex justify-between px-4">
-        <div className="flex flex-col justify-center py-2 text-dark">
+        <div className="text-dark flex flex-col justify-center py-2">
           <h1 className="text-3xl font-bold">{spotQuery.data.name}</h1>
-          <span className="flex items-center gap-2 text-dark/60">
+          <span className="text-dark/60 flex items-center gap-2">
             <IconMapPinPin className="" />
             {spotQuery.data.city}
             {", woj. "}
@@ -50,7 +51,7 @@ const FishingSpot = () => {
         {spotQuery.data.lat && spotQuery.data.lng && (
           <Link
             href={`/fishing-spots-map?flyTo=${spotQuery.data.lat},${spotQuery.data.lng}`}
-            className="flex items-center gap-2 self-center rounded-md bg-accent px-3 py-2 shadow-sm shadow-dark/40"
+            className="shadow-dark/40 flex items-center gap-2 self-center rounded-md bg-accent px-3 py-2 shadow-sm"
           >
             <IconMapSearch />
             <span>Zobacz na mapie</span>
@@ -71,11 +72,11 @@ const FishingSpot = () => {
             <span>ocena</span>
             <span className="text-lg font-bold">8.8</span>
           </div>
-          <div className="mx-auto mt-4 flex gap-2 border-b-2 border-dark/60">
+          <div className="border-dark/60 mx-auto mt-4 flex gap-2 border-b-2">
             <span>0</span>
             <span>opini użytkowników</span>
           </div>
-          <div className="mx-auto mt-8 flex w-48 flex-col gap-1 text-dark ">
+          <div className="text-dark mx-auto mt-8 flex w-48 flex-col gap-1 ">
             <div className="flex items-center justify-between gap-3 rounded-sm  py-1">
               <span className="text-center text-sm">Nocleg</span>
               <span className="font-bold">
@@ -123,10 +124,10 @@ const FishingSpot = () => {
       {/* <div className=" rounded-t-2xl border-t-2 border-t-secondary bg-light px-2 pt-4 leading-3 text-dark" /> */}
       <div className="mt-2 px-3 pr-6">
         <EditableBlock target="">
-          <h5 className="mt-4 text-lg font-bold uppercase text-dark/80">
+          <h5 className="text-dark/80 mt-4 text-lg font-bold uppercase">
             Występujące typy ryb
           </h5>
-          <div className="flex flex-wrap gap-1 text-dark">
+          <div className="text-dark flex flex-wrap gap-1">
             {spotQuery.data.fish_types.map((fishType) => (
               <div
                 className="rounded-sm border border-gray-600/20 bg-white p-2 shadow shadow-primary/20"
@@ -138,17 +139,18 @@ const FishingSpot = () => {
           </div>
         </EditableBlock>
 
-        <EditableBlock target="">
-          <h5 className="mt-4 text-lg font-bold uppercase text-dark/80">
-            Opis
-          </h5>
-          <pre className="font-montserrat whitespace-pre-wrap text-base leading-5 text-gray-600 ">
-            {spotQuery.data.description}
-          </pre>
-        </EditableBlock>
+        <h5 className="text-dark/80 mt-4 text-lg font-bold uppercase">Opis</h5>
+
+        <div className="shadow-dark/40 rounded-sm bg-slate-50 px-4 py-2 shadow-sm">
+          <ReactQuill
+            value={spotQuery.data.description}
+            readOnly={true}
+            theme={"bubble"}
+          />
+        </div>
 
         <EditableBlock target="">
-          <h5 className="py-2 text-lg font-bold uppercase text-dark/80">
+          <h5 className="text-dark/80 py-2 text-lg font-bold uppercase">
             {spotQuery.data.prices.length > 0
               ? "Cennik"
               : "To miejsce nie posiada cennika"}

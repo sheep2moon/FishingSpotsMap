@@ -22,9 +22,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         crossOrigin=""
       ></Script>
       <Nav />
-      <main className="flex min-h-screen flex-col items-center text-dark">
-        {children}
-      </main>
+      <main className="items-cente flex min-h-screen flex-col">{children}</main>
     </>
   );
 };

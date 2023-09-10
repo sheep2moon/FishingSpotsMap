@@ -13,6 +13,7 @@ import { api } from "../utils/api";
 import type { FishingSpot } from "@prisma/client";
 import { useRouter } from "next/router";
 import LoadingSpinner from "../components/common/LoadingSpinner";
+import ThemeToggle from "./ThemeToggle";
 
 const links: { text: string; href: string; icon: React.ReactNode }[] = [
   {
@@ -68,7 +69,7 @@ const Nav = () => {
   return (
     <header
       className={clsx(
-        "duration-400 fixed inset-x-0 top-0 z-[999999] mx-auto flex max-w-screen-xl items-center bg-light py-2 text-light shadow-md shadow-dark/40 transition-all lg:rounded-b-md"
+        "duration-400 fixed inset-x-0 top-0 z-[999999] mx-auto flex max-w-screen-xl items-center py-2 text-primary-dark shadow-md shadow-primary-700/50 transition-all dark:bg-primary-950 dark:text-primary lg:rounded-b-md"
         // {
         //   "bg-opacity-0": scrollPosition === 0,
         //   "bg-opacity-70": scrollPosition > 0,
@@ -76,8 +77,8 @@ const Nav = () => {
       )}
     >
       <Menu as="div" className="relative ml-2 h-10 w-24">
-        <div className="grid aspect-square w-10 place-items-center rounded-full bg-dark p-2 text-xl">
-          <Menu.Button>
+        <div className="bg-dark grid aspect-square w-10 place-items-center rounded-full p-2 text-xl">
+          <Menu.Button className="dark:text-secondary">
             <IconMenu2 />
           </Menu.Button>
         </div>
@@ -91,12 +92,12 @@ const Nav = () => {
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items className="absolute mt-2 w-52 ">
-            <div className="flex flex-col gap-2 rounded-md border-2 border-dark/20 bg-white px-1 py-2  text-lg text-dark/70">
+            <div className="flex flex-col gap-2 rounded-md border-2 border-primary-dark bg-primary px-1 py-2 text-lg  dark:bg-primary-dark dark:text-primary dark:ring dark:ring-secondary">
               {links.map((link) => (
                 <Menu.Item key={link.href}>
                   <Link
                     href={link.href}
-                    className="flex items-center gap-2 rounded-sm p-2 hover:bg-light hover:text-dark "
+                    className="hover:text-dark flex items-center gap-2 rounded-sm p-2 dark:hover:bg-secondary/20 "
                   >
                     {link.icon}
                     {link.text}
@@ -110,7 +111,7 @@ const Nav = () => {
 
       <Combobox
         as="div"
-        className="mx-auto flex h-10 items-center gap-2 text-dark lg:w-72"
+        className="text-dark mx-auto flex h-10 items-center gap-2 lg:w-72"
         onChange={handleSelectSearchSpot}
       >
         <div className="w-full">
@@ -120,7 +121,7 @@ const Nav = () => {
               onChange={handleSearchInputChange}
               id="search-spots"
               type="text"
-              className="w-full rounded-lg border-none py-2 pl-3 pr-10 leading-5 outline-dark"
+              className="outline-dark w-full rounded-lg border-none py-2 pl-3 pr-10 leading-5"
               placeholder="Wyszukaj łowisko"
               // displayValue={(result: FishingSpot) => result.name}
             ></Combobox.Input>
@@ -173,10 +174,11 @@ const Nav = () => {
         </button> */}
       </Combobox>
 
-      <div className="mr-2 flex w-24 justify-end">
+      <div className="mr-2 flex w-24 justify-end gap-2">
+        <ThemeToggle />
         <Link
           href="/auth/signin"
-          className="rounded-md bg-dark p-2 text-center"
+          className="flex items-center justify-center rounded-md border p-2 px-4 dark:border-secondary dark:bg-primary-dark"
         >
           {session.data?.user ? (
             <div>

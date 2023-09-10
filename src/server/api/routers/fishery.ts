@@ -83,7 +83,7 @@ export const fisheryRouter = createTRPCRouter({
   getRecentFishingSpots: publicProcedure.query(async ({ ctx }) => {
     const spots = await ctx.prisma.fishingSpot.findMany({
       orderBy: { createdAt: "desc" },
-      take: 4,
+      take: 8,
     });
 
     return spots.map((spot) => ({
@@ -137,7 +137,6 @@ export const fisheryRouter = createTRPCRouter({
       }
       const res = await ctx.prisma.fishingSpot.create({
         data: {
-          id: encodeURIComponent(input.name.replace(" ", "-").toLowerCase()),
           ...input,
           prices: JSON.stringify(input.prices),
           imagesId: JSON.stringify(input.imagesId),
