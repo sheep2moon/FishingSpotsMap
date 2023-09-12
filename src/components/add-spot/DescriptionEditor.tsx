@@ -36,14 +36,14 @@ const DescriptionEditor = () => {
       <label htmlFor="editor" className="text-xl">
         Opis łowiska
       </label>
-      <div className="min-h-[240px]">
+      {/* <div className="min-h-[240px]">
         <ReactQuill
           style={{ height: "100%" }}
           value={description}
           onChange={(value) => setField("description", value)}
         />
-      </div>
-      {/* <div className="mb-4 w-full rounded-lg border border-gray-200 bg-gray-50 dark:border-gray-600">
+      </div> */}
+      <div className="mb-4 w-full rounded-lg border border-gray-200 bg-gray-50 dark:border-gray-600">
         <div className="flex items-center justify-between border-b px-3 py-2 dark:border-gray-600">
           <div className="flex flex-wrap items-center divide-gray-200 dark:divide-gray-600 sm:divide-x">
             <div className="flex items-center space-x-1 sm:pr-4">
@@ -76,8 +76,8 @@ const DescriptionEditor = () => {
             placeholder="Wprowadź opis..."
             required
           ></textarea>
-        </div> 
-      </div>*/}
+        </div>
+      </div>
     </div>
   );
 };

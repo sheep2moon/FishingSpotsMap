@@ -30,15 +30,14 @@ const ThemeToggle = () => {
   };
 
   return (
-    <div>
-      <button
-        className="m-1 rounded-full bg-primary p-2 text-secondary hover:bg-primary/90"
-        onClick={toggleTheme}
-      >
-        {theme === "dark" && <IconMoon />}
-        {theme === "light" && <IconBrightnessUp />}
-      </button>
-    </div>
+    <button
+      id="theme-toggle"
+      className="rounded-full text-accent dark:text-secondary dark:hover:text-secondary-500"
+      onClick={toggleTheme}
+    >
+      {theme === "dark" && <IconMoon />}
+      {theme === "light" && <IconBrightnessUp />}
+    </button>
   );
 };
 

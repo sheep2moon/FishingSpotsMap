@@ -21,13 +21,13 @@ const Button = ({
       className={clsx(
         "flex items-center justify-center rounded-sm px-1 text-base transition duration-200 disabled:opacity-50",
         {
-          "rounded-lg bg-secondary px-5 py-3 text-sm font-medium text-dark hover:bg-black focus:outline-none focus:ring-4 focus:ring-secondary dark:bg-dark dark:text-light dark:focus:ring-secondary":
+          "text-dark dark:bg-dark dark:text-light rounded-lg bg-secondary px-4 py-2 text-sm font-medium hover:bg-black focus:outline-none focus:ring-4 focus:ring-secondary dark:focus:ring-secondary":
             variant === "filled",
-          "font-base rounded-lg border border-accent/50 px-5 py-2.5 text-center text-base text-purple-700 hover:bg-purple-800 hover:text-white focus:outline-none focus:ring-4 focus:ring-purple-300 dark:border-accent/80 dark:bg-accent dark:text-dark dark:hover:bg-accent dark:hover:text-white dark:focus:ring-indigo-900":
+          "dark:text-dark dark:secondary-300  border border-secondary px-4 py-2 text-center text-primary-dark focus:outline-none focus:ring-2 focus:ring-secondary dark:bg-secondary  dark:hover:bg-secondary-500 dark:hover:text-white dark:focus:ring-indigo-900":
             variant === "secondary",
-          "rounded-lg border border-secondary px-5 py-2.5 text-center text-sm font-medium text-secondary hover:bg-secondary hover:text-dark focus:outline-none focus:ring-4 focus:ring-secondary dark:border-secondary dark:text-secondary dark:hover:bg-secondary  dark:hover:text-dark dark:focus:ring-secondary":
+          "hover:text-dark dark:hover:text-dark rounded-lg border border-secondary px-5 py-2.5 text-center text-sm font-medium text-secondary hover:bg-secondary focus:outline-none focus:ring-4 focus:ring-secondary dark:border-secondary dark:text-secondary  dark:hover:bg-secondary dark:focus:ring-secondary":
             variant === "outline",
-          "rounded-md bg-primary px-3 py-2 text-center text-sm text-secondary shadow-md shadow-dark hover:outline hover:outline-secondary/20":
+          "shadow-dark rounded-md bg-primary px-3 py-2 text-center text-sm text-secondary shadow-md hover:outline hover:outline-secondary/20":
             variant === "minimal",
         },
         className

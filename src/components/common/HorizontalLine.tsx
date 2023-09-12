@@ -15,13 +15,13 @@ const HorizontalLine = ({
         className
       )}
     >
-      <hr className=" h-px w-full border-0 bg-indigo-300 dark:bg-indigo-900" />
+      <hr className=" h-[2px] w-full border-0 bg-secondary/30" />
       {children && (
-        <span className="block w-fit whitespace-nowrap px-3 font-medium text-dark dark:text-indigo-100">
+        <span className="text-dark block w-fit whitespace-nowrap px-3 font-medium dark:text-indigo-100">
           {children}
         </span>
       )}
-      <hr className=" h-px w-full border-0 bg-indigo-300 dark:bg-indigo-900" />
+      <hr className=" h-[2px] w-full border-0 bg-secondary/30" />
     </div>
   );
 };

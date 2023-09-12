@@ -13,6 +13,10 @@
   }
 }
 
+.keen-slider:not(.initialized) {
+  gap: 15px;
+}
+
 .h-calc-screen {
   height: calc(100vh - 4rem);
 }
@@ -62,7 +66,7 @@
 
 
 .custom-marker-cluster{
-  @apply bg-accent text-primary  w-10 aspect-square rounded-full font-bold 
+  @apply bg-accent dark:bg-primary-dark dark:text-secondary text-primary  w-10 aspect-square rounded-full font-bold 
 }
 .custom-marker-cluster span{
   @apply flex justify-center w-full h-full items-center
@@ -70,8 +74,8 @@
 
 .ql-editor{
   min-height:200px;
-  @apply bg-primary
+  @apply bg-primary dark:bg-primary-dark
 }
 .ql-container{
-  @apply bg-primary
+  @apply bg-primary dark:bg-primary-dark
 }

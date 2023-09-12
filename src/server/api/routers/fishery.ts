@@ -66,31 +66,34 @@ export const fisheryRouter = createTRPCRouter({
         orderBy: { [input.orderByParam]: input.orderBy },
         take: limit + 1,
         cursor: input.cursor ? { id: input.cursor } : undefined,
+        include: {
+          images: true,
+        },
       });
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (spots.length > limit) {
         const lastSpot = spots.pop();
         nextCursor = lastSpot!.id;
       }
-      const parsedSpots = spots.map((spot) => {
-        return {
-          ...spot,
-          imagesId: JSON.parse(spot.imagesId) as string[],
-        };
-      });
-      return { spots: parsedSpots, nextCursor };
+      return { spots, nextCursor };
     }),
-  getRecentFishingSpots: publicProcedure.query(async ({ ctx }) => {
-    const spots = await ctx.prisma.fishingSpot.findMany({
-      orderBy: { createdAt: "desc" },
-      take: 8,
-    });
+  getRecentFishingSpots: publicProcedure
+    .input(
+      z.object({
+        count: z.number(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      const spots = await ctx.prisma.fishingSpot.findMany({
+        orderBy: { createdAt: "desc" },
+        take: input.count ? input.count : 4,
+        include: {
+          images: true,
+        },
+      });
 
-    return spots.map((spot) => ({
-      ...spot,
-      imagesId: spot?.imagesId ? (JSON.parse(spot.imagesId) as string[]) : [],
-    }));
-  }),
+      return spots;
+    }),
   getFishingSpotsCount: publicProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.fishingSpot.count();
   }),
@@ -101,11 +104,33 @@ export const fisheryRouter = createTRPCRouter({
     const res = await ctx.prisma.fishingSpot.findMany({
       select: {
         id: true,
+        name: true,
         lat: true,
         lng: true,
-        name: true,
       },
     });
+    // const res = await ctx.prisma.fishingSpot.findMany({
+    //   select: {
+    //     id: true,
+    //     name: true,
+    //     imagesId: true,
+    //   },
+    // });
+    // for (const spot of res) {
+    //   console.log(spot.name);
+    //   const imagesId = spot?.imagesId
+    //     ? (JSON.parse(spot.imagesId) as string[])
+    //     : [];
+    //   if (imagesId.length > 0) {
+    //     await ctx.prisma.image.create({
+    //       data: {
+    //         fishingSpotId: spot.id,
+    //         id: imagesId[0],
+    //       },
+    //     });
+    //   }
+    // }
+
     return res;
   }),
   addFishery: publicProcedure

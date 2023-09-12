@@ -9,13 +9,19 @@ import React from "react";
 import { api } from "../../utils/api";
 import Link from "next/link";
 import Image from "next/image";
-import { getSpotImageSrc } from "../../utils/getImageSrc";
-import { IconFishHook } from "@tabler/icons-react";
-import Slider from "../common/Slider";
 import FishingSpotCard from "../FishingSpotCard";
+import Slider from "react-slick";
+// import { Swiper, SwiperSlide } from "swiper/react";
+// import "swiper/css";
+// import "swiper/css/navigation";
+// import "swiper/css/pagination";
+// import "swiper/css/scrollbar";
+// import { Navigation, Pagination } from "swiper/modules";
 
 const RecentFisheries = () => {
-  const recentFishingSpotsQuery = api.fishery.getRecentFishingSpots.useQuery();
+  const recentFishingSpotsQuery = api.fishery.getRecentFishingSpots.useQuery({
+    count: 4,
+  });
   return (
     <div className="mt-8 w-full max-w-screen-xl px-2 dark:text-primary-dark">
       <div className="flex items-center justify-between p-2">
@@ -27,15 +33,15 @@ const RecentFisheries = () => {
           zobacz więcej <IconChevronsRight />
         </Link>
       </div>
-      <Slider>
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
         {recentFishingSpotsQuery.data &&
           recentFishingSpotsQuery.data.map((fishingSpot) => (
             <FishingSpotCard
-              fishingSpot={fishingSpot}
               key={`recent-${fishingSpot.id}`}
+              fishingSpot={fishingSpot}
             />
           ))}
-      </Slider>
+      </div>
     </div>
   );
 };

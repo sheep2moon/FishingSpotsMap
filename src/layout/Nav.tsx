@@ -69,14 +69,14 @@ const Nav = () => {
   return (
     <header
       className={clsx(
-        "duration-400 fixed inset-x-0 top-0 z-[999999] mx-auto flex max-w-screen-xl items-center py-2 text-primary-dark shadow-md shadow-primary-700/50 transition-all dark:bg-primary-950 dark:text-primary lg:rounded-b-md"
+        "duration-400 fixed inset-x-0 top-0 z-[999999] mx-auto flex max-w-screen-xl items-center bg-primary-100 py-2 text-primary-dark shadow-md shadow-primary-700/50 transition-all dark:bg-primary-950 dark:text-primary lg:rounded-b-md"
         // {
         //   "bg-opacity-0": scrollPosition === 0,
         //   "bg-opacity-70": scrollPosition > 0,
         // }
       )}
     >
-      <Menu as="div" className="relative ml-2 h-10 w-24">
+      <Menu as="div" className="relative ml-2 h-10 sm:w-24">
         <div className="bg-dark grid aspect-square w-10 place-items-center rounded-full p-2 text-xl">
           <Menu.Button className="dark:text-secondary">
             <IconMenu2 />
@@ -104,6 +104,14 @@ const Nav = () => {
                   </Link>
                 </Menu.Item>
               ))}
+              <Menu.Item>
+                <div className="flex items-center gap-2 px-2 sm:hidden">
+                  <ThemeToggle />
+                  <label htmlFor="theme-toggle" className="">
+                    Zmień motyw
+                  </label>
+                </div>
+              </Menu.Item>
             </div>
           </Menu.Items>
         </Transition>
@@ -115,13 +123,13 @@ const Nav = () => {
         onChange={handleSelectSearchSpot}
       >
         <div className="w-full">
-          <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
+          <div className="relative w-full cursor-default overflow-hidden rounded-lg text-left shadow-md shadow-primary-dark/30 outline-none focus:ring focus:ring-primary-dark sm:text-sm">
             <Combobox.Input
               value={searchQuery}
               onChange={handleSearchInputChange}
               id="search-spots"
               type="text"
-              className="outline-dark w-full rounded-lg border-none py-2 pl-3 pr-10 leading-5"
+              className=" w-full rounded-lg border-none bg-primary py-2 pl-3 pr-10 text-base leading-5 dark:bg-primary-dark"
               placeholder="Wyszukaj łowisko"
               // displayValue={(result: FishingSpot) => result.name}
             ></Combobox.Input>
@@ -175,10 +183,12 @@ const Nav = () => {
       </Combobox>
 
       <div className="mr-2 flex w-24 justify-end gap-2">
-        <ThemeToggle />
+        <div className="hidden sm:mr-4 sm:flex sm:items-center">
+          <ThemeToggle />
+        </div>
         <Link
           href="/auth/signin"
-          className="flex items-center justify-center rounded-md border p-2 px-4 dark:border-secondary dark:bg-primary-dark"
+          className="flex items-center justify-center rounded-md border px-2.5 py-2 text-sm dark:border-secondary dark:bg-primary-dark sm:px-4 sm:text-base"
         >
           {session.data?.user ? (
             <div>

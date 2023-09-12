@@ -1,16 +1,23 @@
 import React from "react";
-import { useKeenSlider } from "keen-slider/react";
+import { KeenSliderPlugin, useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 
-const Slider = ({ children }: { children: React.ReactNode }) => {
-  const [sliderRef] = useKeenSlider({
-    mode: "free-snap",
-    slides: {
-      origin: "center",
-      perView: 2,
-      spacing: 15,
-    },
+const InitializePlugin: KeenSliderPlugin = (slider) => {
+  slider.on("created", () => {
+    slider?.container?.classList?.add("initialized");
   });
+};
+
+const Slider = ({ children }: { children: React.ReactNode }) => {
+  const [sliderRef] = useKeenSlider(
+    {
+      slides: {
+        perView: 5,
+        spacing: 15,
+      },
+    },
+    [InitializePlugin]
+  );
   return (
     <div ref={sliderRef} className="keen-slider">
       {children}

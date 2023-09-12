@@ -4,15 +4,14 @@ import { api } from "../../utils/api";
 import Image from "next/image";
 import heroBgSrc from "../../assets/hero-bg.jpg";
 import { IconMap2 } from "@tabler/icons-react";
+import InternalLink from "../common/InternalLink";
 const HeroBanner = () => {
   const fishingSpotsCountQuery = api.fishery.getFishingSpotsCount.useQuery();
 
   return (
     <>
-      <div className="flex w-full flex-col items-center justify-center p-4 text-primary">
-        <h1 className="text-4xl font-black ">
-          Odkryj łowiska w twojej okolicy
-        </h1>
+      <div className="flex w-full flex-col items-center justify-center p-4 text-primary-dark dark:text-primary">
+        <h1 className="text-4xl font-black">Odkryj łowiska w twojej okolicy</h1>
         <h3 className="text-xl">
           oraz dziel się swoimi wędkarskimi przygodami z innymi pasjonatami
         </h3>
@@ -23,13 +22,14 @@ const HeroBanner = () => {
             className="rounded-md object-cover"
             alt=""
           />
-          <Link
+          <InternalLink
+            variant="secondary"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2"
             href="/fishing-spots-map"
-            className="text-dark shadow-dark absolute left-1/2 top-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 items-center gap-3 whitespace-nowrap rounded-md bg-accent/90 p-2 text-xl font-bold shadow-sm transition-all hover:bg-accent"
           >
             <IconMap2 />
             Przejdź do mapy
-          </Link>
+          </InternalLink>
         </div>
         <div></div>
       </div>
