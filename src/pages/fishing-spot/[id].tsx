@@ -156,11 +156,7 @@ const FishingSpot = () => {
         <h5 className="text-dark/80 mt-4 text-lg font-bold uppercase">Opis</h5>
 
         <div className="shadow-dark/40 rounded-sm px-4 py-2 shadow-sm dark:bg-primary-dark">
-          <ReactQuill
-            value={spotQuery.data.description}
-            readOnly={true}
-            theme={"bubble"}
-          />
+          <pre>{spotQuery.data.description}</pre>
         </div>
 
         <EditableBlock target="">

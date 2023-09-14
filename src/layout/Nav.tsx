@@ -70,10 +70,6 @@ const Nav = () => {
     <header
       className={clsx(
         "duration-400 fixed inset-x-0 top-0 z-[999999] mx-auto flex max-w-screen-xl items-center bg-primary-100 py-2 text-primary-dark shadow-md shadow-primary-700/50 transition-all dark:bg-primary-950 dark:text-primary lg:rounded-b-md"
-        // {
-        //   "bg-opacity-0": scrollPosition === 0,
-        //   "bg-opacity-70": scrollPosition > 0,
-        // }
       )}
     >
       <Menu as="div" className="relative ml-2 h-10 sm:w-24">
@@ -97,7 +93,7 @@ const Nav = () => {
                 <Menu.Item key={link.href}>
                   <Link
                     href={link.href}
-                    className="hover:text-dark flex items-center gap-2 rounded-sm p-2 dark:hover:bg-secondary/20 "
+                    className="hover:text-dark flex items-center gap-2 rounded-sm p-2 dark:hover:bg-secondary/20"
                   >
                     {link.icon}
                     {link.text}
