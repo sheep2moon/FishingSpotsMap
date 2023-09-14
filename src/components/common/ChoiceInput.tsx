@@ -18,28 +18,28 @@ const ChoiceInput = React.forwardRef<HTMLInputElement, InputProps>(
         />
         <span
           className={clsx(
-            "relative flex h-8 w-20 cursor-pointer select-none items-center justify-around rounded-md border border-gray-600 bg-light text-base transition-none duration-300"
+            "relative flex h-8 w-20 cursor-pointer select-none items-center justify-around rounded-md border border-secondary text-base transition-none duration-300 dark:bg-primary-950"
           )}
         >
           <span
             className={clsx("z-10", {
-              "text-light": !checked,
-              "text-dark": checked,
+              "text-primary": !checked,
+              "dark:text-primary-600": checked,
             })}
           >
             NIE
           </span>
           <span
             className={clsx("z-10", {
-              "text-light": checked,
-              "text-dark": !checked,
+              "text-primary": checked,
+              "dark:text-primary-600": !checked,
             })}
           >
             TAK
           </span>
           <span
             className={clsx(
-              "absolute left-0 h-8 w-10 translate-x-0 transform rounded-md bg-dark transition-transform duration-300",
+              "absolute left-0 h-7 w-9 translate-x-0 transform rounded-md transition-transform duration-300 dark:bg-secondary-900",
               {
                 "translate-x-0": !checked,
                 "translate-x-10": checked,

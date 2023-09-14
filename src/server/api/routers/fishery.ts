@@ -17,6 +17,7 @@ export const fisheryRouter = createTRPCRouter({
           reviews: true,
         },
       });
+      if (!fishingSpot) return null;
       const fish_types = fishingSpot?.fish_types
         ? (JSON.parse(fishingSpot.fish_types) as string[])
         : [];

@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { api } from "../../utils/api";
 import Image from "next/image";
 import { getSpotImageSrc } from "../../utils/getImageSrc";
@@ -9,23 +9,18 @@ import AddReview from "../../components/fishing-spot/AddReview";
 import Reviews from "../../components/fishing-spot/Reviews";
 import { IconEdit, IconMapPinPin, IconRuler } from "@tabler/icons-react";
 import { useSession } from "next-auth/react";
-import dynamic from "next/dynamic";
-import mapIconSrc from "../../assets/map-icon.svg";
 import Button from "../../components/common/Button";
 import { IconMapSearch } from "@tabler/icons-react";
 import Link from "next/link";
-import ReactQuill from "react-quill";
 import InternalLink from "../../components/common/InternalLink";
 import HorizontalLine from "../../components/common/HorizontalLine";
+import { marked } from "marked";
+import ReactMarkdown from "react-markdown";
 
 const FishingSpot = () => {
   const router = useRouter();
   const { id } = router.query as { id: string };
   const spotQuery = api.fishery.getFishingSpot.useQuery({ id });
-
-  // const [mediaSrcId, setMediaSrcId] = useState<"position-map" | string>(
-  //   "position-map"
-  // );
   const [selectedImage, setSelectedImage] = useState("");
   const session = useSession();
   useEffect(() => {
@@ -33,10 +28,7 @@ const FishingSpot = () => {
       setSelectedImage(spotQuery.data?.imagesId[0]);
     }
   }, [spotQuery.data]);
-  // const PositionMap = dynamic(
-  //   () => import("../../components/map/PositionMap"),
-  //   { ssr: false }
-  // );
+
   if (!spotQuery.data || spotQuery.isLoading) return <div>skeleton</div>;
   return (
     <div className="shadow-dark/40 mx-auto mt-16 flex min-h-screen w-full max-w-7xl flex-col pb-24 shadow-lg">
@@ -156,7 +148,8 @@ const FishingSpot = () => {
         <h5 className="text-dark/80 mt-4 text-lg font-bold uppercase">Opis</h5>
 
         <div className="shadow-dark/40 rounded-sm px-4 py-2 shadow-sm dark:bg-primary-dark">
-          <pre>{spotQuery.data.description}</pre>
+          <ReactMarkdown>{spotQuery.data.description}</ReactMarkdown>
+          {/* <pre>{marked.parse(spotQuery.data.description)}</pre> */}
         </div>
 
         <EditableBlock target="">

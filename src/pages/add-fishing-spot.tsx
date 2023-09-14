@@ -3,13 +3,13 @@ import DetailsForm from "../components/add-spot/DetailsForm";
 import PricesForm from "../components/add-spot/PricesForm";
 import Button from "../components/common/Button";
 import { useNewSpotStore } from "../zustand/new-spot-store";
-import DescriptionEditor from "../components/add-spot/DescriptionEditor";
 import { api } from "../utils/api";
 import FishTypeSelector from "../components/add-spot/FishTypeSelector";
 import ImagesGallery from "../components/add-spot/ImagesGallery";
 import { useEffect, useState } from "react";
 import { catchError } from "../utils/catchError";
 import { IconAlertHexagonFilled } from "@tabler/icons-react";
+import MarkdownEditor from "../components/markdown-editor/MarkdownEditor";
 
 const AddFishingSpot = () => {
   const SelectPositionMap = dynamic(
@@ -20,14 +20,14 @@ const AddFishingSpot = () => {
   );
 
   return (
-    <div className="mt-16 flex w-full max-w-4xl flex-col gap-3 p-2 pb-16 text-xl">
+    <div className="mx-auto mt-16 flex w-full max-w-screen-xl flex-col gap-3 p-2 pb-16 text-xl">
       <h1 className="mx-auto text-2xl font-bold">Dodaj nowe łowisko</h1>
       <SelectPositionMap />
       <DetailsForm />
       <PricesForm />
       <FishTypeSelector />
       <ImagesGallery />
-      <DescriptionEditor />
+      <MarkdownEditor />
       <FormSubmit />
     </div>
   );

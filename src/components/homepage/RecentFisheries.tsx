@@ -10,7 +10,6 @@ import { api } from "../../utils/api";
 import Link from "next/link";
 import Image from "next/image";
 import FishingSpotCard from "../FishingSpotCard";
-import Slider from "react-slick";
 // import { Swiper, SwiperSlide } from "swiper/react";
 // import "swiper/css";
 // import "swiper/css/navigation";
