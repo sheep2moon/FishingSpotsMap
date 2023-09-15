@@ -26,7 +26,7 @@ const Review = ({ review }: { review: Review }) => {
   });
 
   return (
-    <div className="rounded-sm bg-gray-200 p-2 shadow-sm shadow-gray-400">
+    <div className="rounded-sm bg-gray-200 p-2 ring-1 ring-primary-700 dark:bg-primary-dark">
       <div className="flex items-center gap-2">
         <div className="relative aspect-square w-12 ">
           <Image
@@ -45,7 +45,9 @@ const Review = ({ review }: { review: Review }) => {
         </div>
       </div>
       <StarRating disabled={true} rate={review.rate} />
-      <p className="mt-2 bg-gray-100 px-2">{review.comment}</p>
+      <p className="mt-2 bg-gray-100 px-2 py-1 dark:bg-primary-800">
+        {review.comment}
+      </p>
     </div>
   );
 };

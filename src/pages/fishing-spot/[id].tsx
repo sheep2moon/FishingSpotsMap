@@ -16,6 +16,7 @@ import InternalLink from "../../components/common/InternalLink";
 import HorizontalLine from "../../components/common/HorizontalLine";
 import { marked } from "marked";
 import ReactMarkdown from "react-markdown";
+import ModeratorOnly from "../../components/ModeratorOnly";
 
 const FishingSpot = () => {
   const router = useRouter();
@@ -24,8 +25,8 @@ const FishingSpot = () => {
   const [selectedImage, setSelectedImage] = useState("");
   const session = useSession();
   useEffect(() => {
-    if (spotQuery.data?.imagesId[0]) {
-      setSelectedImage(spotQuery.data?.imagesId[0]);
+    if (spotQuery.data?.images[0]) {
+      setSelectedImage(spotQuery.data.images[0].id);
     }
   }, [spotQuery.data]);
 
@@ -36,10 +37,15 @@ const FishingSpot = () => {
         <div className="text-dark flex w-full flex-col justify-center py-2">
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-bold">{spotQuery.data.name}</h1>
-            <Button className="gap-2" variant="secondary">
-              <IconEdit />
-              Edytuj
-            </Button>
+            <ModeratorOnly>
+              <InternalLink
+                href={`/fishing-spot/edit/${spotQuery.data.id}`}
+                className="gap-2"
+              >
+                <IconEdit />
+                Edytuj
+              </InternalLink>
+            </ModeratorOnly>
           </div>
           <span className="text-dark/60 flex items-center gap-2">
             <IconMapPinPin className="" />
@@ -59,8 +65,8 @@ const FishingSpot = () => {
         </div>
       </div>
       <div className="mt-4 grid w-full grid-cols-1 lg:grid-cols-3">
-        <div className="lg:col-span-2">
-          <div className="relative aspect-video max-h-[500px] w-full object-cover ">
+        <div className="p-2 lg:col-span-2">
+          <div className="relative aspect-video max-h-[500px] w-full bg-primary-200 object-cover dark:bg-primary-800">
             <Image
               alt="widok"
               className="rounded-md object-contain"
@@ -68,18 +74,18 @@ const FishingSpot = () => {
               src={getSpotImageSrc(selectedImage)}
             />
           </div>
-          <div className="overeflow-x-auto flex p-1">
-            {spotQuery.data.imagesId.map((imageId) => (
+          <div className="overeflow-x-auto flex gap-1">
+            {spotQuery.data.images.map((image) => (
               <div
-                onClick={() => setSelectedImage(imageId)}
+                onClick={() => setSelectedImage(image.id)}
                 className="relative aspect-square w-28"
-                key={imageId}
+                key={image.id}
               >
                 <Image
                   className="rounded-sm object-cover"
                   alt="widok"
                   fill
-                  src={getSpotImageSrc(imageId)}
+                  src={getSpotImageSrc(image.id)}
                 />
               </div>
             ))}
@@ -88,11 +94,11 @@ const FishingSpot = () => {
 
         <div className="flex w-full flex-col justify-center">
           <div className="flex items-center justify-center gap-2">
-            <span>ocena</span>
-            <span className="text-lg font-bold">8.8</span>
+            <span>średnia ocena</span>
+            <span className="text-lg font-bold">{spotQuery.data.rating}</span>
           </div>
           <div className="border-dark/60 mx-auto mt-4 flex gap-2 border-b-2">
-            <span>0</span>
+            <span>{spotQuery.data.reviews.length}</span>
             <span>opini użytkowników</span>
           </div>
           <div className="text-dark mt-8 flex flex-col gap-1 px-4">
@@ -137,7 +143,7 @@ const FishingSpot = () => {
         <div className="text-dark flex flex-wrap gap-1">
           {spotQuery.data.fish_types.map((fishType) => (
             <div
-              className="rounded-sm border border-secondary/30 p-2 dark:bg-primary-800"
+              className="rounded-sm border  px-2 py-1 dark:bg-primary-800"
               key={fishType}
             >
               {fishType}
@@ -152,16 +158,17 @@ const FishingSpot = () => {
           {/* <pre>{marked.parse(spotQuery.data.description)}</pre> */}
         </div>
 
-        <EditableBlock target="">
-          <h5 className="text-dark/80 py-2 text-lg font-bold uppercase">
-            {spotQuery.data.prices.length > 0
-              ? "Cennik"
-              : "To miejsce nie posiada cennika"}
-          </h5>
-          <PricingTable prices={spotQuery.data.prices} />
-        </EditableBlock>
+        <h5 className="text-dark/80 py-2 text-lg font-bold uppercase">
+          {spotQuery.data.prices.length > 0
+            ? "Cennik"
+            : "To miejsce nie posiada cennika"}
+        </h5>
+        <PricingTable prices={spotQuery.data.prices} />
       </div>
-      {session.data?.user && <AddReview spotId={id} />}
+      {session.data?.user &&
+        !spotQuery.data.reviews.some(
+          (review) => review.createdBy === session.data.user.id
+        ) && <AddReview spotId={id} />}
       {spotQuery.data.reviews && <Reviews reviews={spotQuery.data.reviews} />}
     </div>
   );

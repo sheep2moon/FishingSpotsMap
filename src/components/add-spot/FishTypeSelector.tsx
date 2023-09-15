@@ -18,15 +18,16 @@ const FishTypeSelector = () => {
   return (
     <div className="mt-8">
       <h3 className="mb-2 text-xl">Wybierz gatunki występujących ryb</h3>
-      <div className="flex max-w-lg flex-wrap gap-0.5">
+      <div className="flex max-w-lg flex-wrap gap-1">
         {fishTypes.map((fishName) => (
           <div
             onClick={() => handleFishClick(fishName)}
             className={clsx(
-              "cursor-default rounded-sm border border-gray-600 p-2",
+              "cursor-default rounded-sm p-2 ring-1 hover:ring-secondary",
               {
-                "bg-accent/40": fish_types.includes(fishName),
-                "bg-transparent": !fish_types.includes(fishName),
+                "bg-secondary/40 ring-secondary": fish_types.includes(fishName),
+                "bg-transparent ring-primary-dark dark:ring-primary":
+                  !fish_types.includes(fishName),
               }
             )}
             key={fishName}

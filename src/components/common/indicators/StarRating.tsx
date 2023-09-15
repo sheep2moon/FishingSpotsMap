@@ -32,7 +32,7 @@ const StarRating = (props: StarRatingProps) => {
     }
   };
   return (
-    <div className="my-2 flex text-amber-400">
+    <div className="my-2 flex">
       {[1, 2, 3, 4, 5].map((starIndex) => (
         <button
           style={{ pointerEvents: props.disabled ? "none" : "all" }}
@@ -44,9 +44,9 @@ const StarRating = (props: StarRatingProps) => {
           onMouseOut={handleMouseOut}
         >
           {(hoveredStars || props.rate) >= starIndex ? (
-            <IconStarFilled />
+            <IconStarFilled className="text-amber-400" />
           ) : (
-            <IconStar />
+            <IconStar className="text-primary-dark dark:text-primary" />
           )}
         </button>
       ))}

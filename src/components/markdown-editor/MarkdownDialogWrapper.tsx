@@ -38,7 +38,7 @@ const MarkdownDialogWrapper = ({
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <Dialog.Panel className="fixed inset-0 z-[9999] overflow-y-auto bg-primary dark:bg-primary-dark">
+            <Dialog.Panel className="fixed inset-0 z-[2000] overflow-y-auto bg-primary dark:bg-primary-dark">
               <div className="flex h-full flex-col">
                 <div className="flex items-center justify-between px-4 pt-4">
                   <Dialog.Title className="flex items-center gap-2 text-center text-lg">

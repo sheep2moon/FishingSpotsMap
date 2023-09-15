@@ -15,14 +15,12 @@ export const fisheryRouter = createTRPCRouter({
         where: { id: input.id },
         include: {
           reviews: true,
+          images: true,
         },
       });
       if (!fishingSpot) return null;
       const fish_types = fishingSpot?.fish_types
         ? (JSON.parse(fishingSpot.fish_types) as string[])
-        : [];
-      const imagesId = fishingSpot?.imagesId
-        ? (JSON.parse(fishingSpot.imagesId) as string[])
         : [];
       const prices = fishingSpot?.prices
         ? (JSON.parse(fishingSpot?.prices) as {
@@ -30,11 +28,15 @@ export const fisheryRouter = createTRPCRouter({
             value: string;
           }[])
         : [];
+      const rating =
+        fishingSpot.reviews.reduce((prev, curr) => {
+          return prev + curr.rate;
+        }, 0) / fishingSpot.reviews.length || "-";
       return {
         ...fishingSpot,
-        imagesId,
         fish_types,
         prices,
+        rating,
       };
     }),
   searchFishingSpots: publicProcedure

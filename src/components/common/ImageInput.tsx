@@ -81,7 +81,7 @@ const ImageInput = ({ onUpload, bucketFolderName }: ImageInputProps) => {
   };
 
   return (
-    <div className="bg-light/5 aspect-square w-full rounded-md">
+    <div className="aspect-square w-full rounded-md bg-secondary/20 dark:bg-primary-800/50">
       <label
         htmlFor="image-upload"
         className="ring-light flex h-full cursor-pointer focus:ring-2"

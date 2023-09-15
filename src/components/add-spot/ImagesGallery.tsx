@@ -12,7 +12,10 @@ const ImagesGallery = () => {
     setField("imagesId", [imageId, ...imagesId]);
   };
   return (
-    <div ref={parent} className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+    <div
+      ref={parent}
+      className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-6"
+    >
       <ImageInput bucketFolderName="spot-images" onUpload={handleUpload} />
       {imagesId.map((imageId) => (
         <div key={imageId} className="relative ">

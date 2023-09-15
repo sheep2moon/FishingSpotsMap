@@ -24,9 +24,14 @@ const MarkdownEditor = () => {
     close();
   };
   return (
-    <div>
-      <ReactMarkdown>{markdownText}</ReactMarkdown>
-      <Button onClick={() => setIsOpen(true)}>Edytuj opis</Button>
+    <div className="flex flex-col gap-2">
+      <h3>Opis</h3>
+      <div
+        onClick={() => setIsOpen(true)}
+        className="cursor-pointer rounded-md border border-secondary p-2 dark:bg-primary-800"
+      >
+        <ReactMarkdown>{markdownText}</ReactMarkdown>
+      </div>
       <MarkdownDialogWrapper isOpen={isOpen} close={close}>
         <div className="flex h-full flex-col p-2">
           <div className="grid h-full w-full grid-cols-2 gap-2 ">
@@ -44,8 +49,7 @@ const MarkdownEditor = () => {
             </div>
           </div>
           <div className="flex items-center justify-end gap-2 p-2">
-            <Button onClick={handleCancel}>Anuluj</Button>
-            <Button onClick={handleSave}>Zapisz</Button>
+            <Button onClick={handleSave}>Zamknij</Button>
           </div>
         </div>
       </MarkdownDialogWrapper>

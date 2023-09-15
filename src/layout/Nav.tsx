@@ -69,7 +69,7 @@ const Nav = () => {
   return (
     <header
       className={clsx(
-        "duration-400 fixed inset-x-0 top-0 z-[999] mx-auto flex max-w-screen-xl items-center bg-primary-100 py-2 text-primary-dark shadow-md shadow-primary-700/50 transition-all dark:bg-primary-950 dark:text-primary lg:rounded-b-md"
+        "duration-400 fixed inset-x-0 top-0 z-[1000] mx-auto flex max-w-screen-xl items-center bg-primary-100 py-2 text-primary-dark shadow-md shadow-primary-700/50 transition-all dark:bg-primary-950 dark:text-primary lg:rounded-b-md"
       )}
     >
       <Menu as="div" className="relative ml-2 h-10 sm:w-24">

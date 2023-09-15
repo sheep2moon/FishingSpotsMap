@@ -61,7 +61,7 @@
     display: none;
   }
   .leaflet-left{
-    @apply mt-14
+    @apply mt-14 z-[999]
   }
 
 

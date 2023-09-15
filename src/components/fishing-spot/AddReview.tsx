@@ -3,6 +3,7 @@ import StarRating from "../common/indicators/StarRating";
 import { Textarea } from "../common/TextArea";
 import Button from "../common/Button";
 import { api } from "../../utils/api";
+import HorizontalLine from "../common/HorizontalLine";
 
 type AddReviewProps = {
   spotId: string;
@@ -28,7 +29,8 @@ const AddReview = ({ spotId }: AddReviewProps) => {
   };
 
   return (
-    <div className="shadow-dark/30 mx-2 mt-2 rounded-sm border-2 border-gray-400/20 bg-gray-200 p-2 shadow-sm">
+    <div className="mx-2 mt-2 rounded-md p-2 dark:bg-primary-dark">
+      <HorizontalLine />
       <span className="text-base ">
         Widziałeś to miejsce? Przekaż swoją opinie.
       </span>
@@ -38,7 +40,6 @@ const AddReview = ({ spotId }: AddReviewProps) => {
           placeholder="Opisz swoje doświadczenie z tym miejscem."
           name="comment"
           value={comment}
-          className="bg-gray-100"
           onChange={(e) => setComment(e.target.value)}
         />
       </div>
@@ -47,7 +48,7 @@ const AddReview = ({ spotId }: AddReviewProps) => {
         isLoading={addReviewMutation.isLoading}
         onClick={handleAddReview}
         className="ml-auto mt-2 w-fit "
-        variant="filled"
+        variant="secondary"
         disabled={isSubmitDisabled}
       >
         Dodaj recenzje
