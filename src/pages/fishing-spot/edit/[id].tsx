@@ -3,10 +3,18 @@ import { getServerSession } from "next-auth";
 import React, { useState } from "react";
 import { authOptions } from "../../../server/auth";
 import { useRouter } from "next/router";
-import { api } from "../../../utils/api";
+import { api } from "../../../lib/utils/api";
 import LoadingSpinner from "../../../components/common/LoadingSpinner";
-import { IconFileDescription, IconMessagePin } from "@tabler/icons-react";
+import {
+  IconAdjustmentsHorizontal,
+  IconFileDescription,
+  IconFish,
+  IconMessagePin,
+  IconPhotoEdit,
+} from "@tabler/icons-react";
 import clsx from "clsx";
+import { IconGps } from "@tabler/icons-react";
+import EditTabContainer from "../../../components/edit-spot/EditTabContainer";
 
 type EditableTab = { name: string; icon: React.ReactNode; id: string };
 const editableTabs: EditableTab[] = [
@@ -16,17 +24,40 @@ const editableTabs: EditableTab[] = [
     icon: <IconMessagePin />,
   },
   {
+    name: "Lokalizacja",
+    id: "position",
+    icon: <IconGps />,
+  },
+  {
+    name: "Zdjęcia",
+    id: "images",
+    icon: <IconPhotoEdit />,
+  },
+  {
+    name: "Występujące ryby",
+    id: "fish_types",
+    icon: <IconFish />,
+  },
+  {
+    name: "Szczegóły",
+    id: "details",
+    icon: <IconAdjustmentsHorizontal />,
+  },
+  {
     name: "Opis",
     id: "description",
     icon: <IconFileDescription />,
   },
 ];
 
+// type EditTabId = (typeof editableTabs)[number]["id"];
+type EditTabId = Extract<EditableTab["id"], string>;
+
 const EditFishingSpot = () => {
   const router = useRouter();
   const { id } = router.query as { id: string };
-  const [selectedTabId, setSelectedTabId] = useState<string>(
-    editableTabs[0] ? editableTabs[0].id : ""
+  const [selectedTabId, setSelectedTabId] = useState<EditTabId>(
+    editableTabs[0]?.id as EditTabId
   );
   const spotQuery = api.fishery.getFishingSpot.useQuery({ id });
   const handleSelectTab = (tab: EditableTab) => {
@@ -47,18 +78,20 @@ const EditFishingSpot = () => {
           {editableTabs.map((editableTab) => (
             <div
               className={clsx(
-                "flex items-center gap-2 rounded-sm p-2 text-lg dark:bg-primary-800",
+                "dark:bg-primary-800 flex items-center gap-2 rounded-sm p-3 text-lg",
                 { "dark:bg-primary-700": selectedTabId === editableTab.id }
               )}
               key={editableTab.id}
               onClick={() => handleSelectTab(editableTab)}
             >
-              {editableTab.icon}
+              <span className="text-secondary-300">{editableTab.icon}</span>
               <span>{editableTab.name}</span>
             </div>
           ))}
         </div>
-        <div className="col-span-3 px-4 py-2">{spotQuery.data?.name}</div>
+        <div className="col-span-3 px-4 py-2">
+          <EditTabContainer>{selectedTabId === ""}</EditTabContainer>
+        </div>
       </div>
     </div>
   );

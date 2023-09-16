@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import { api } from "../../utils/api";
+import { api } from "../../lib/utils/api";
 import Image from "next/image";
 import heroBgSrc from "../../assets/hero-bg.jpg";
 import { IconMap2 } from "@tabler/icons-react";
@@ -10,7 +10,7 @@ const HeroBanner = () => {
 
   return (
     <>
-      <div className="flex w-full flex-col items-center justify-center p-4 text-primary-dark dark:text-primary">
+      <div className="text-primary-dark dark:text-primary flex w-full flex-col items-center justify-center p-4">
         <h1 className="text-4xl font-black">Odkryj łowiska w twojej okolicy</h1>
         <h3 className="text-xl">
           oraz dziel się swoimi wędkarskimi przygodami z innymi pasjonatami

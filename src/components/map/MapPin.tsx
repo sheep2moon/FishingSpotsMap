@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { Marker, useMapEvent } from "react-leaflet";
-import { searchReverse } from "../../utils/searchReverse";
+import { searchReverse } from "../../lib/utils/searchReverse";
 
 type MapPinProps =
   | {

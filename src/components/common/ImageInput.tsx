@@ -1,8 +1,8 @@
 import Image from "next/image";
 import React, { useState } from "react";
-import { compressImage } from "../../utils/compressImage";
+import { compressImage } from "../../lib/utils/compressImage";
 import LoadingSpinner from "../common/LoadingSpinner";
-import { api } from "../../utils/api";
+import { api } from "../../lib/utils/api";
 import { uploadFile } from "../../server/s3";
 
 type ImageInputProps = {
@@ -81,7 +81,7 @@ const ImageInput = ({ onUpload, bucketFolderName }: ImageInputProps) => {
   };
 
   return (
-    <div className="aspect-square w-full rounded-md bg-secondary/20 dark:bg-primary-800/50">
+    <div className="aspect-square w-full rounded-md border border-primary-200 dark:border-primary-800 dark:hover:bg-primary-800">
       <label
         htmlFor="image-upload"
         className="ring-light flex h-full cursor-pointer focus:ring-2"
@@ -90,7 +90,7 @@ const ImageInput = ({ onUpload, bucketFolderName }: ImageInputProps) => {
           <div className="relative aspect-square w-full border">
             <Image src={URL.createObjectURL(file)} alt="podgląd" fill />
             {loading && (
-              <div className="absolute inset-0 flex items-center justify-center bg-slate-900/50 ">
+              <div className="absolute inset-0 flex items-center justify-center bg-primary dark:bg-primary-dark">
                 <LoadingSpinner />
               </div>
             )}
@@ -103,10 +103,10 @@ const ImageInput = ({ onUpload, bucketFolderName }: ImageInputProps) => {
               type="file"
               onChange={handleFileChange}
             />
-            <div className="ring-light flex h-full w-full flex-col items-center justify-center border-slate-50 peer-focus:border-2">
+            <div className="flex h-full w-full flex-col items-center justify-center peer-focus:border-2">
               <svg
                 aria-hidden="true"
-                className="mb-3 h-8 w-8 text-gray-400"
+                className="mb-3 h-8 w-8 text-primary-500 dark:text-primary"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -119,7 +119,7 @@ const ImageInput = ({ onUpload, bucketFolderName }: ImageInputProps) => {
                   d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                 ></path>
               </svg>
-              <span className="text-md text-center">
+              <span className="text-center text-sm">
                 Kliknij aby dodać zdjęcie
               </span>
             </div>

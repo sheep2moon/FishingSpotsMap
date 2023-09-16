@@ -1,15 +1,14 @@
 import dynamic from "next/dynamic";
 import DetailsForm from "../components/add-spot/DetailsForm";
 import PricesForm from "../components/add-spot/PricesForm";
-import Button from "../components/common/Button";
 import { useNewSpotStore } from "../zustand/new-spot-store";
-import { api } from "../utils/api";
+import { api } from "../lib/utils/api";
 import FishTypeSelector from "../components/add-spot/FishTypeSelector";
 import ImagesGallery from "../components/add-spot/ImagesGallery";
-import { useEffect, useState } from "react";
-import { catchError } from "../utils/catchError";
-import { IconAlertHexagonFilled } from "@tabler/icons-react";
+import { useState } from "react";
 import MarkdownEditor from "../components/markdown-editor/MarkdownEditor";
+import { IconAlertHexagonFilled } from "@tabler/icons-react";
+import { Button } from "../components/ui/button";
 
 const AddFishingSpot = () => {
   const SelectPositionMap = dynamic(
@@ -99,7 +98,7 @@ const FormSubmit = () => {
           </p>
         ))}
       </div>
-      <Button onClick={handleSubmit} className="" variant="secondary">
+      <Button onClick={handleSubmit} className="font-bold">
         Potwierdź
       </Button>
     </div>

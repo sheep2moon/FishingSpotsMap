@@ -8,14 +8,11 @@
     @apply border-primary-950;
   }
   body {
-    @apply bg-primary dark:bg-primary-dark text-primary-dark dark:text-primary;
+    @apply bg-gradient-to-b bg-primary dark:from-primary-dark dark:to-primary-950 text-primary-dark dark:text-primary;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
 
-.keen-slider:not(.initialized) {
-  gap: 15px;
-}
 
 .h-calc-screen {
   height: calc(100vh - 4rem);

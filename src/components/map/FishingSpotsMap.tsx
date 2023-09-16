@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import L, { MarkerCluster } from "leaflet";
 import LoadingSpinner from "../common/LoadingSpinner";
-import { api } from "../../utils/api";
+import { api } from "../../lib/utils/api";
 import SpotMarker from "./SpotMarker";
 import { useRouter } from "next/router";
 import useSpotSidebarStore from "../../zustand/spot-sidebar-store";

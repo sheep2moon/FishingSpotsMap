@@ -6,7 +6,7 @@ import {
   IconStarFilled,
 } from "@tabler/icons-react";
 import React from "react";
-import { api } from "../../utils/api";
+import { api } from "../../lib/utils/api";
 import Link from "next/link";
 import Image from "next/image";
 import FishingSpotCard from "../FishingSpotCard";
@@ -22,9 +22,9 @@ const RecentFisheries = () => {
     count: 4,
   });
   return (
-    <div className="mt-8 w-full max-w-screen-xl px-2 dark:text-primary-dark">
+    <div className="dark:text-primary-dark mt-8 w-full max-w-screen-xl px-2">
       <div className="flex items-center justify-between p-2">
-        <h2 className="flex gap-2 text-xl font-semibold dark:text-primary ">
+        <h2 className="dark:text-primary flex gap-2 text-xl font-semibold ">
           <IconClock className="text-secondary" />
           Ostatnio dodane łowiska
         </h2>

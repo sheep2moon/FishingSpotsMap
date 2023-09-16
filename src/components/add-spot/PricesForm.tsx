@@ -1,17 +1,19 @@
 import React, { type ChangeEvent, useCallback, useState } from "react";
 import { useNewSpotStore } from "../../zustand/new-spot-store";
-import { Input } from "../common/Input";
-import Button from "../common/Button";
 import ChoiceInput from "../common/ChoiceInput";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { Input } from "../ui/input";
+import { Switch } from "../ui/switch";
+import { Label } from "../ui/label";
+import { Button } from "../ui/button";
 
 const PricesForm = () => {
   const { isPaid, setField, prices } = useNewSpotStore((store) => store);
   const [parent] = useAutoAnimate();
   const [pricesCount, setPricesCount] = useState(0);
 
-  const toggleIsPaid = (e: ChangeEvent<HTMLInputElement>) => {
-    setField("isPaid", e.target.checked);
+  const toggleIsPaid = (value: boolean) => {
+    setField("isPaid", value);
   };
 
   const handlePriceTitleChange = (index: number, title: string) => {
@@ -47,16 +49,19 @@ const PricesForm = () => {
 
   return (
     <div ref={parent} className="flex w-full flex-col transition-all">
-      <ChoiceInput
-        checked={isPaid}
-        onChange={toggleIsPaid}
-        label="Chcesz dodać cennik?"
-      />
+      <div className="flex items-center space-x-2">
+        <Switch
+          id="is-paid"
+          checked={isPaid}
+          onCheckedChange={(e) => toggleIsPaid(e.valueOf())}
+        />
+        <Label htmlFor="is-paid">Chcesz dodać cennik?</Label>
+      </div>
       {isPaid && (
         <div className="mt-2 flex w-full flex-col gap-1">
           {/* <p>Wprowadź cennik</p> */}
           {prices.length > 0 && (
-            <div className="grid grid-cols-2 gap-1 rounded-t-md p-1 pr-11 text-lg dark:bg-dark">
+            <div className="dark:bg-dark grid grid-cols-2 gap-1 rounded-t-md p-1 pr-11 text-lg">
               <span className="ml-2">Nazwa usługi</span>
               <span className="ml-2">Cena</span>
             </div>
@@ -83,18 +88,18 @@ const PricesForm = () => {
                     handlePriceValueChange(index, e.target.value)
                   }
                 />
-                <button
+                <Button
                   onClick={() => handleDeletePrice(index)}
-                  className="h-10 w-10 shrink-0 rounded-md bg-white shadow-sm shadow-primary/40 hover:bg-black dark:bg-stone-900"
+                  variant="ghost"
                 >
                   X
-                </button>
+                </Button>
               </div>
             ))}
           <Button
             onClick={handleAddNewPrice}
             className=" text-lg"
-            variant="outline"
+            variant="default"
           >
             {prices.length > 0 ? (
               <span className="flex items-center gap-2">Dodaj opcje</span>

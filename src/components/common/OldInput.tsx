@@ -8,7 +8,7 @@ export interface InputProps
   error?: boolean;
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
+const OldInput = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className = "", label, name, error, type, ...props }, ref) => {
     return (
       <div className="grid w-full max-w-md items-center gap-1.5 text-base">
@@ -38,6 +38,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     );
   }
 );
-Input.displayName = "Input";
+OldInput.displayName = "OldInput";
 
-export { Input };
+export { OldInput };

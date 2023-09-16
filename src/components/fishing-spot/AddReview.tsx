@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import StarRating from "../common/indicators/StarRating";
 import { Textarea } from "../common/TextArea";
 import Button from "../common/Button";
-import { api } from "../../utils/api";
+import { api } from "../../lib/utils/api";
 import HorizontalLine from "../common/HorizontalLine";
 
 type AddReviewProps = {
@@ -29,7 +29,7 @@ const AddReview = ({ spotId }: AddReviewProps) => {
   };
 
   return (
-    <div className="mx-2 mt-2 rounded-md p-2 dark:bg-primary-dark">
+    <div className="dark:bg-primary-dark mx-2 mt-2 rounded-md p-2">
       <HorizontalLine />
       <span className="text-base ">
         Widziałeś to miejsce? Przekaż swoją opinie.

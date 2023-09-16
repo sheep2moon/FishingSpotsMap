@@ -1,8 +1,6 @@
 import React from "react";
 import { IconList, IconMoodSmile } from "@tabler/icons-react";
 import { useNewSpotStore } from "../../zustand/new-spot-store";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 
 const DescriptionEditor = () => {
   const { description, setField } = useNewSpotStore((store) => store);

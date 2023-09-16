@@ -1,10 +1,17 @@
-import { Input, type InputProps } from "../common/Input";
-import ChoiceInput from "../common/ChoiceInput";
 import {
   type NewSpotFields,
   useNewSpotStore,
 } from "../../zustand/new-spot-store";
-import React from "react";
+import React, { useEffect } from "react";
+import InputWithLabel from "../ui/input-with-label";
+import { Switch } from "../ui/switch";
+import { Label } from "../ui/label";
+import {
+  IconBedFilled,
+  IconFish,
+  IconMoonFilled,
+  IconTent,
+} from "@tabler/icons-react";
 
 // export type FormData = {
 //   name: string;
@@ -36,80 +43,82 @@ const DetailsForm = () => {
     setField(e.target.name as K, e.target.value as NewSpotFields[K]);
   };
 
+  useEffect(() => {
+    console.log(tent);
+  }, [tent]);
+
   return (
     <>
-      <NewSpotInput
+      <InputWithLabel
         label="Nazwa"
         name="name"
         value={name}
         onChange={handleInputChange}
       />
-      <NewSpotInput
+      <InputWithLabel
         label="Miasto"
         name="city"
         value={city}
         onChange={handleInputChange}
       />
-      <NewSpotInput
+      <InputWithLabel
         label="Województwo"
         name="province"
         value={province}
         onChange={handleInputChange}
       />
-      <NewSpotInput
+      <InputWithLabel
         label="Kontakt"
         name="contact"
         value={contact}
         onChange={handleInputChange}
       />
-      <NewSpotInput
+      <InputWithLabel
         label="Powierzchnia łowiska"
         name="area"
         value={area}
         onChange={handleInputChange}
       />
-      <NewSpotToggle
-        name="tent"
-        label="Można rozłożyć namiot"
-        onChange={() => setField("tent", !tent)}
-        checked={tent}
-      />
-      <NewSpotToggle
-        name="spinning"
-        label="Można rozłożyć namiot"
-        onChange={() => setField("spinning", !spinning)}
-        checked={spinning}
-      />
-      <NewSpotToggle
-        name="night_fishing"
-        label="Można łowić w nocy"
-        onChange={() => setField("night_fishing", !night_fishing)}
-        checked={night_fishing}
-      />
-      <NewSpotToggle
-        name="accommodation"
-        label="Możliwość noclegu"
-        onChange={() => setField("accommodation", !accommodation)}
-        checked={accommodation}
-      />
+      <div className="grid max-w-md grid-cols-[3fr_1fr] space-y-5">
+        <Label className="flex items-center gap-2" htmlFor="tent">
+          <IconTent />
+          Możliwość rozłożenia namiotu
+        </Label>
+        <Switch
+          id="tent"
+          onCheckedChange={() => setField("tent", !tent)}
+          checked={tent}
+        />
+        <Label className="flex items-center gap-2" htmlFor="spinning">
+          <IconFish />
+          Można łowić na spinning
+        </Label>
+        <Switch
+          id="spinning"
+          onCheckedChange={() => setField("spinning", !spinning)}
+          checked={spinning}
+        />
+        <Label className="flex items-center gap-2" htmlFor="night_fishing">
+          <IconMoonFilled />
+          Łowienie w nocy
+        </Label>
+        <Switch
+          id="night_fishing"
+          onCheckedChange={() => setField("night_fishing", !night_fishing)}
+          checked={night_fishing}
+        />
+        <Label className="flex items-center gap-2" htmlFor="accommodation">
+          <IconBedFilled />
+          Nocleg
+        </Label>
+        <Switch
+          id="accommodation"
+          onCheckedChange={() => setField("accommodation", !accommodation)}
+          checked={accommodation}
+        />
+      </div>
     </>
   );
 };
 
 export default DetailsForm;
-
-const NewSpotInput = React.forwardRef<
-  HTMLInputElement,
-  InputProps & { name: keyof NewSpotFields }
->((props, ref) => {
-  return <Input ref={ref} {...props} />;
-});
-NewSpotInput.displayName = "NewSpotInput";
-
-const NewSpotToggle = React.forwardRef<
-  HTMLInputElement,
-  Omit<InputProps, "error"> & { name: keyof NewSpotFields }
->((props, ref) => {
-  return <ChoiceInput ref={ref} {...props} />;
-});
-NewSpotToggle.displayName = "NewSpotToggle";

@@ -23,7 +23,7 @@ const Button = ({
         {
           "text-dark dark:bg-dark dark:text-light rounded-lg bg-secondary px-4 py-2 text-sm font-medium ring-2 ring-secondary focus:outline-none focus:ring-4 focus:ring-secondary dark:bg-primary-dark dark:hover:bg-primary-950 dark:focus:ring-secondary":
             variant === "filled",
-          "dark:text-dark dark:secondary-300  border border-secondary bg-secondary-200/30 px-4 py-2 text-center text-primary-dark hover:bg-secondary-200/70 focus:outline-none focus:ring-2 focus:ring-secondary dark:bg-secondary dark:text-primary  dark:hover:bg-secondary-500 dark:hover:text-primary-200 dark:focus:ring-indigo-900":
+          "dark:text-dark dark:secondary-300 border border-secondary bg-secondary-200/30 px-4 py-2 text-center text-primary-dark hover:bg-secondary-200/70 focus:outline-none focus:ring-2 focus:ring-secondary dark:bg-secondary dark:text-primary dark:hover:bg-secondary-500 dark:hover:text-primary-200 dark:focus:ring-indigo-900":
             variant === "secondary",
           "hover:text-dark dark:hover:text-dark rounded-lg border border-secondary px-5 py-2.5 text-center text-sm font-medium text-secondary hover:bg-secondary focus:outline-none focus:ring-4 focus:ring-secondary dark:border-secondary dark:text-secondary  dark:hover:bg-secondary dark:focus:ring-secondary":
             variant === "outline",

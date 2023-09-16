@@ -2,7 +2,7 @@ import { type Review } from "@prisma/client";
 import React from "react";
 import StarRating from "../common/indicators/StarRating";
 import Image from "next/image";
-import { api } from "../../utils/api";
+import { api } from "../../lib/utils/api";
 
 type ReviewsProps = {
   reviews: Review[];
@@ -26,7 +26,7 @@ const Review = ({ review }: { review: Review }) => {
   });
 
   return (
-    <div className="rounded-sm bg-gray-200 p-2 ring-1 ring-primary-700 dark:bg-primary-dark">
+    <div className="ring-primary-700 dark:bg-primary-dark rounded-sm bg-gray-200 p-2 ring-1">
       <div className="flex items-center gap-2">
         <div className="relative aspect-square w-12 ">
           <Image
@@ -45,7 +45,7 @@ const Review = ({ review }: { review: Review }) => {
         </div>
       </div>
       <StarRating disabled={true} rate={review.rate} />
-      <p className="mt-2 bg-gray-100 px-2 py-1 dark:bg-primary-800">
+      <p className="dark:bg-primary-800 mt-2 bg-gray-100 px-2 py-1">
         {review.comment}
       </p>
     </div>

@@ -2,6 +2,8 @@ import React from "react";
 import { type FishType, fishTypes } from "../../const/fish-types";
 import { useNewSpotStore } from "../../zustand/new-spot-store";
 import clsx from "clsx";
+import { Toggle } from "../ui/toggle";
+import { Label } from "../ui/label";
 
 const FishTypeSelector = () => {
   const { fish_types, setField } = useNewSpotStore((store) => store);
@@ -16,24 +18,20 @@ const FishTypeSelector = () => {
     }
   };
   return (
-    <div className="mt-8">
-      <h3 className="mb-2 text-xl">Wybierz gatunki występujących ryb</h3>
+    <div className="space-y-2">
+      <Label>Wybierz gatunki występujących ryb</Label>
       <div className="flex max-w-lg flex-wrap gap-1">
         {fishTypes.map((fishName) => (
-          <div
-            onClick={() => handleFishClick(fishName)}
-            className={clsx(
-              "cursor-default rounded-sm p-2 ring-1 hover:ring-secondary",
-              {
-                "bg-secondary/40 ring-secondary": fish_types.includes(fishName),
-                "bg-transparent ring-primary-dark dark:ring-primary":
-                  !fish_types.includes(fishName),
-              }
-            )}
+          <Toggle
+            size="lg"
+            variant="outline"
+            pressed={fish_types.includes(fishName)}
+            onPressedChange={() => handleFishClick(fishName)}
             key={fishName}
+            aria-label={`toggle ${fishName}`}
           >
             {fishName}
-          </div>
+          </Toggle>
         ))}
       </div>
     </div>

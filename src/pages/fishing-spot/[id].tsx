@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
-import { api } from "../../utils/api";
+import { api } from "../../lib/utils/api";
 import Image from "next/image";
-import { getSpotImageSrc } from "../../utils/getImageSrc";
+import { getSpotImageSrc } from "../../lib/utils/getImageSrc";
 import EditableBlock from "../../components/fishing-spot/EditableBlock";
 import PricingTable from "../../components/fishing-spot/PricingTable";
 import AddReview from "../../components/fishing-spot/AddReview";
@@ -66,7 +66,7 @@ const FishingSpot = () => {
       </div>
       <div className="mt-4 grid w-full grid-cols-1 lg:grid-cols-3">
         <div className="p-2 lg:col-span-2">
-          <div className="relative aspect-video max-h-[500px] w-full bg-primary-200 object-cover dark:bg-primary-800">
+          <div className="bg-primary-200 dark:bg-primary-800 relative aspect-video max-h-[500px] w-full object-cover">
             <Image
               alt="widok"
               className="rounded-md object-contain"
@@ -143,7 +143,7 @@ const FishingSpot = () => {
         <div className="text-dark flex flex-wrap gap-1">
           {spotQuery.data.fish_types.map((fishType) => (
             <div
-              className="rounded-sm border  px-2 py-1 dark:bg-primary-800"
+              className="dark:bg-primary-800 rounded-sm  border px-2 py-1"
               key={fishType}
             >
               {fishType}
@@ -153,7 +153,7 @@ const FishingSpot = () => {
 
         <h5 className="text-dark/80 mt-4 text-lg font-bold uppercase">Opis</h5>
 
-        <div className="shadow-dark/40 rounded-sm px-4 py-2 shadow-sm dark:bg-primary-dark">
+        <div className="shadow-dark/40 dark:bg-primary-dark rounded-sm px-4 py-2 shadow-sm">
           <ReactMarkdown>{spotQuery.data.description}</ReactMarkdown>
           {/* <pre>{marked.parse(spotQuery.data.description)}</pre> */}
         </div>

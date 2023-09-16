@@ -1,5 +1,5 @@
 import React from "react";
-import { api } from "../../utils/api";
+import { api } from "../../lib/utils/api";
 import Button from "../common/Button";
 
 export type HandleSubmitArgs =

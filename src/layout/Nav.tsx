@@ -9,7 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { Fragment, useEffect, useState } from "react";
 import useDebounce from "../hooks/useDebounce";
-import { api } from "../utils/api";
+import { api } from "../lib/utils/api";
 import type { FishingSpot } from "@prisma/client";
 import { useRouter } from "next/router";
 import LoadingSpinner from "../components/common/LoadingSpinner";
@@ -125,7 +125,7 @@ const Nav = () => {
               onChange={handleSearchInputChange}
               id="search-spots"
               type="text"
-              className=" w-full rounded-lg border-none bg-primary py-2 pl-3 pr-10 text-base leading-5 dark:bg-primary-dark"
+              className="w-full rounded-lg border-none bg-primary py-2 pl-3 pr-10 text-base leading-5 dark:bg-primary-dark"
               placeholder="Wyszukaj łowisko"
               // displayValue={(result: FishingSpot) => result.name}
             ></Combobox.Input>

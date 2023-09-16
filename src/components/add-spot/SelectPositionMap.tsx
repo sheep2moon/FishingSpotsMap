@@ -2,7 +2,7 @@ import React from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 import MapPin from "../map/MapPin";
 import { useNewSpotStore } from "../../zustand/new-spot-store";
-import { searchReverse } from "../../utils/searchReverse";
+import { searchReverse } from "../../lib/utils/searchReverse";
 
 type SelectPositionMapProps = {
   disabled?: boolean;
