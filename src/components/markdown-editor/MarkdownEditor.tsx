@@ -1,6 +1,12 @@
 import React, { type ChangeEvent, useState } from "react";
 import MarkdownDialogWrapper from "./MarkdownDialogWrapper";
-import { IconEye, IconMarkdown, IconReportSearch } from "@tabler/icons-react";
+import {
+  IconEye,
+  IconFilePencil,
+  IconInfoSquareRounded,
+  IconMarkdown,
+  IconReportSearch,
+} from "@tabler/icons-react";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -21,6 +27,11 @@ import {
 } from "../ui/dialog";
 import { Textarea } from "../ui/textarea";
 import { Close } from "@radix-ui/react-dialog";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "../ui/hover-card";
 
 // type MarkdownEditorProps = {
 //   initialText: string;
@@ -49,7 +60,7 @@ const MarkdownEditor = () => {
           Opis
         </CardTitle>
         <CardDescription>
-          Opisz łowisko za pomocą Markdown, minimum 50 znaków
+          Opisz najważniejsze informacje o łowisku, minimum 50 znaków.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -70,11 +81,40 @@ const MarkdownEditor = () => {
           )}
           <DialogContent className="z-[1000] h-screen max-w-none">
             <DialogHeader className="h-fit">
-              <DialogTitle className="text-3xl">Opis</DialogTitle>
-              <DialogDescription>Użyj Markdown do edycji</DialogDescription>
+              <DialogTitle className="text-3xl">
+                <IconFilePencil size="2rem" />
+                Opis
+              </DialogTitle>
+              <DialogDescription className="ml-auto mr-8">
+                <HoverCard>
+                  <HoverCardTrigger>
+                    <Button className="m-0 h-fit p-0" variant="link">
+                      <IconInfoSquareRounded className="mr-1 text-info dark:text-info-dark" />
+                      Pomoc
+                    </Button>
+                  </HoverCardTrigger>
+                  <HoverCardContent align="end">
+                    <h4 className="text-xl">Czym jest Markdown?</h4>
+                    <p className="mt-2">
+                      Markdown to język znaczników do prostego tworzenia
+                      sformatowanego tekstu
+                    </p>
+                    <a
+                      href="https://typografia.info/artykuly/markdown"
+                      target="_blank"
+                      className="mt-2 block w-fit bg-primary px-2 py-1 font-dosis text-base font-bold text-primary-dark"
+                    >
+                      Poradnik
+                    </a>
+                    <p className="mt-4 underline">
+                      Możesz również napisać opis standardowo.
+                    </p>
+                  </HoverCardContent>
+                </HoverCard>
+              </DialogDescription>
             </DialogHeader>
             <div className="grid h-full min-h-0 grid-cols-1 gap-2 overflow-y-auto p-1 sm:grid-cols-2">
-              <div className="flex h-[300px] flex-col rounded-sm bg-primary-dark p-1 sm:h-auto sm:min-h-0">
+              <div className="flex h-[300px] flex-col rounded-sm bg-primary-200 p-1 dark:bg-primary-dark sm:h-auto sm:min-h-0">
                 <h4 className="flex items-center gap-2 p-2">
                   <IconMarkdown size="1.5rem" />
                   Tekst źródłowy
@@ -85,13 +125,13 @@ const MarkdownEditor = () => {
                   onChange={handleInputChange}
                 />
               </div>
-              <div className="flex h-[300px] min-h-0 flex-col rounded-sm bg-primary-dark p-1 sm:h-auto">
+              <div className="flex h-[300px] min-h-0 flex-col rounded-sm bg-primary-200 p-1 dark:bg-primary-dark sm:h-auto">
                 <h4 className="flex items-center gap-2 p-2">
                   <IconReportSearch size="1.5rem" />
                   Rezultat
                 </h4>
                 <MarkdownContent
-                  className="h-full overflow-y-auto p-2 scrollbar-thin scrollbar-track-primary-dark hover:scrollbar-thumb-primary-600 dark:bg-primary-950 dark:scrollbar-thumb-primary-700"
+                  className="h-full overflow-y-auto rounded-md bg-white p-2 scrollbar-thin scrollbar-track-primary-dark hover:scrollbar-thumb-primary-600 dark:bg-primary-950 dark:scrollbar-thumb-primary-700"
                   text={markdownText}
                 />
               </div>

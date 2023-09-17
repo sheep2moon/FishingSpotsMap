@@ -9,12 +9,10 @@ import { useState } from "react";
 import MarkdownEditor from "../components/markdown-editor/MarkdownEditor";
 import {
   IconAlertHexagonFilled,
-  IconMapPinPlus,
   IconPlayerStopFilled,
 } from "@tabler/icons-react";
 import { Button } from "../components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert";
-import { TriangleRight } from "lucide-react";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import {
   ViewHeader,

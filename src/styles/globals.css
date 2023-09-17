@@ -9,10 +9,11 @@
     @apply border-primary-950;
   }
   body {
-    @apply bg-gradient-to-b bg-primary dark:from-primary-dark dark:to-primary-950 text-primary-dark dark:text-primary;
+    @apply bg-gradient-to-t bg-primary dark:from-primary-dark dark:to-primary-950 text-primary-dark dark:text-primary;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
+
 
 
 .h-calc-screen {

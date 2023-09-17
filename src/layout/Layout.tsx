@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Script from "next/script";
-import Nav from "./Nav";
+import Nav from "../components/nav/nav";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -33,6 +33,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         crossOrigin=""
       ></Script>
 
+      {/* <Nav /> */}
       <Nav />
       <main className="items-cente flex min-h-screen flex-col">{children}</main>
     </>

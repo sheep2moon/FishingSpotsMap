@@ -16,6 +16,10 @@ export default {
           DEFAULT: colors.teal[600],
           ...colors.teal,
         },
+        info: {
+          DEFAULT: colors.sky[500],
+          dark: colors.sky[800],
+        },
         accent: colors.amber[400],
       },
       keyframes: {
