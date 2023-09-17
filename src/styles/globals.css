@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Montserrat:ital,wght@0,300;0,400;0,500;0,700;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200;300;400;500;600;700;800&family=Lato:wght@300;400;700;900&family=Montserrat:ital,wght@0,300;0,400;0,500;0,700;1,500&display=swap');
 
 @layer base {
   * {
@@ -24,29 +25,19 @@
   cursor: crosshair;
   }
   
-.font-montserrat{
-    font-family: 'Lato', sans-serif;
-    font-family: 'Montserrat', sans-serif;
-}
 
 * {
-    font-family: 'Lato', sans-serif;
-    font-family: 'Montserrat', sans-serif;
-    margin: 0;
-    box-sizing: border-box;
-    padding: 0;
-    
+    @apply font-lato m-0 box-border p-0    
   }
   .leaflet-div-icon {
-    background: none;
-    border: none;
+    @apply border-none bg-transparent
   }
   
   .leaflet-popup-content-wrapper {
-    padding: 0;
+    @apply p-0
   }
   .leaflet-popup-content {
-    margin: 0;
+    @apply m-0
   }
   .leaflet-popup-close-button {
     z-index: 99;

@@ -3,6 +3,7 @@ import { SessionProvider } from "next-auth/react";
 import { type AppType } from "next/app";
 import { api } from "~/lib/utils/api";
 import "~/styles/globals.css";
+import "~/styles/markdown.css";
 import Layout from "../layout/Layout";
 import { ThemeProvider } from "next-themes";
 

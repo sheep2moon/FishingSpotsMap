@@ -4,6 +4,14 @@ import { useNewSpotStore } from "../../zustand/new-spot-store";
 import clsx from "clsx";
 import { Toggle } from "../ui/toggle";
 import { Label } from "../ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { IconFish } from "@tabler/icons-react";
 
 const FishTypeSelector = () => {
   const { fish_types, setField } = useNewSpotStore((store) => store);
@@ -18,9 +26,15 @@ const FishTypeSelector = () => {
     }
   };
   return (
-    <div className="space-y-2">
-      <Label>Wybierz gatunki występujących ryb</Label>
-      <div className="flex max-w-lg flex-wrap gap-1">
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          <IconFish size="2rem" />
+          Gatunki ryb
+        </CardTitle>
+        <CardDescription>Wybierz występujące gatunki ryb</CardDescription>
+      </CardHeader>
+      <CardContent className="flex flex-wrap gap-1">
         {fishTypes.map((fishName) => (
           <Toggle
             size="lg"
@@ -33,8 +47,8 @@ const FishTypeSelector = () => {
             {fishName}
           </Toggle>
         ))}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 

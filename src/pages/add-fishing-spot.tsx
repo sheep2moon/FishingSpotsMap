@@ -7,8 +7,20 @@ import FishTypeSelector from "../components/add-spot/FishTypeSelector";
 import ImagesGallery from "../components/add-spot/ImagesGallery";
 import { useState } from "react";
 import MarkdownEditor from "../components/markdown-editor/MarkdownEditor";
-import { IconAlertHexagonFilled } from "@tabler/icons-react";
+import {
+  IconAlertHexagonFilled,
+  IconMapPinPlus,
+  IconPlayerStopFilled,
+} from "@tabler/icons-react";
 import { Button } from "../components/ui/button";
+import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert";
+import { TriangleRight } from "lucide-react";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import {
+  ViewHeader,
+  ViewSubtitle,
+  ViewTitle,
+} from "../components/ui/view-header";
 
 const AddFishingSpot = () => {
   const SelectPositionMap = dynamic(
@@ -19,12 +31,23 @@ const AddFishingSpot = () => {
   );
 
   return (
-    <div className="mx-auto mt-16 flex w-full max-w-screen-xl flex-col gap-3 p-2 pb-16 text-xl">
-      <h1 className="mx-auto text-2xl font-bold">Dodaj nowe łowisko</h1>
+    <div className="mx-auto mt-16 flex w-full max-w-screen-xl flex-col gap-6 p-2 pb-16 text-xl">
+      <ViewHeader>
+        <ViewTitle>
+          {/* <IconMapPinPlus size="3rem" /> */}
+          Nowe łowisko
+        </ViewTitle>
+        <ViewSubtitle>
+          Wypełnij formularz nowego łowiska aby dodać je do mapy, przed dodaniem
+          dane zostaną zweryfikowane przez moderatorów.
+        </ViewSubtitle>
+      </ViewHeader>
       <SelectPositionMap />
-      <DetailsForm />
-      <PricesForm />
-      <FishTypeSelector />
+      <div className="grid gap-4 lg:grid-cols-2">
+        <DetailsForm />
+        <PricesForm />
+        <FishTypeSelector />
+      </div>
       <ImagesGallery />
       <MarkdownEditor />
       <FormSubmit />
@@ -37,6 +60,7 @@ export default AddFishingSpot;
 const FormSubmit = () => {
   const { mutate: addFishery } = api.fishery.addFishery.useMutation();
   const [errorMesssages, setErrorMessages] = useState<Array<string>>([]);
+  const [parent] = useAutoAnimate();
 
   const handleSubmit = () => {
     const errors = [];
@@ -89,16 +113,29 @@ const FormSubmit = () => {
   };
 
   return (
-    <div className="mt-12 flex w-full flex-col gap-2">
-      <div className="flex flex-col gap-1 text-sm text-amber-700">
-        {errorMesssages.map((message, index) => (
-          <p className="flex items-center gap-1" key={`error-message${index}`}>
+    <div className="flex w-full flex-col gap-2" ref={parent}>
+      {errorMesssages.length > 0 && (
+        <div className="flex flex-col gap-1 text-sm text-amber-700">
+          <Alert variant="destructive">
             <IconAlertHexagonFilled />
-            <span>{message}</span>
-          </p>
-        ))}
-      </div>
-      <Button onClick={handleSubmit} className="font-bold">
+            <AlertTitle className="text-base">Błąd</AlertTitle>
+            <AlertDescription className="flex flex-col gap-1">
+              {errorMesssages.map((message, index) => (
+                <div
+                  key={`error-message${index}`}
+                  className="flex items-center gap-1 text-base"
+                >
+                  <IconPlayerStopFilled />
+                  <span className="text-primary-dark dark:text-primary ">
+                    {message}
+                  </span>
+                </div>
+              ))}
+            </AlertDescription>
+          </Alert>
+        </div>
+      )}
+      <Button onClick={handleSubmit} className="mt-4 font-bold">
         Potwierdź
       </Button>
     </div>

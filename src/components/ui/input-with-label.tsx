@@ -1,3 +1,4 @@
+import { cn } from "../../lib/utils/cn";
 import { Input, type InputProps } from "./input";
 import { Label } from "./label";
 import * as React from "react";
@@ -6,10 +7,14 @@ interface InputWithLabelProps extends InputProps {
 }
 
 const InputWithLabel = React.forwardRef<HTMLInputElement, InputWithLabelProps>(
-  ({ label, ...props }, ref) => {
+  ({ label, className, ...props }, ref) => {
     return (
-      <div className="grid w-full max-w-sm items-center gap-1.5">
-        <Label htmlFor={props.id}>{label}</Label>
+      <div
+        className={cn("grid w-full max-w-sm items-center gap-1.5", className)}
+      >
+        <Label className="" htmlFor={props.id}>
+          {label}
+        </Label>
         <Input {...props} ref={ref} />
       </div>
     );
