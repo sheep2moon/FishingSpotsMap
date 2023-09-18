@@ -1,19 +1,12 @@
 import React, { useEffect } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
-import L, { MarkerCluster } from "leaflet";
+import L, { type MarkerCluster } from "leaflet";
 import LoadingSpinner from "../common/LoadingSpinner";
 import { api } from "../../lib/utils/api";
 import SpotMarker from "./SpotMarker";
 import { useRouter } from "next/router";
-import useSpotSidebarStore from "../../zustand/spot-sidebar-store";
-import markerSvg from "../../assets/map-icon.svg";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import "leaflet/dist/leaflet.css";
-
-const customIcon: L.Icon = new L.Icon({
-  iconUrl: "/pin.svg",
-  iconSize: [40, 40],
-});
 
 const createClusterCustomIcon = (cluster: MarkerCluster) => {
   return L.divIcon({
@@ -22,31 +15,9 @@ const createClusterCustomIcon = (cluster: MarkerCluster) => {
     iconSize: L.point(33, 33, true),
   });
 };
-// const customIcon = L.Icon.extend({
-//   options: {
-//     iconUrl: "/pin.svg",
-//     iconSize: [40, 40],
-//   },
 
 const FishingSpotsMap = () => {
   const fisheries = api.fishery.getFisheries.useQuery();
-  const { setSpotId } = useSpotSidebarStore((store) => store);
-  const router = useRouter();
-
-  const handleDisplayDetails = (spotId: string) => {
-    const newQuery = new URLSearchParams({
-      ...router.query,
-      spotId,
-    }).toString();
-    const newUrl = `${router.pathname}?${newQuery}`;
-    window.history.replaceState(
-      { ...window.history.state, as: newUrl, url: newUrl },
-      "",
-      newUrl
-    );
-    setSpotId(spotId);
-    // void router.push(newUrl, undefined, { shallow: true });
-  };
 
   return (
     <MapContainer preferCanvas={true} center={[52.09, 19.09]} zoom={7}>
@@ -76,11 +47,7 @@ const FishingSpotsMap = () => {
       >
         {fisheries.data &&
           fisheries.data.map((fishingSpot) => (
-            <SpotMarker
-              handleDisplayDetails={handleDisplayDetails}
-              key={fishingSpot.id}
-              fishingSpot={fishingSpot}
-            />
+            <SpotMarker key={fishingSpot.id} fishingSpot={fishingSpot} />
           ))}
       </MarkerClusterGroup>
     </MapContainer>
@@ -89,6 +56,7 @@ const FishingSpotsMap = () => {
 
 export default FishingSpotsMap;
 
+// USES query param flyTo=lat,lng to center point
 const FlyToHandler = () => {
   const map = useMap();
   const router = useRouter();
@@ -96,8 +64,6 @@ const FlyToHandler = () => {
     const positionParams = router.query.flyTo as string;
     if (positionParams) {
       const [lat, lng] = positionParams.split(",");
-      console.log(lat, lng);
-
       if (lat && lng) {
         map.flyTo({ lat: parseFloat(lat), lng: parseFloat(lng) }, 14);
       }

@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import DetailsForm from "../components/add-spot/DetailsForm";
-import PricesForm from "../components/add-spot/PricesForm";
+import PricesForm from "../components/fishing-spot-forms/pricing-spot-form";
 import { useNewSpotStore } from "../zustand/new-spot-store";
 import { api } from "../lib/utils/api";
 import FishTypeSelector from "../components/add-spot/FishTypeSelector";
@@ -19,14 +19,32 @@ import {
   ViewSubtitle,
   ViewTitle,
 } from "../components/ui/view-header";
+import BasicsSpotForm from "../components/fishing-spot-forms/basics-spot-form";
+import DetailsSpotForm from "../components/fishing-spot-forms/details-spot-form";
+import PricingSpotForm from "../components/fishing-spot-forms/pricing-spot-form";
+import { fishingSpotSchema } from "../../schemas/fishing-spot.schema";
 
+const SelectPositionMap = dynamic(
+  () => import("../components/map/SelectPositionMap"),
+  {
+    ssr: false,
+  }
+);
 const AddFishingSpot = () => {
-  const SelectPositionMap = dynamic(
-    () => import("../components/add-spot/SelectPositionMap"),
-    {
-      ssr: false,
-    }
-  );
+  const {
+    lat,
+    lng,
+    prices,
+    area,
+    tent,
+    spinning,
+    accommodation,
+    night_fishing,
+    city,
+    name,
+    province,
+    setField,
+  } = useNewSpotStore((store) => store);
 
   return (
     <div className="mx-auto mt-16 flex w-full max-w-screen-xl flex-col gap-6 p-2 pb-16 text-xl">
@@ -40,10 +58,45 @@ const AddFishingSpot = () => {
           dane zostaną zweryfikowane przez moderatorów.
         </ViewSubtitle>
       </ViewHeader>
-      <SelectPositionMap />
+      <SelectPositionMap
+        position={{ lat, lng }}
+        setPosition={(position) => {
+          setField("lat", position.lat);
+          setField("lng", position.lng);
+        }}
+        setCity={(province) => setField("province", province)}
+        setProvince={(city) => setField("city", city)}
+      />
       <div className="grid gap-4 lg:grid-cols-2">
-        <DetailsForm />
-        <PricesForm />
+        <BasicsSpotForm
+          city={city}
+          name={name}
+          province={province}
+          setCity={(city) => setField("city", city)}
+          setName={(name) => setField("name", name)}
+          setProvince={(province) => setField("province", province)}
+        />
+        <DetailsSpotForm
+          area={area}
+          spinning={spinning}
+          accommodation={accommodation}
+          tent={tent}
+          night_fishing={night_fishing}
+          setArea={(area) => setField("area", area)}
+          setTent={(tent) => setField("tent", tent)}
+          setAccommodation={(accommodation) =>
+            setField("accommodation", accommodation)
+          }
+          setNightFishing={(night_fishing) =>
+            setField("night_fishing", night_fishing)
+          }
+          setSpinning={(spinning) => setField("spinning", spinning)}
+        />
+        <PricingSpotForm
+          prices={prices}
+          setPrices={(prices) => setField("prices", prices)}
+        />
+
         <FishTypeSelector />
       </div>
       <ImagesGallery />
@@ -61,53 +114,14 @@ const FormSubmit = () => {
   const [parent] = useAutoAnimate();
 
   const handleSubmit = () => {
-    const errors = [];
-    const {
-      name,
-      province,
-      city,
-      fish_types,
-      area,
-      contact,
-      night_fishing,
-      tent,
-      accommodation,
-      spinning,
-      position,
-      prices,
-      description,
-      imagesId,
-    } = useNewSpotStore.getState();
-    if (!position) errors.push("Lokalizacja na mapie jest wymagana");
-    if (!name) errors.push("Nazwa jest wymagana");
-    if (!city) errors.push("Nazwa miejscowości jest wymagana");
-    if (!province) errors.push("Województwo jest wymagane");
-    if (!description) errors.push("Opis jest wymagany");
-    if (description && description.length < 50)
-      errors.push("Opis musi być dłuższy niż 50 znaków.");
-
-    if (errors.length > 0) {
-      setErrorMessages(errors);
-      return;
+    const newSpotData = useNewSpotStore.getState();
+    const parsingResults = fishingSpotSchema.safeParse(newSpotData);
+    if (parsingResults.success) addFishery({ ...newSpotData });
+    else {
+      setErrorMessages(
+        parsingResults.error.issues.map((issue) => issue.message)
+      );
     }
-    const newFisherySpotData = {
-      name,
-      province,
-      city,
-      fish_types,
-      area,
-      contact,
-      night_fishing,
-      tent,
-      accommodation,
-      spinning,
-      lat: position?.lat as number,
-      lng: position?.lng as number,
-      description,
-      prices,
-      imagesId,
-    };
-    addFishery(newFisherySpotData);
   };
 
   return (

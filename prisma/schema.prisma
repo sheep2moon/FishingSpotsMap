@@ -120,7 +120,6 @@ model FishingSpot {
     published     Boolean
     reviews       Review[]
     images        Image[]
-    imagesId      String
     prices        String
     lat           Float
     lng           Float

@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from "react";
-import { useNewSpotStore } from "../../zustand/new-spot-store";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -12,55 +11,60 @@ import {
 } from "../ui/card";
 import { IconTag } from "@tabler/icons-react";
 
-const PricesForm = () => {
-  const { isPaid, setField, prices } = useNewSpotStore((store) => store);
+type PricingSpotFormProps = {
+  prices: SpotPricing;
+  setPrices: (pricing: SpotPricing) => void;
+};
+
+const PricingSpotForm = ({ prices, setPrices }: PricingSpotFormProps) => {
   const [parent] = useAutoAnimate();
   const [pricesCount, setPricesCount] = useState(0);
+  const [isPaid, setIsPaid] = useState(false);
 
-  const setIsPaid = (isPaid: boolean) => {
+  const handleSetIsPaid = (isPaid: boolean) => {
     if (isPaid) {
-      setField("isPaid", true);
+      setIsPaid(true);
       setPricesCount(1);
     }
     if (!isPaid) {
-      setField("isPaid", false);
+      setIsPaid(false);
       setPricesCount(0);
     }
   };
 
   const handlePriceTitleChange = (index: number, title: string) => {
-    const newPrices = prices.map((price, i) => {
+    const newPricing = prices.map((price, i) => {
       if (index == i) {
         return { ...price, title };
       }
       return price;
     });
-    setField("prices", newPrices);
+    setPrices(newPricing);
   };
 
   const handlePriceValueChange = (index: number, value: string) => {
-    const newPrices = prices.map((price, i) => {
+    const newPricing = prices.map((price, i) => {
       if (index == i) {
         return { ...price, value };
       }
       return price;
     });
-    setField("prices", newPrices);
+    setPrices(newPricing);
   };
 
   const handleDeletePrice = (index: number) => {
-    const newPrices = prices.filter((_, i) => i !== index);
-    setField("prices", newPrices);
+    const newPricing = prices.filter((_, i) => i !== index);
+    setPrices(newPricing);
     setPricesCount((prev) => {
-      if (prev === 1) setIsPaid(false);
+      if (prev === 1) handleSetIsPaid(false);
       return prev - 1;
     });
   };
 
   const handleAddNewPrice = useCallback(() => {
-    setField("prices", [...prices, { title: "", value: "" }]);
+    setPrices([...prices, { title: "", value: "" }]);
     setPricesCount((prev) => prev + 1);
-  }, [prices, setField]);
+  }, [prices, setPrices]);
 
   return (
     <Card className="transition-all">
@@ -106,7 +110,7 @@ const PricesForm = () => {
           </Button>
         )}
         {!isPaid && (
-          <Button variant="outline" onClick={() => setIsPaid(true)}>
+          <Button variant="outline" onClick={() => handleSetIsPaid(true)}>
             Stwórz cennik
           </Button>
         )}
@@ -115,4 +119,4 @@ const PricesForm = () => {
   );
 };
 
-export default PricesForm;
+export default PricingSpotForm;

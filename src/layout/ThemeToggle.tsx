@@ -1,5 +1,12 @@
 import { IconBrightnessUp, IconMoon } from "@tabler/icons-react";
 import React, { useEffect, useState } from "react";
+import { Button } from "../components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../components/ui/tooltip";
 type Theme = "light" | "dark";
 
 const ThemeToggle = () => {
@@ -30,14 +37,24 @@ const ThemeToggle = () => {
   };
 
   return (
-    <button
-      id="theme-toggle"
-      className="rounded-full text-accent dark:text-secondary dark:hover:text-secondary-500"
-      onClick={toggleTheme}
-    >
-      {theme === "dark" && <IconMoon />}
-      {theme === "light" && <IconBrightnessUp />}
-    </button>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            id="theme-toggle"
+            className="justify-start"
+            variant="ghost"
+            onClick={toggleTheme}
+          >
+            {theme === "dark" && <IconMoon />}
+            {theme === "light" && <IconBrightnessUp />}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent className="p-2">
+          <p>Zmień motyw na {theme === "light" ? "ciemny" : "jasny"}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
 

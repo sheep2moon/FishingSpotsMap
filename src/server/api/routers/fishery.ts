@@ -6,6 +6,7 @@ import {
   publicProcedure,
 } from "~/server/api/trpc";
 import { fishTypes } from "../../../const/fish-types";
+import type { Image as SpotImage } from "@prisma/client";
 
 export const fisheryRouter = createTRPCRouter({
   getFishingSpot: publicProcedure
@@ -152,7 +153,7 @@ export const fisheryRouter = createTRPCRouter({
         lng: z.number(),
         fish_types: z.array(z.enum(fishTypes)),
         prices: z.array(z.object({ title: z.string(), value: z.string() })),
-        imagesId: z.array(z.string()),
+        images: z.array(z.string()),
         description: z.string(),
       })
     )
@@ -163,17 +164,36 @@ export const fisheryRouter = createTRPCRouter({
         published = true;
         acceptedBy = ctx.session.user.id;
       }
-      const res = await ctx.prisma.fishingSpot.create({
+      const newSpot = await ctx.prisma.fishingSpot.create({
         data: {
-          ...input,
-          prices: JSON.stringify(input.prices),
-          imagesId: JSON.stringify(input.imagesId),
+          name: input.name,
+          province: input.province,
+          city: input.city,
+          area: input.area,
+          contact: input.contact,
+          night_fishing: input.night_fishing,
+          tent: input.tent,
+          accommodation: input.accommodation,
+          spinning: input.spinning,
+          lat: input.lat,
+          lng: input.lng,
+          description: input.description,
           fish_types: JSON.stringify(input.fish_types),
+          prices: JSON.stringify(input.prices),
           published,
           acceptedBy,
         },
       });
-      return res;
+      const imagesData: SpotImage[] = input.images.map((imageId) => ({
+        fishingSpotId: newSpot.id,
+        id: imageId,
+        userId: ctx.session?.user.id || "",
+        source: "",
+        comment: "",
+      }));
+      await ctx.prisma.image.createMany({
+        data: imagesData,
+      });
     }),
   addReview: protectedProcedure
     .input(

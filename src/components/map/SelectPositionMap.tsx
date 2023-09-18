@@ -1,8 +1,7 @@
 import React from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
-import MapPin from "../map/MapPin";
-import { useNewSpotStore } from "../../zustand/new-spot-store";
-import { searchReverse } from "../../lib/utils/searchReverse";
+import MapPin from "./MapPin";
+import { searchCityByLatLng } from "../../lib/utils/searchReverse";
 import {
   Card,
   CardContent,
@@ -14,20 +13,26 @@ import { IconCurrentLocation } from "@tabler/icons-react";
 
 type SelectPositionMapProps = {
   disabled?: boolean;
+  position: Position;
+  setPosition: (position: Position) => void;
+  setCity?: (city: string) => void;
+  setProvince?: (province: string) => void;
 };
 
-const SelectPositionMap = ({ disabled }: SelectPositionMapProps) => {
-  const { position, setField } = useNewSpotStore((store) => store);
-
+const SelectPositionMap = ({
+  disabled,
+  setPosition,
+  setCity,
+  setProvince,
+  position,
+}: SelectPositionMapProps) => {
   const onPositionChange = async (position: Position) => {
-    setField("position", position);
-    const { province, city } = await searchReverse(position);
-    setField("city", city);
-    let formattedProvince = province.split(" ")[1];
-    if (formattedProvince) {
-      formattedProvince =
-        formattedProvince.charAt(0).toUpperCase() + formattedProvince.slice(1);
-      setField("province", formattedProvince);
+    setPosition(position);
+
+    if (setCity || setProvince) {
+      const { province, city } = await searchCityByLatLng(position);
+      setCity?.(city);
+      setProvince?.(province);
     }
   };
 
@@ -44,8 +49,12 @@ const SelectPositionMap = ({ disabled }: SelectPositionMapProps) => {
         <CardContent className="relative aspect-square w-full sm:aspect-video">
           <MapContainer
             scrollWheelZoom={!disabled}
-            center={position ? [position.lat, position.lng] : [52.09, 19.09]}
-            zoom={position ? 13 : 6}
+            center={
+              position.lat !== 0 && position.lng !== 0
+                ? [position.lat, position.lng]
+                : [52.09, 19.09]
+            }
+            zoom={position.lat !== 0 && position.lng !== 0 ? 13 : 6}
           >
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

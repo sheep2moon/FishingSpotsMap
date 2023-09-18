@@ -1,41 +1,22 @@
 import { create } from "zustand";
-import { type fishTypes } from "../const/fish-types";
+import { type FishingSpotData } from "../../schemas/fishing-spot.schema";
 
-export type NewSpotFields = {
-  name: string;
-  position: Position | null;
-  city: string;
-  province: string;
-  accommodation: boolean;
-  tent: boolean;
-  contact: string;
-  night_fishing: boolean;
-  spinning: boolean;
-  description: string;
-  imagesId: string[];
-  area: string;
-  isPaid: boolean;
-  prices: { title: string; value: string }[];
-  fish_types: (typeof fishTypes)[number][];
-};
-
-type NewSpotState = NewSpotFields & {
-  setField: <K extends keyof NewSpotFields>(
+type NewSpotState = FishingSpotData & {
+  setField: <K extends keyof FishingSpotData>(
     key: K,
-    value: NewSpotFields[K]
+    value: FishingSpotData[K]
   ) => void;
 };
 
 export const useNewSpotStore = create<NewSpotState>((set) => ({
   name: "",
   prices: [],
-  position: null,
   city: "",
   province: "",
   isPaid: false,
   accommodation: false,
   tent: false,
-  imagesId: [],
+  images: [],
   night_fishing: false,
   spinning: false,
   contact: "",

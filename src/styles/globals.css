@@ -55,7 +55,7 @@
 
 
 .custom-marker-cluster{
-  @apply bg-accent dark:bg-primary-dark dark:text-secondary text-primary  w-10 aspect-square rounded-full font-bold 
+  @apply bg-accent dark:bg-primary-dark dark:text-primary border-4 border-primary-700 text-primary  w-10 aspect-square rounded-full font-bold 
 }
 .custom-marker-cluster span{
   @apply flex justify-center w-full h-full items-center

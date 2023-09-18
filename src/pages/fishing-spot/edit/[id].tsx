@@ -15,6 +15,19 @@ import {
 import clsx from "clsx";
 import { IconGps } from "@tabler/icons-react";
 import EditTabContainer from "../../../components/edit-spot/EditTabContainer";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "../../../components/ui/tabs";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../../components/ui/card";
+import { Input } from "../../../components/ui/input";
 
 type EditableTab = { name: string; icon: React.ReactNode; id: string };
 const editableTabs: EditableTab[] = [
@@ -72,28 +85,55 @@ const EditFishingSpot = () => {
       </div>
     );
   return (
-    <div className="mx-auto mt-16 w-full max-w-screen-xl">
-      <div className="grid w-full grid-cols-4 p-2">
-        <div className="col-span-1 flex flex-col">
-          {editableTabs.map((editableTab) => (
-            <div
-              className={clsx(
-                "dark:bg-primary-800 flex items-center gap-2 rounded-sm p-3 text-lg",
-                { "dark:bg-primary-700": selectedTabId === editableTab.id }
-              )}
-              key={editableTab.id}
-              onClick={() => handleSelectTab(editableTab)}
-            >
-              <span className="text-secondary-300">{editableTab.icon}</span>
-              <span>{editableTab.name}</span>
+    <div className="mx-auto mt-16 grid w-full max-w-screen-xl">
+      <Tabs defaultValue="general" asChild>
+        <div className="grid-cols-3">
+          <TabsList asChild>
+            <div className="flex flex-col">
+              {editableTabs.map((section) => (
+                <TabsTrigger value={section.id} key={section.id}>
+                  {section.name}
+                </TabsTrigger>
+              ))}
             </div>
-          ))}
+          </TabsList>
+          <TabsContent value="general" asChild>
+            <div className="col-span-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Podstawowe informacje</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Input />
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
         </div>
-        <div className="col-span-3 px-4 py-2">
-          <EditTabContainer>{selectedTabId === ""}</EditTabContainer>
-        </div>
-      </div>
+      </Tabs>
     </div>
+    // <div className="mx-auto mt-16 w-full max-w-screen-xl">
+    //   <div className="grid w-full grid-cols-4 p-2">
+    //     <div className="col-span-1 flex flex-col">
+    //       {editableTabs.map((editableTab) => (
+    //         <div
+    //           className={clsx(
+    //             "dark:bg-primary-800 flex items-center gap-2 rounded-sm p-3 text-lg",
+    //             { "dark:bg-primary-700": selectedTabId === editableTab.id }
+    //           )}
+    //           key={editableTab.id}
+    //           onClick={() => handleSelectTab(editableTab)}
+    //         >
+    //           <span className="text-secondary-300">{editableTab.icon}</span>
+    //           <span>{editableTab.name}</span>
+    //         </div>
+    //       ))}
+    //     </div>
+    //     <div className="col-span-3 px-4 py-2">
+    //       <EditTabContainer>{selectedTabId === ""}</EditTabContainer>
+    //     </div>
+    //   </div>
+    // </div>
   );
 };
 

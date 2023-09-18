@@ -8,10 +8,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { IconCamera } from "@tabler/icons-react";
 
 const ImagesGallery = () => {
-  const { imagesId, setField } = useNewSpotStore((store) => store);
+  const { images, setField } = useNewSpotStore((store) => store);
   const [parent] = useAutoAnimate();
   const handleUpload = (imageId: string) => {
-    setField("imagesId", [imageId, ...imagesId]);
+    setField("images", [imageId, ...images]);
   };
   return (
     <Card>
@@ -26,7 +26,7 @@ const ImagesGallery = () => {
         className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-6"
       >
         <ImageInput bucketFolderName="spot-images" onUpload={handleUpload} />
-        {imagesId.map((imageId) => (
+        {images.map((imageId) => (
           <div key={imageId} className="relative ">
             <Image
               className="rounded-md object-cover"

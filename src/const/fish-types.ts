@@ -13,5 +13,3 @@ export const fishTypes = [
   "Lin",
   "Płoć",
 ] as const;
-
-export type FishType = (typeof fishTypes)[number];
