@@ -7,6 +7,7 @@ import {
 } from "~/server/api/trpc";
 import { fishTypes } from "../../../const/fish-types";
 import type { Image as SpotImage } from "@prisma/client";
+import { FishTypes } from "../../../types/global";
 
 export const fisheryRouter = createTRPCRouter({
   getFishingSpot: publicProcedure
@@ -21,7 +22,7 @@ export const fisheryRouter = createTRPCRouter({
       });
       if (!fishingSpot) return null;
       const fish_types = fishingSpot?.fish_types
-        ? (JSON.parse(fishingSpot.fish_types) as string[])
+        ? (JSON.parse(fishingSpot.fish_types) as FishTypes)
         : [];
       const prices = fishingSpot?.prices
         ? (JSON.parse(fishingSpot?.prices) as {
@@ -101,9 +102,6 @@ export const fisheryRouter = createTRPCRouter({
   getFishingSpotsCount: publicProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.fishingSpot.count();
   }),
-  // getFishingSpotReviews: publicProcedure.input(z.object({spotId: z.string()})).query(async ({input,ctx}) => {
-  //   const reviewsData = ctx.prisma.r
-  // }),
   getFisheries: publicProcedure.query(async ({ ctx }) => {
     const res = await ctx.prisma.fishingSpot.findMany({
       select: {
@@ -113,27 +111,6 @@ export const fisheryRouter = createTRPCRouter({
         lng: true,
       },
     });
-    // const res = await ctx.prisma.fishingSpot.findMany({
-    //   select: {
-    //     id: true,
-    //     name: true,
-    //     imagesId: true,
-    //   },
-    // });
-    // for (const spot of res) {
-    //   console.log(spot.name);
-    //   const imagesId = spot?.imagesId
-    //     ? (JSON.parse(spot.imagesId) as string[])
-    //     : [];
-    //   if (imagesId.length > 0) {
-    //     await ctx.prisma.image.create({
-    //       data: {
-    //         fishingSpotId: spot.id,
-    //         id: imagesId[0],
-    //       },
-    //     });
-    //   }
-    // }
 
     return res;
   }),

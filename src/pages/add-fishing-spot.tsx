@@ -1,12 +1,8 @@
 import dynamic from "next/dynamic";
-import DetailsForm from "../components/add-spot/DetailsForm";
-import PricesForm from "../components/fishing-spot-forms/pricing-spot-form";
 import { useNewSpotStore } from "../zustand/new-spot-store";
 import { api } from "../lib/utils/api";
 import FishTypeSelector from "../components/add-spot/FishTypeSelector";
-import ImagesGallery from "../components/add-spot/ImagesGallery";
 import { useState } from "react";
-import MarkdownEditor from "../components/markdown-editor/MarkdownEditor";
 import {
   IconAlertHexagonFilled,
   IconPlayerStopFilled,
@@ -19,10 +15,12 @@ import {
   ViewSubtitle,
   ViewTitle,
 } from "../components/ui/view-header";
-import BasicsSpotForm from "../components/fishing-spot-forms/basics-spot-form";
-import DetailsSpotForm from "../components/fishing-spot-forms/details-spot-form";
+import { BasicsSpotForm } from "../components/fishing-spot-forms/basics-spot-form";
+import { DetailsSpotForm } from "../components/fishing-spot-forms/details-spot-form";
 import PricingSpotForm from "../components/fishing-spot-forms/pricing-spot-form";
 import { fishingSpotSchema } from "../../schemas/fishing-spot.schema";
+import { DescriptionSpotForm } from "../components/fishing-spot-forms/description-spot-form";
+import ImagesSpotForm from "../components/fishing-spot-forms/images-spot-form";
 
 const SelectPositionMap = dynamic(
   () => import("../components/map/SelectPositionMap"),
@@ -37,11 +35,13 @@ const AddFishingSpot = () => {
     prices,
     area,
     tent,
+    description,
     spinning,
     accommodation,
     night_fishing,
     city,
     name,
+    images,
     province,
     setField,
   } = useNewSpotStore((store) => store);
@@ -99,8 +99,14 @@ const AddFishingSpot = () => {
 
         <FishTypeSelector />
       </div>
-      <ImagesGallery />
-      <MarkdownEditor />
+      <ImagesSpotForm
+        images={images}
+        setImages={(images) => setField("images", images)}
+      />
+      <DescriptionSpotForm
+        description={description}
+        setDescription={(description) => setField("description", description)}
+      />
       <FormSubmit />
     </div>
   );
@@ -127,10 +133,10 @@ const FormSubmit = () => {
   return (
     <div className="flex w-full flex-col gap-2" ref={parent}>
       {errorMesssages.length > 0 && (
-        <div className="flex flex-col gap-1 text-sm text-amber-700">
+        <div className="flex flex-col gap-1 text-sm">
           <Alert variant="destructive">
             <IconAlertHexagonFilled />
-            <AlertTitle className="text-base">Błąd</AlertTitle>
+            <AlertTitle className="text-lg">Błąd</AlertTitle>
             <AlertDescription className="flex flex-col gap-1">
               {errorMesssages.map((message, index) => (
                 <div

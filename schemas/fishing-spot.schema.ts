@@ -15,7 +15,7 @@ export const fishingSpotSchema = z.object({
   lng: z.number(),
   fish_types: z.array(z.enum(fishTypes)),
   prices: z.array(z.object({ title: z.string(), value: z.string() })),
-  images: z.array(z.string()).nonempty("Dodaj przynajmniej jedno zdjęcie"),
+  images: z.array(z.string()),
   description: z
     .string()
     .min(50, "Opis powinien zawierać minimum 50 znaków")

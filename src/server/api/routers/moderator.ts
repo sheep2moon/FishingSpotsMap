@@ -2,6 +2,13 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const moderatorRouter = createTRPCRouter({
+  getRawFishingSpot: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input, ctx }) => {
+      return await ctx.prisma.fishingSpot.findFirst({
+        where: { id: input.id },
+      });
+    }),
   editStringField: protectedProcedure
     .input(
       z.object({

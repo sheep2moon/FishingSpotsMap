@@ -1,7 +1,5 @@
-import React, { type ChangeEvent, useState } from "react";
-import MarkdownDialogWrapper from "./MarkdownDialogWrapper";
+import React, { type ChangeEvent } from "react";
 import {
-  IconEye,
   IconFilePencil,
   IconInfoSquareRounded,
   IconMarkdown,
@@ -15,7 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import MarkdownContent from "./MarkdownContent";
+import MarkdownContent from "../markdown-editor/MarkdownContent";
 import {
   Dialog,
   DialogContent,
@@ -32,28 +30,21 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "../ui/hover-card";
+import { type FishingSpotData } from "../../../schemas/fishing-spot.schema";
 
-// type MarkdownEditorProps = {
-//   initialText: string;
-// };
+type DescriptionSpotFormProps = Pick<FishingSpotData, "description"> & {
+  setDescription: (d: string) => void;
+};
 
-const MarkdownEditor = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [markdownText, setMarkdownText] = useState("");
+const DescriptionSpotForm = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement> & DescriptionSpotFormProps
+>(({ description, setDescription, ...props }, ref) => {
   const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setMarkdownText(e.target.value);
-  };
-  const close = () => setIsOpen(false);
-
-  // const handleCancel = () => {
-  //   close();
-  // };
-
-  const handleSave = () => {
-    close();
+    setDescription(e.target.value);
   };
   return (
-    <Card>
+    <Card ref={ref} {...props}>
       <CardHeader>
         <CardTitle>
           <IconMarkdown size="2rem" />
@@ -65,13 +56,10 @@ const MarkdownEditor = () => {
       </CardHeader>
       <CardContent>
         <Dialog>
-          {markdownText.length > 0 ? (
+          {description.length > 0 ? (
             <DialogTrigger asChild className="w-full text-start">
-              <div
-                onClick={() => setIsOpen(true)}
-                className="cursor-pointer rounded-md border border-primary-200 p-2 transition-all hover:bg-primary-100 dark:border-primary-dark hover:dark:bg-primary-800"
-              >
-                <MarkdownContent text={markdownText} />
+              <div className="cursor-pointer rounded-md border border-primary-200 p-2 transition-all hover:bg-primary-100 dark:border-primary-dark hover:dark:bg-primary-800">
+                <MarkdownContent text={description} />
               </div>
             </DialogTrigger>
           ) : (
@@ -121,7 +109,7 @@ const MarkdownEditor = () => {
                 </h4>
                 <Textarea
                   className="grow resize-none overflow-y-auto scrollbar-thin scrollbar-track-primary-dark hover:scrollbar-thumb-primary-600 dark:scrollbar-thumb-primary-700"
-                  value={markdownText}
+                  value={description}
                   onChange={handleInputChange}
                 />
               </div>
@@ -132,7 +120,7 @@ const MarkdownEditor = () => {
                 </h4>
                 <MarkdownContent
                   className="h-full overflow-y-auto rounded-md bg-white p-2 scrollbar-thin scrollbar-track-primary-dark hover:scrollbar-thumb-primary-600 dark:bg-primary-950 dark:scrollbar-thumb-primary-700"
-                  text={markdownText}
+                  text={description}
                 />
               </div>
             </div>
@@ -143,30 +131,11 @@ const MarkdownEditor = () => {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-        {/* <MarkdownDialogWrapper isOpen={isOpen} close={close}>
-          <div className="flex h-full flex-col p-2">
-            <div className="grid h-full w-full grid-cols-1 grid-rows-2 gap-2 sm:grid-cols-2 sm:grid-rows-1 ">
-              <textarea
-                className="rounded-sm bg-primary p-2 dark:bg-primary-dark"
-                value={markdownText}
-                onChange={handleInputChange}
-              ></textarea>
-              <div className="rounded-sm bg-primary p-2 dark:bg-primary-dark">
-                <div className="flex items-center justify-center gap-2 text-center text-lg">
-                  <IconEye />
-                  Podgląd
-                </div>
-                <MarkdownContent text={markdownText} />
-              </div>
-            </div>
-            <div className="flex items-center justify-end gap-2 p-2">
-              <Button onClick={handleSave}>Zamknij</Button>
-            </div>
-          </div>
-        </MarkdownDialogWrapper> */}
       </CardContent>
     </Card>
   );
-};
+});
 
-export default MarkdownEditor;
+DescriptionSpotForm.displayName = "DescriptionSpotForm";
+
+export { DescriptionSpotForm };

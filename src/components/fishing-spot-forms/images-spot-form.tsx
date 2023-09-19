@@ -1,17 +1,20 @@
 import React from "react";
 import ImageInput from "../common/ImageInput";
-import { useNewSpotStore } from "../../zustand/new-spot-store";
 import Image from "next/image";
 import { getSpotImageSrc } from "../../lib/utils/getImageSrc";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { IconCamera } from "@tabler/icons-react";
+import { type FishingSpotData } from "../../../schemas/fishing-spot.schema";
 
-const ImagesGallery = () => {
-  const { images, setField } = useNewSpotStore((store) => store);
+type ImagesSpotFormProps = Pick<FishingSpotData, "images"> & {
+  setImages: (images: string[]) => void;
+};
+
+const ImagesSpotForm = ({ images, setImages }: ImagesSpotFormProps) => {
   const [parent] = useAutoAnimate();
   const handleUpload = (imageId: string) => {
-    setField("images", [imageId, ...images]);
+    setImages([imageId, ...images]);
   };
   return (
     <Card>
@@ -41,4 +44,4 @@ const ImagesGallery = () => {
   );
 };
 
-export default ImagesGallery;
+export default ImagesSpotForm;

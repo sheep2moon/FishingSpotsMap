@@ -66,7 +66,7 @@ const FishingSpot = () => {
       </div>
       <div className="mt-4 grid w-full grid-cols-1 lg:grid-cols-3">
         <div className="p-2 lg:col-span-2">
-          <div className="bg-primary-200 dark:bg-primary-800 relative aspect-video max-h-[500px] w-full object-cover">
+          <div className="relative aspect-video max-h-[500px] w-full bg-primary-200 object-cover dark:bg-primary-800/10">
             <Image
               alt="widok"
               className="rounded-md object-contain"
@@ -143,7 +143,7 @@ const FishingSpot = () => {
         <div className="text-dark flex flex-wrap gap-1">
           {spotQuery.data.fish_types.map((fishType) => (
             <div
-              className="dark:bg-primary-800 rounded-sm  border px-2 py-1"
+              className="rounded-sm border  px-2 py-1 dark:bg-primary-800"
               key={fishType}
             >
               {fishType}
@@ -153,7 +153,7 @@ const FishingSpot = () => {
 
         <h5 className="text-dark/80 mt-4 text-lg font-bold uppercase">Opis</h5>
 
-        <div className="shadow-dark/40 dark:bg-primary-dark rounded-sm px-4 py-2 shadow-sm">
+        <div className="shadow-dark/40 rounded-sm px-4 py-2 shadow-sm dark:bg-primary-dark">
           <ReactMarkdown>{spotQuery.data.description}</ReactMarkdown>
           {/* <pre>{marked.parse(spotQuery.data.description)}</pre> */}
         </div>
