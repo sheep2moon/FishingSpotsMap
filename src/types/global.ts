@@ -1,8 +1,8 @@
-import { type fishTypes } from "../const/fish-types";
+import { type fishTypeNames } from "../const/fish-type-names";
 
 export type Position = {
   lat: number;
   lng: number;
 };
-export type FishTypes = (typeof fishTypes)[];
+export type FishType = (typeof fishTypeNames)[number];
 export type SpotPricing = { title: string; value: string }[];

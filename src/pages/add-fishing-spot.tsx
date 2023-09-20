@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import { useNewSpotStore } from "../zustand/new-spot-store";
 import { api } from "../lib/utils/api";
-import FishTypeSelector from "../components/add-spot/FishTypeSelector";
+import { FishTypeSpotForm } from "../components/fishing-spot-forms/fish-types-spot-form";
 import { useState } from "react";
 import {
   IconAlertHexagonFilled,
@@ -20,7 +20,7 @@ import { DetailsSpotForm } from "../components/fishing-spot-forms/details-spot-f
 import PricingSpotForm from "../components/fishing-spot-forms/pricing-spot-form";
 import { fishingSpotSchema } from "../../schemas/fishing-spot.schema";
 import { DescriptionSpotForm } from "../components/fishing-spot-forms/description-spot-form";
-import ImagesSpotForm from "../components/fishing-spot-forms/images-spot-form";
+import { NewSpotImagesForm } from "../components/fishing-spot-forms/images-spot-form";
 
 const SelectPositionMap = dynamic(
   () => import("../components/map/SelectPositionMap"),
@@ -42,6 +42,7 @@ const AddFishingSpot = () => {
     city,
     name,
     images,
+    fish_types,
     province,
     setField,
   } = useNewSpotStore((store) => store);
@@ -97,12 +98,12 @@ const AddFishingSpot = () => {
           setPrices={(prices) => setField("prices", prices)}
         />
 
-        <FishTypeSelector />
+        <FishTypeSpotForm
+          fishTypes={fish_types}
+          setFishTypes={(fishTypes) => setField("fish_types", fishTypes)}
+        />
       </div>
-      <ImagesSpotForm
-        images={images}
-        setImages={(images) => setField("images", images)}
-      />
+      <NewSpotImagesForm />
       <DescriptionSpotForm
         description={description}
         setDescription={(description) => setField("description", description)}

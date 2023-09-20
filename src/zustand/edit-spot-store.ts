@@ -1,10 +1,7 @@
 import { create } from "zustand";
 import { type FishingSpotData } from "../../schemas/fishing-spot.schema";
-import { type FishTypes } from "../types/global";
 
-type EditFields = Omit<FishingSpotData, "images" | "fish_types" | "contact"> & {
-  fish_types: FishTypes;
-};
+type EditFields = Omit<FishingSpotData, "images" | "contact">;
 
 type EditSpotState = EditFields & {
   setField: <K extends keyof FishingSpotData>(

@@ -1,4 +1,4 @@
-export const fishTypes = [
+export const fishTypeNames = [
   "Karp",
   "Amur",
   "Sandacz",

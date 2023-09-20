@@ -1,6 +1,10 @@
 import { create } from "zustand";
 import { type FishingSpotData } from "../../schemas/fishing-spot.schema";
 
+// type StateFields = Omit<FishingSpotData, "images"> & {
+//   images: EditableImage[];
+// };
+
 type NewSpotState = FishingSpotData & {
   setField: <K extends keyof FishingSpotData>(
     key: K,
@@ -16,8 +20,8 @@ export const useNewSpotStore = create<NewSpotState>((set) => ({
   isPaid: false,
   accommodation: false,
   tent: false,
-  images: [],
   night_fishing: false,
+  images: [],
   spinning: false,
   contact: "",
   lat: 0,

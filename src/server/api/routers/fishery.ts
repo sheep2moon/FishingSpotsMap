@@ -5,9 +5,9 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
-import { fishTypes } from "../../../const/fish-types";
 import type { Image as SpotImage } from "@prisma/client";
-import { FishTypes } from "../../../types/global";
+import { type FishType } from "../../../types/global";
+import { fishingSpotSchema } from "../../../../schemas/fishing-spot.schema";
 
 export const fisheryRouter = createTRPCRouter({
   getFishingSpot: publicProcedure
@@ -22,7 +22,7 @@ export const fisheryRouter = createTRPCRouter({
       });
       if (!fishingSpot) return null;
       const fish_types = fishingSpot?.fish_types
-        ? (JSON.parse(fishingSpot.fish_types) as FishTypes)
+        ? (JSON.parse(fishingSpot.fish_types) as FishType[])
         : [];
       const prices = fishingSpot?.prices
         ? (JSON.parse(fishingSpot?.prices) as {
@@ -115,25 +115,7 @@ export const fisheryRouter = createTRPCRouter({
     return res;
   }),
   addFishery: publicProcedure
-    .input(
-      z.object({
-        name: z.string(),
-        province: z.string(),
-        city: z.string(),
-        area: z.string(),
-        contact: z.string(),
-        night_fishing: z.boolean(),
-        tent: z.boolean(),
-        accommodation: z.boolean(),
-        spinning: z.boolean(),
-        lat: z.number(),
-        lng: z.number(),
-        fish_types: z.array(z.enum(fishTypes)),
-        prices: z.array(z.object({ title: z.string(), value: z.string() })),
-        images: z.array(z.string()),
-        description: z.string(),
-      })
-    )
+    .input(fishingSpotSchema)
     .mutation(async ({ input, ctx }) => {
       let published = false;
       let acceptedBy = "";
@@ -187,6 +169,24 @@ export const fisheryRouter = createTRPCRouter({
           rate: input.rate,
           fishingSpotId: input.spotId,
           createdBy: ctx.session.user.id,
+        },
+      });
+    }),
+  addImageToSpot: protectedProcedure
+    .input(
+      z.object({
+        spotId: z.string(),
+        comment: z.string().optional(),
+        source: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      await ctx.prisma.image.create({
+        data: {
+          userId: ctx.session.user.id,
+          comment: input.comment || "",
+          source: input.source || "",
+          fishingSpotId: input.spotId,
         },
       });
     }),

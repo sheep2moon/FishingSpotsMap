@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "../ui/card";
 import { IconCurrentLocation } from "@tabler/icons-react";
+import { type Position } from "../../types/global";
 
 type SelectPositionMapProps = {
   disabled?: boolean;
@@ -19,29 +20,29 @@ type SelectPositionMapProps = {
   setProvince?: (province: string) => void;
 };
 
-const SelectPositionMap = ({
-  disabled,
-  setPosition,
-  setCity,
-  setProvince,
-  position,
-}: SelectPositionMapProps) => {
-  const onPositionChange = async (position: Position) => {
-    setPosition(position);
+const SelectPositionMap = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement> & SelectPositionMapProps
+>(
+  (
+    { disabled, setPosition, setCity, setProvince, position, ...props },
+    ref
+  ) => {
+    const onPositionChange = async (position: Position) => {
+      setPosition(position);
 
-    if (setCity || setProvince) {
-      const { province, city } = await searchCityByLatLng(position);
-      setCity?.(city);
-      setProvince?.(province);
-    }
-  };
+      if (setCity || setProvince) {
+        const { province, city } = await searchCityByLatLng(position);
+        setCity?.(city);
+        setProvince?.(province);
+      }
+    };
 
-  return (
-    <>
-      <Card>
+    return (
+      <Card ref={ref} {...props}>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <IconCurrentLocation size="2rem" />
+            <IconCurrentLocation />
             Lokalizacja łowiska
           </CardTitle>
           <CardDescription>Wskaż lokalizacje łowiska na mapie</CardDescription>
@@ -68,8 +69,10 @@ const SelectPositionMap = ({
           </MapContainer>
         </CardContent>
       </Card>
-    </>
-  );
-};
+    );
+  }
+);
+
+SelectPositionMap.displayName = "SelectPositionMap";
 
 export default SelectPositionMap;

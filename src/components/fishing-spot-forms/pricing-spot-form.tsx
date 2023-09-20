@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { forwardRef, useCallback, useState } from "react";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -10,13 +10,18 @@ import {
   CardTitle,
 } from "../ui/card";
 import { IconTag } from "@tabler/icons-react";
+import { type SpotPricing } from "../../types/global";
+import { cn } from "../../lib/utils/cn";
 
 type PricingSpotFormProps = {
   prices: SpotPricing;
   setPrices: (pricing: SpotPricing) => void;
 };
 
-const PricingSpotForm = ({ prices, setPrices }: PricingSpotFormProps) => {
+const PricingSpotForm = forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement> & PricingSpotFormProps
+>(({ prices, setPrices, ...props }, ref) => {
   const [parent] = useAutoAnimate();
   const [pricesCount, setPricesCount] = useState(0);
   const [isPaid, setIsPaid] = useState(false);
@@ -67,7 +72,7 @@ const PricingSpotForm = ({ prices, setPrices }: PricingSpotFormProps) => {
   }, [prices, setPrices]);
 
   return (
-    <Card className="transition-all">
+    <Card ref={ref} {...props} className={cn("transition-al", props.className)}>
       <CardHeader>
         <CardTitle>
           <IconTag size="2rem" />
@@ -117,6 +122,8 @@ const PricingSpotForm = ({ prices, setPrices }: PricingSpotFormProps) => {
       </CardContent>
     </Card>
   );
-};
+});
+
+PricingSpotForm.displayName = "PricingSpotForm";
 
 export default PricingSpotForm;
