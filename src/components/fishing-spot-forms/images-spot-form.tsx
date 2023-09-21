@@ -17,6 +17,8 @@ import { Button } from "../ui/button";
 import { useNewSpotStore } from "../../zustand/new-spot-store";
 import { SpotImage } from "../../../schemas/fishing-spot.schema";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { cn } from "../../lib/utils/cn";
+import { IconPhotoStar } from "@tabler/icons-react";
 
 // type NewSpotImagesFormProps = {
 //   images: SpotImage[];
@@ -51,6 +53,17 @@ const NewSpotImagesForm = forwardRef<
     setField("images", newImages);
   };
 
+  const setMainImage = (imageIndex: number) => {
+    const newImages = [...images];
+    if (!newImages[0]) return;
+    const temp = newImages[imageIndex];
+    if (temp) {
+      newImages[imageIndex] = newImages[0];
+      newImages[0] = temp;
+      setField("images", newImages);
+    }
+  };
+
   return (
     <Card ref={ref} {...props}>
       <CardHeader>
@@ -69,7 +82,9 @@ const NewSpotImagesForm = forwardRef<
             const currentImage = images[index];
             return (
               <div
-                className="group relative aspect-square w-full max-w-[180px] rounded-md border dark:border-primary-dark"
+                className={cn(
+                  "group relative aspect-square w-full max-w-[180px] rounded-md border dark:border-primary-dark"
+                )}
                 key={`image-${index}`}
               >
                 {currentImage !== undefined && (
@@ -80,18 +95,33 @@ const NewSpotImagesForm = forwardRef<
                       alt=""
                       src={URL.createObjectURL(currentImage.file)}
                     />
-                    <button
-                      className="absolute right-1 top-1 rounded-full p-2 opacity-0 transition-all group-hover:opacity-100 dark:bg-primary-dark/50 dark:text-primary/80 dark:hover:text-primary"
-                      onClick={() => handleDeleteImage(index)}
-                    >
-                      <IconX size="2rem" />
-                    </button>
-                    <button
-                      className="absolute left-1 top-1 rounded-full p-2 opacity-0 transition-all group-hover:opacity-100 dark:bg-primary-dark/50 dark:text-primary/80 dark:hover:text-primary"
-                      onClick={() => setSelectedImage(currentImage)}
-                    >
-                      <IconPencilMinus size="1.8rem" />
-                    </button>
+                    {index === 0 && (
+                      <span className="absolute bottom-0 left-0 rounded-bl-md rounded-tr-md bg-secondary px-2 py-1 text-base text-primary">
+                        Zdjęcie główne
+                      </span>
+                    )}
+                    <div className="absolute left-1/2 top-4 flex -translate-x-1/2 justify-center gap-2">
+                      {index !== 0 && (
+                        <button
+                          className="rounded-full p-2 opacity-0 transition-all group-hover:opacity-100 dark:bg-primary-dark/50 dark:text-primary/80 dark:hover:text-primary"
+                          onClick={() => setMainImage(index)}
+                        >
+                          <IconPhotoStar size="2rem" />
+                        </button>
+                      )}
+                      <button
+                        className="rounded-full p-2 opacity-0 transition-all group-hover:opacity-100 dark:bg-primary-dark/50 dark:text-primary/80 dark:hover:text-primary"
+                        onClick={() => setSelectedImage(currentImage)}
+                      >
+                        <IconPencilMinus size="1.8rem" />
+                      </button>
+                      <button
+                        className="rounded-full p-2 opacity-0 transition-all group-hover:opacity-100 dark:bg-primary-dark/50 dark:text-primary/80 dark:hover:text-primary"
+                        onClick={() => handleDeleteImage(index)}
+                      >
+                        <IconX size="2rem" />
+                      </button>
+                    </div>
                   </>
                 )}
               </div>
