@@ -19,6 +19,12 @@ import { SpotImage } from "../../../schemas/fishing-spot.schema";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { cn } from "../../lib/utils/cn";
 import { IconPhotoStar } from "@tabler/icons-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 // type NewSpotImagesFormProps = {
 //   images: SpotImage[];
@@ -102,25 +108,23 @@ const NewSpotImagesForm = forwardRef<
                     )}
                     <div className="absolute left-1/2 top-4 flex -translate-x-1/2 justify-center gap-2">
                       {index !== 0 && (
-                        <button
-                          className="rounded-full p-2 opacity-0 transition-all group-hover:opacity-100 dark:bg-primary-dark/50 dark:text-primary/80 dark:hover:text-primary"
+                        <ImageOptionButton
+                          tooltip="Ustaw jako główne"
+                          icon={<IconPhotoStar className="p-2" size="2.8rem" />}
                           onClick={() => setMainImage(index)}
-                        >
-                          <IconPhotoStar size="2rem" />
-                        </button>
+                        />
                       )}
-                      <button
-                        className="rounded-full p-2 opacity-0 transition-all group-hover:opacity-100 dark:bg-primary-dark/50 dark:text-primary/80 dark:hover:text-primary"
+                      <ImageOptionButton
+                        tooltip="Opcje zdjęcia"
+                        icon={<IconPencilMinus className="p-2" size="2.8rem" />}
                         onClick={() => setSelectedImage(currentImage)}
-                      >
-                        <IconPencilMinus size="1.8rem" />
-                      </button>
-                      <button
-                        className="rounded-full p-2 opacity-0 transition-all group-hover:opacity-100 dark:bg-primary-dark/50 dark:text-primary/80 dark:hover:text-primary"
+                      />
+
+                      <ImageOptionButton
+                        icon={<IconX className="p-2" size="2.8rem" />}
+                        tooltip="Usuń zdjęcie"
                         onClick={() => handleDeleteImage(index)}
-                      >
-                        <IconX size="2rem" />
-                      </button>
+                      />
                     </div>
                   </>
                 )}
@@ -141,6 +145,35 @@ const NewSpotImagesForm = forwardRef<
 });
 
 NewSpotImagesForm.displayName = "NewSpotImagesForm";
+
+type ImageOptionButtonProps = {
+  icon: React.ReactNode;
+  tooltip: string;
+};
+
+const ImageOptionButton = React.forwardRef<
+  HTMLButtonElement,
+  React.HTMLAttributes<HTMLButtonElement> & ImageOptionButtonProps
+>(({ icon, tooltip, ...props }, ref) => {
+  return (
+    <button
+      ref={ref}
+      {...props}
+      className="rounded-full opacity-0 transition-all group-hover:opacity-100 dark:bg-primary-dark/50 dark:text-primary/80 dark:hover:text-primary"
+    >
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>{icon}</TooltipTrigger>
+          <TooltipContent>
+            <p>{tooltip}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    </button>
+  );
+});
+
+ImageOptionButton.displayName = "ImageOptionButton";
 
 type ImageDetailsDialogContentProps = {
   isOpen: boolean;
