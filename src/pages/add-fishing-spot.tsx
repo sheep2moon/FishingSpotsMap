@@ -21,6 +21,7 @@ import PricingSpotForm from "../components/fishing-spot-forms/pricing-spot-form"
 import { fishingSpotSchema } from "../../schemas/fishing-spot.schema";
 import { DescriptionSpotForm } from "../components/fishing-spot-forms/description-spot-form";
 import { NewSpotImagesForm } from "../components/fishing-spot-forms/images-spot-form";
+import { ContactSpotForm } from "../components/fishing-spot-forms/contact-spot-form";
 
 const SelectPositionMap = dynamic(
   () => import("../components/map/SelectPositionMap"),
@@ -41,6 +42,10 @@ const AddFishingSpot = () => {
     night_fishing,
     city,
     name,
+    contact_email,
+    contact_instagram,
+    contact_page,
+    contact_phone,
     images,
     fish_types,
     province,
@@ -103,6 +108,16 @@ const AddFishingSpot = () => {
           setFishTypes={(fishTypes) => setField("fish_types", fishTypes)}
         />
       </div>
+      <ContactSpotForm
+        contact_email={contact_email}
+        contact_instagram={contact_instagram}
+        contact_page={contact_page}
+        contact_phone={contact_phone}
+        setPhone={(phone) => setField("contact_phone", phone)}
+        setEmail={(email) => setField("contact_email", email)}
+        setInstagram={(instagram) => setField("contact_instagram", instagram)}
+        setPage={(page) => setField("contact_page", page)}
+      />
       <NewSpotImagesForm />
       <DescriptionSpotForm
         description={description}

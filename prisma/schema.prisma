@@ -2,8 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider        = "prisma-client-js"
-    previewFeatures = ["jsonProtocol"]
+    provider = "prisma-client-js"
+    // previewFeatures = ["jsonProtocol"]
 }
 
 datasource db {
@@ -112,26 +112,30 @@ model Review {
 }
 
 model FishingSpot {
-    id            String        @id @default(cuid())
-    createdAt     DateTime      @default(now())
-    acceptedBy    String?
-    wishlistedBy  UserLibrary[] @relation("Wishlist")
-    visitedBy     UserLibrary[] @relation("Visited")
-    published     Boolean
-    reviews       Review[]
-    images        Image[]
-    prices        String
-    lat           Float
-    lng           Float
-    name          String
-    description   String        @db.Text
-    province      String
-    city          String
-    fish_types    String        @db.Text
-    area          String
-    contact       String
-    night_fishing Boolean
-    tent          Boolean
-    accommodation Boolean
-    spinning      Boolean
+    id                String        @id @default(cuid())
+    createdAt         DateTime      @default(now())
+    acceptedBy        String?
+    wishlistedBy      UserLibrary[] @relation("Wishlist")
+    visitedBy         UserLibrary[] @relation("Visited")
+    published         Boolean
+    reviews           Review[]
+    images            Image[]
+    prices            String
+    lat               Float
+    lng               Float
+    name              String
+    description       String        @db.Text
+    province          String
+    city              String
+    fish_types        String        @db.Text
+    area              String
+    contact           String
+    contact_page      String?
+    contact_phone     Int?
+    contact_instagram String?
+    contact_email     String?
+    night_fishing     Boolean
+    tent              Boolean
+    accommodation     Boolean
+    spinning          Boolean
 }

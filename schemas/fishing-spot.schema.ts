@@ -6,13 +6,26 @@ export const fishingSpotSchema = z.object({
   province: z.string().nonempty("Wprowadź nazwę województwa"),
   city: z.string().nonempty("Wprowadź nazwę miasta"),
   area: z.string(),
-  contact: z.string(),
   night_fishing: z.boolean(),
   tent: z.boolean(),
   accommodation: z.boolean(),
   spinning: z.boolean(),
   lat: z.number().min(0.00001, "Wskaż lokalizacje"),
   lng: z.number(),
+  contact_page: z
+    .string()
+    .url("Adres URL strony łowiska nieprawidłowy")
+    .nullish(),
+  contact_phone: z
+    .number()
+    .min(9, "Długość telefonu powinna wynosić 9")
+    .max(9, "Telefon powinien mieć 9 cyfr")
+    .nullish(),
+  contact_email: z.string().email("Email kontaktowy nieprawidłowy").nullish(),
+  contact_instagram: z
+    .string()
+    .url("Adres URL Instagrama nieprawidłowy")
+    .nullish(),
   fish_types: z.array(z.enum(fishTypeNames)),
   prices: z.array(z.object({ title: z.string(), value: z.string() })),
   images: z.array(

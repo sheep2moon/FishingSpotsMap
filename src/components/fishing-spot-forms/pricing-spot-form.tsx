@@ -90,12 +90,12 @@ const PricingSpotForm = forwardRef<
             >
               <Input
                 className=""
-                value={prices[index]?.title}
+                value={prices[index]?.title || ""}
                 placeholder={`${(index + 1) * 2} godziny`}
                 onChange={(e) => handlePriceTitleChange(index, e.target.value)}
               />
               <Input
-                value={prices[index]?.value}
+                value={prices[index]?.value || ""}
                 placeholder="20zł/os"
                 onChange={(e) => handlePriceValueChange(index, e.target.value)}
               />

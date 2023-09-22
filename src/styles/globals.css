@@ -13,7 +13,9 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
-
+.cls-1 {
+  fill-rule: evenodd;
+}
 .h-calc-screen {
   height: calc(100vh - 4rem);
 }

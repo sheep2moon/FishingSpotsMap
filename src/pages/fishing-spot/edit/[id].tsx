@@ -36,7 +36,6 @@ import dynamic from "next/dynamic";
 import { FishTypeSpotForm } from "../../../components/fishing-spot-forms/fish-types-spot-form";
 import PricingSpotForm from "../../../components/fishing-spot-forms/pricing-spot-form";
 import { IconTag } from "@tabler/icons-react";
-import ImagesSpotForm from "../../../components/fishing-spot-forms/images-spot-form";
 
 const SelectPositionMap = dynamic(
   () => import("../../../components/map/SelectPositionMap"),
@@ -126,6 +125,10 @@ const EditFishingSpot = () => {
         province: spotQuery.data.province,
         spinning: spotQuery.data.spinning,
         tent: spotQuery.data.tent,
+        contact_phone: spotQuery.data.contact_phone,
+        contact_email: spotQuery.data.contact_email,
+        contact_page: spotQuery.data.contact_page,
+        contact_instagram: spotQuery.data.contact_instagram,
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [spotQuery.isSuccess]);

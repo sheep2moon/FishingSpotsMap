@@ -27,6 +27,7 @@ import Image from "next/image";
 import { InternalLink } from "../ui/internal-link";
 import { signOut, useSession } from "next-auth/react";
 import ThemeToggle from "../../layout/ThemeToggle";
+import { LogoIcon } from "../icons/LogoIcon";
 
 const links: { text: string; href: string; icon: React.ReactNode }[] = [
   {
@@ -60,6 +61,16 @@ const Nav = () => {
       )}
     >
       <nav className="mx-auto flex w-full max-w-screen-xl items-center px-2">
+        {/* <Image
+          src="/images/logo-icon.svg"
+          alt=""
+          width={32}
+          height={32}
+          className="p-2 text-accent"
+        /> */}
+        {/* <div className="mx-2 aspect-square w-10 fill-accent">
+          <LogoIcon />
+        </div> */}
         <div className="lg:hidden">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

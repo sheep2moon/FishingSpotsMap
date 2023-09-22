@@ -78,9 +78,12 @@ const NewSpotImagesForm = forwardRef<
           Zdjęcia
         </CardTitle>
       </CardHeader>
-      <CardContent ref={imageContainerRef} className="flex flex-wrap gap-2">
+      <CardContent
+        ref={imageContainerRef}
+        className="grid grid-cols-2 gap-1 sm:grid-cols-4 lg:grid-cols-6"
+      >
         {images.length !== 6 && (
-          <ImageInput className="max-w-[180px]" onFileAdd={onFileAdd} />
+          <ImageInput className="" onFileAdd={onFileAdd} />
         )}
         {Array(images.length === 6 ? 6 : 5)
           .fill(0)
@@ -89,7 +92,7 @@ const NewSpotImagesForm = forwardRef<
             return (
               <div
                 className={cn(
-                  "group relative aspect-square w-full max-w-[180px] rounded-md border dark:border-primary-dark"
+                  "group relative aspect-square w-full rounded-md border dark:border-primary-dark"
                 )}
                 key={`image-${index}`}
               >
@@ -106,7 +109,7 @@ const NewSpotImagesForm = forwardRef<
                         Zdjęcie główne
                       </span>
                     )}
-                    <div className="absolute left-1/2 top-4 flex -translate-x-1/2 justify-center gap-2">
+                    <div className="invisible absolute left-1/2 top-4 flex -translate-x-1/2 justify-center gap-2 group-hover:visible">
                       {index !== 0 && (
                         <ImageOptionButton
                           tooltip="Ustaw jako główne"
@@ -157,9 +160,10 @@ const ImageOptionButton = React.forwardRef<
 >(({ icon, tooltip, ...props }, ref) => {
   return (
     <button
+      aria-label={tooltip}
       ref={ref}
       {...props}
-      className="rounded-full opacity-0 transition-all group-hover:opacity-100 dark:bg-primary-dark/50 dark:text-primary/80 dark:hover:text-primary"
+      className="rounded-full opacity-0 transition-all group-hover:opacity-100 focus:opacity-100 dark:bg-primary-dark/50 dark:text-primary/80 dark:hover:text-primary"
     >
       <TooltipProvider>
         <Tooltip>
@@ -193,14 +197,15 @@ const ImageDetailsDialogContent = ({
 
   const handleSubmit = () => {
     onSubmit({ comment, source, file: image.file });
+    close();
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={() => close()}>
-      <DialogContent>
+      <DialogContent className="z-[1001] h-full max-h-screen w-full max-w-full sm:h-auto sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>Szczegóły zdjęcia</DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-left">
             Dodaj opcjonalne informacje do zdjęcia
           </DialogDescription>
         </DialogHeader>

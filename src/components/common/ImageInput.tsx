@@ -24,17 +24,14 @@ const ImageInput = React.forwardRef<
         className
       )}
     >
-      <label
-        htmlFor="image-upload"
-        className="ring-light flex h-full cursor-pointer focus:ring-2"
-      >
+      <label htmlFor="image-upload" className="flex h-full cursor-pointer ">
         <input
           className="peer w-0 opacity-0"
           id="image-upload"
           type="file"
           onChange={handleFileChange}
         />
-        <div className="flex h-full w-full flex-col items-center justify-center peer-focus:border-2">
+        <div className="flex h-full w-full flex-col items-center justify-center rounded-md ring-primary peer-focus:ring-2">
           <svg
             aria-hidden="true"
             className="mb-3 h-8 w-8 text-primary-500 dark:text-primary"

@@ -73,8 +73,8 @@ const DescriptionSpotForm = React.forwardRef<
                 <IconFilePencil size="2rem" />
                 Opis
               </DialogTitle>
-              <DialogDescription className="ml-auto mr-8">
-                <HoverCard>
+              <div className="ml-auto mr-8">
+                <HoverCard defaultOpen={false}>
                   <HoverCardTrigger>
                     <Button className="m-0 h-fit p-0" variant="link">
                       <IconInfoSquareRounded className="mr-1 text-info dark:text-info-dark" />
@@ -99,7 +99,7 @@ const DescriptionSpotForm = React.forwardRef<
                     </p>
                   </HoverCardContent>
                 </HoverCard>
-              </DialogDescription>
+              </div>
             </DialogHeader>
             <div className="grid h-full min-h-0 grid-cols-1 gap-2 overflow-y-auto p-1 sm:grid-cols-2">
               <div className="flex h-[300px] flex-col rounded-sm bg-primary-200 p-1 dark:bg-primary-dark sm:h-auto sm:min-h-0">

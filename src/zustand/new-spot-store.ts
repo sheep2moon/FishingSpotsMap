@@ -28,6 +28,10 @@ export const useNewSpotStore = create<NewSpotState>((set) => ({
   lng: 0,
   area: "",
   description: "",
+  email: "",
+  phone: undefined,
+  instagram: "",
+  owner_page: "",
   fish_types: [],
   setField: (key, value) => set((state) => ({ ...state, [key]: value })),
 }));

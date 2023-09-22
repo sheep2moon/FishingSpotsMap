@@ -3,7 +3,7 @@ import { Input, type InputProps } from "./input";
 import { Label } from "./label";
 import * as React from "react";
 interface InputWithLabelProps extends InputProps {
-  label: string;
+  label: React.ReactNode;
 }
 
 const InputWithLabel = React.forwardRef<HTMLInputElement, InputWithLabelProps>(
@@ -12,7 +12,7 @@ const InputWithLabel = React.forwardRef<HTMLInputElement, InputWithLabelProps>(
       <div
         className={cn("grid w-full max-w-sm items-center gap-1.5", className)}
       >
-        <Label className="" htmlFor={props.id}>
+        <Label className="flex items-center gap-2" htmlFor={props.id}>
           {label}
         </Label>
         <Input {...props} ref={ref} />
