@@ -1,15 +1,16 @@
 import { create } from "zustand";
-import { type FishingSpotData } from "../../schemas/fishing-spot.schema";
+import type {
+  FSpotImageWithFile,
+  FSpotData,
+} from "../../schemas/fishing-spot.schema";
 
 // type StateFields = Omit<FishingSpotData, "images"> & {
 //   images: EditableImage[];
 // };
 
-type NewSpotState = FishingSpotData & {
-  setField: <K extends keyof FishingSpotData>(
-    key: K,
-    value: FishingSpotData[K]
-  ) => void;
+type NewSpotState = Omit<FSpotData, "images"> & {
+  setField: <K extends keyof FSpotData>(key: K, value: FSpotData[K]) => void;
+  images: FSpotImageWithFile[];
 };
 
 export const useNewSpotStore = create<NewSpotState>((set) => ({
@@ -17,7 +18,6 @@ export const useNewSpotStore = create<NewSpotState>((set) => ({
   prices: [],
   city: "",
   province: "",
-  isPaid: false,
   accommodation: false,
   tent: false,
   night_fishing: false,
@@ -28,10 +28,10 @@ export const useNewSpotStore = create<NewSpotState>((set) => ({
   lng: 0,
   area: "",
   description: "",
-  email: "",
-  phone: undefined,
-  instagram: "",
-  owner_page: "",
+  contact_email: undefined,
+  contact_phone: undefined,
+  contact_instagram: undefined,
+  contact_page: undefined,
   fish_types: [],
   setField: (key, value) => set((state) => ({ ...state, [key]: value })),
 }));

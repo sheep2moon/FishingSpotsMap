@@ -12,6 +12,7 @@ import {
 import { IconTag } from "@tabler/icons-react";
 import { type SpotPricing } from "../../types/global";
 import { cn } from "../../lib/utils/cn";
+import { useDebugLog } from "../../hooks/useDebugLog";
 
 type PricingSpotFormProps = {
   prices: SpotPricing;
@@ -24,18 +25,6 @@ const PricingSpotForm = forwardRef<
 >(({ prices, setPrices, ...props }, ref) => {
   const [parent] = useAutoAnimate();
   const [pricesCount, setPricesCount] = useState(0);
-  const [isPaid, setIsPaid] = useState(false);
-
-  const handleSetIsPaid = (isPaid: boolean) => {
-    if (isPaid) {
-      setIsPaid(true);
-      setPricesCount(1);
-    }
-    if (!isPaid) {
-      setIsPaid(false);
-      setPricesCount(0);
-    }
-  };
 
   const handlePriceTitleChange = (index: number, title: string) => {
     const newPricing = prices.map((price, i) => {
@@ -61,10 +50,11 @@ const PricingSpotForm = forwardRef<
     const newPricing = prices.filter((_, i) => i !== index);
     setPrices(newPricing);
     setPricesCount((prev) => {
-      if (prev === 1) handleSetIsPaid(false);
       return prev - 1;
     });
   };
+
+  useDebugLog(prices);
 
   const handleAddNewPrice = useCallback(() => {
     setPrices([...prices, { title: "", value: "" }]);
@@ -91,12 +81,12 @@ const PricingSpotForm = forwardRef<
               <Input
                 className=""
                 value={prices[index]?.title || ""}
-                placeholder={`${(index + 1) * 2} godziny`}
+                placeholder="czas"
                 onChange={(e) => handlePriceTitleChange(index, e.target.value)}
               />
               <Input
                 value={prices[index]?.value || ""}
-                placeholder="20zł/os"
+                placeholder="cena"
                 onChange={(e) => handlePriceValueChange(index, e.target.value)}
               />
               <Button onClick={() => handleDeletePrice(index)} variant="ghost">
@@ -105,20 +95,13 @@ const PricingSpotForm = forwardRef<
             </div>
           ))}
         {}
-        {isPaid && (
-          <Button
-            variant="outline"
-            className="w-full"
-            onClick={handleAddNewPrice}
-          >
-            Dodaj pole
-          </Button>
-        )}
-        {!isPaid && (
-          <Button variant="outline" onClick={() => handleSetIsPaid(true)}>
-            Stwórz cennik
-          </Button>
-        )}
+        <Button
+          variant="outline"
+          className="w-full"
+          onClick={handleAddNewPrice}
+        >
+          {prices.length === 0 ? "Stwórz cennik" : "Dodaj pole"}
+        </Button>
       </CardContent>
     </Card>
   );

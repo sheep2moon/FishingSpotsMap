@@ -5,9 +5,10 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
-import type { Image as SpotImage } from "@prisma/client";
+import type { Image, Image as SpotImage } from "@prisma/client";
 import { type FishType } from "../../../types/global";
 import { fishingSpotSchema } from "../../../../schemas/fishing-spot.schema";
+import { uploadFile } from "../../image-handlers";
 
 export const fisheryRouter = createTRPCRouter({
   getFishingSpot: publicProcedure
@@ -129,7 +130,10 @@ export const fisheryRouter = createTRPCRouter({
           province: input.province,
           city: input.city,
           area: input.area,
-          contact: input.contact,
+          contact_email: input.contact_email,
+          contact_instagram: input.contact_instagram,
+          contact_page: input.contact_page,
+          contact_phone: input.contact_phone,
           night_fishing: input.night_fishing,
           tent: input.tent,
           accommodation: input.accommodation,
@@ -143,12 +147,10 @@ export const fisheryRouter = createTRPCRouter({
           acceptedBy,
         },
       });
-      const imagesData: SpotImage[] = input.images.map((imageId) => ({
+      const imagesData: Image[] = input.images.map((image) => ({
+        ...image,
         fishingSpotId: newSpot.id,
-        id: imageId,
         userId: ctx.session?.user.id || "",
-        source: "",
-        comment: "",
       }));
       await ctx.prisma.image.createMany({
         data: imagesData,

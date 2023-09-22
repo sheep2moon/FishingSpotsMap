@@ -125,7 +125,7 @@ const DescriptionSpotForm = React.forwardRef<
               </div>
             </div>
             <DialogFooter className="h-fit">
-              <Close>
+              <Close asChild>
                 <Button>Zamknij</Button>
               </Close>
             </DialogFooter>

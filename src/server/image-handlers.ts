@@ -3,34 +3,26 @@ import { env } from "../env.mjs";
 import { v4 as uuidv4 } from "uuid";
 import { type PresignedPost } from "aws-sdk/clients/s3";
 
-export const s3 = new S3({
-  apiVersion: "2006-03-01",
-  accessKeyId: env.S3_ACCESS_KEY,
-  secretAccessKey: env.S3_SECRET_KEY,
-  region: env.S3_REGION,
-  signatureVersion: "v4",
-});
+type Fields = Record<string, string>;
 
-export const uploadImage = async (bucketFolderName: string) => {
-  const imageId = uuidv4();
-  const s3Data: PresignedPost = await new Promise((resolve, reject) => {
-    s3.createPresignedPost(
-      {
-        Fields: {
-          key: `${bucketFolderName}/${imageId}`,
-        },
-        Conditions: [
-          ["starts-with", "$Content-Type", "image/"],
-          ["content-length-range", 0, 5000000],
-        ],
-        Expires: 60,
-        Bucket: env.S3_BUCKET_NAME,
-      },
-      (err, signed) => {
-        if (err) return reject(err);
-        resolve(signed);
-      }
-    );
+export const uploadFile = async ({
+  url,
+  fields,
+  file,
+}: {
+  url: string;
+  fields: Record<string, string>;
+  file: File;
+}) => {
+  const formData = new FormData();
+  Object.keys(fields).forEach((key) => {
+    formData.append(key, fields[key] as string);
   });
-  return { url: s3Data.url, fields: s3Data.fields, imageId };
+  formData.append("Content-Type", file.type);
+  formData.append("file", file);
+
+  await fetch(url, {
+    method: "POST",
+    body: formData,
+  });
 };

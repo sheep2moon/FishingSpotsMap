@@ -18,10 +18,15 @@ import {
 import { BasicsSpotForm } from "../components/fishing-spot-forms/basics-spot-form";
 import { DetailsSpotForm } from "../components/fishing-spot-forms/details-spot-form";
 import PricingSpotForm from "../components/fishing-spot-forms/pricing-spot-form";
-import { fishingSpotSchema } from "../../schemas/fishing-spot.schema";
+import {
+  type FSpotData,
+  fishingSpotSchema,
+} from "../../schemas/fishing-spot.schema";
 import { DescriptionSpotForm } from "../components/fishing-spot-forms/description-spot-form";
 import { NewSpotImagesForm } from "../components/fishing-spot-forms/images-spot-form";
 import { ContactSpotForm } from "../components/fishing-spot-forms/contact-spot-form";
+import { cn } from "../lib/utils/cn";
+import { uploadFile } from "../server/image-handlers";
 
 const SelectPositionMap = dynamic(
   () => import("../components/map/SelectPositionMap"),
@@ -46,7 +51,6 @@ const AddFishingSpot = () => {
     contact_instagram,
     contact_page,
     contact_phone,
-    images,
     fish_types,
     province,
     setField,
@@ -132,18 +136,48 @@ export default AddFishingSpot;
 
 const FormSubmit = () => {
   const { mutate: addFishery } = api.fishery.addFishery.useMutation();
+  const { mutateAsync: createPresignedUrl } =
+    api.images.createPresignedUrl.useMutation();
   const [errorMesssages, setErrorMessages] = useState<Array<string>>([]);
   const [parent] = useAutoAnimate();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = () => {
-    const newSpotData = useNewSpotStore.getState();
-    const parsingResults = fishingSpotSchema.safeParse(newSpotData);
-    if (parsingResults.success) addFishery({ ...newSpotData });
-    else {
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    const spotData = useNewSpotStore.getState();
+    const parsingResults = fishingSpotSchema.safeParse(spotData);
+
+    if (!parsingResults.success) {
       setErrorMessages(
         parsingResults.error.issues.map((issue) => issue.message)
       );
+      setIsLoading(false);
+      return;
     }
+
+    setErrorMessages([]);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { setField, images, ...newSpotData } = spotData;
+    const dbImages: FSpotData["images"] = [];
+
+    for (let i = 0; i < images.length; i++) {
+      const currentImage = images[i];
+      if (currentImage) {
+        const { url, fields } = await createPresignedUrl({
+          folderName: "spot-images",
+          id: currentImage.id,
+        });
+        await uploadFile({ url, fields, file: currentImage.file });
+        dbImages.push({
+          id: currentImage.id,
+          comment: currentImage.comment,
+          source: currentImage.source,
+        });
+      }
+    }
+
+    addFishery({ ...newSpotData, images: dbImages });
+    setIsLoading(false);
   };
 
   return (
@@ -169,8 +203,12 @@ const FormSubmit = () => {
           </Alert>
         </div>
       )}
-      <Button onClick={handleSubmit} className="mt-4 font-bold">
-        Potwierdź
+      <Button
+        disabled={isLoading}
+        onClick={() => void handleSubmit()}
+        className={cn("mt-4 font-bold", isLoading && "animate-pulse")}
+      >
+        {isLoading ? "Czekaj..." : "Potwierdź"}
       </Button>
     </div>
   );

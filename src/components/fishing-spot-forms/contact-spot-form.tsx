@@ -62,7 +62,7 @@ const ContactSpotForm = React.forwardRef<
           }
           name="phone"
           type="number"
-          value={contact_phone || undefined}
+          value={contact_phone || ""}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setPhone(parseInt(e.target.value))
           }

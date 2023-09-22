@@ -18,8 +18,10 @@ export const fishingSpotSchema = z.object({
     .nullish(),
   contact_phone: z
     .number()
-    .min(9, "Długość telefonu powinna wynosić 9")
-    .max(9, "Telefon powinien mieć 9 cyfr")
+    .refine(
+      (phoneNumber) => phoneNumber.toString().length === 9,
+      "Numer telefonu powinien mieć 9 cyfr"
+    )
     .nullish(),
   contact_email: z.string().email("Email kontaktowy nieprawidłowy").nullish(),
   contact_instagram: z
@@ -30,9 +32,9 @@ export const fishingSpotSchema = z.object({
   prices: z.array(z.object({ title: z.string(), value: z.string() })),
   images: z.array(
     z.object({
+      id: z.string(),
       comment: z.string(),
       source: z.string(),
-      file: z.custom<File>((v) => v instanceof File),
     })
   ),
   description: z
@@ -41,5 +43,5 @@ export const fishingSpotSchema = z.object({
     .max(5000, "Opis powinien zawierać maksymalnie 8000 znaków"),
 });
 
-export type FishingSpotData = z.infer<typeof fishingSpotSchema>;
-export type SpotImage = FishingSpotData["images"][number];
+export type FSpotData = z.infer<typeof fishingSpotSchema>;
+export type FSpotImageWithFile = FSpotData["images"][number] & { file: File };

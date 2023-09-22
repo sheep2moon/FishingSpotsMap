@@ -129,7 +129,6 @@ model FishingSpot {
     city              String
     fish_types        String        @db.Text
     area              String
-    contact           String
     contact_page      String?
     contact_phone     Int?
     contact_instagram String?

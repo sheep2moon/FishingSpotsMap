@@ -24,7 +24,7 @@ const ImageInput = React.forwardRef<
         className
       )}
     >
-      <label htmlFor="image-upload" className="flex h-full cursor-pointer ">
+      <label htmlFor="image-upload" className="flex h-full cursor-pointer">
         <input
           className="peer w-0 opacity-0"
           id="image-upload"

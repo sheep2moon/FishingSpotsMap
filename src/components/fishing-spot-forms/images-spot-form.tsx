@@ -1,22 +1,16 @@
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { forwardRef, useState } from "react";
 import ImageInput from "../common/ImageInput";
 import Image from "next/image";
+import { v4 as uuidv4 } from "uuid";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { IconCamera, IconPencilMinus, IconX } from "@tabler/icons-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { Button } from "../ui/button";
 import { useNewSpotStore } from "../../zustand/new-spot-store";
-import { SpotImage } from "../../../schemas/fishing-spot.schema";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { type FSpotImageWithFile } from "../../../schemas/fishing-spot.schema";
 import { cn } from "../../lib/utils/cn";
 import { IconPhotoStar } from "@tabler/icons-react";
 import {
@@ -26,22 +20,19 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 
-// type NewSpotImagesFormProps = {
-//   images: SpotImage[];
-//   setImages: (images: SpotImage[]) => void;
-//   // onUpload: (imageId: string) => void;
-// };
-
 const NewSpotImagesForm = forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ ...props }, ref) => {
   const [imageContainerRef] = useAutoAnimate();
   const { images, setField } = useNewSpotStore((state) => state);
-  const [selectedImage, setSelectedImage] = useState<SpotImage>();
+  const [selectedImage, setSelectedImage] = useState<FSpotImageWithFile>();
 
   const onFileAdd = (file: File) => {
-    setField("images", [...images, { comment: "", source: "", file }]);
+    setField("images", [
+      ...images,
+      { comment: "", source: "", file, id: uuidv4() },
+    ]);
   };
 
   const handleDeleteImage = (imageIndex: number) => {
@@ -50,12 +41,10 @@ const NewSpotImagesForm = forwardRef<
     setField("images", newImages);
   };
 
-  const onImageDetailsSubmit = (image: SpotImage) => {
+  const onImageDetailsSubmit = (image: FSpotImageWithFile) => {
     const newImages = [...images];
-    const changeIndex = newImages.findIndex(
-      (i) => i.file.name === image.file.name
-    );
-    newImages.splice(changeIndex, 1, image);
+    const changedImageIndex = newImages.findIndex((i) => i.id === image.id);
+    newImages.splice(changedImageIndex, 1, image);
     setField("images", newImages);
   };
 
@@ -109,11 +98,13 @@ const NewSpotImagesForm = forwardRef<
                         Zdjęcie główne
                       </span>
                     )}
-                    <div className="invisible absolute left-1/2 top-4 flex -translate-x-1/2 justify-center gap-2 group-hover:visible">
+                    <div className=" absolute right-2 top-2 flex justify-center gap-2 ">
                       {index !== 0 && (
                         <ImageOptionButton
                           tooltip="Ustaw jako główne"
-                          icon={<IconPhotoStar className="p-2" size="2.8rem" />}
+                          icon={
+                            <IconPhotoStar className=" p-2" size="2.8rem" />
+                          }
                           onClick={() => setMainImage(index)}
                         />
                       )}
@@ -163,7 +154,7 @@ const ImageOptionButton = React.forwardRef<
       aria-label={tooltip}
       ref={ref}
       {...props}
-      className="rounded-full opacity-0 transition-all group-hover:opacity-100 focus:opacity-100 dark:bg-primary-dark/50 dark:text-primary/80 dark:hover:text-primary"
+      className="rounded-full opacity-80 transition-all group-hover:opacity-100 dark:bg-primary-dark/50 dark:text-primary/80 dark:hover:text-primary"
     >
       <TooltipProvider>
         <Tooltip>
@@ -182,8 +173,8 @@ ImageOptionButton.displayName = "ImageOptionButton";
 type ImageDetailsDialogContentProps = {
   isOpen: boolean;
   close: () => void;
-  image: SpotImage;
-  onSubmit: (image: SpotImage) => void;
+  image: FSpotImageWithFile;
+  onSubmit: (image: FSpotImageWithFile) => void;
 };
 
 const ImageDetailsDialogContent = ({
@@ -196,7 +187,7 @@ const ImageDetailsDialogContent = ({
   const [source, setSource] = useState(image.source);
 
   const handleSubmit = () => {
-    onSubmit({ comment, source, file: image.file });
+    onSubmit({ ...image, comment, source });
     close();
   };
 
