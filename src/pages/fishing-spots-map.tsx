@@ -1,6 +1,5 @@
 import React from "react";
 import dynamic from "next/dynamic";
-import FishingSpotSidebar from "../components/fishing-spot-sidebar/FishingSpotSidebar";
 
 const MapPage = () => {
   const FishingSpotsMap = dynamic(
@@ -10,7 +9,6 @@ const MapPage = () => {
   return (
     <div className="z-10 flex h-screen w-full">
       <FishingSpotsMap />
-      <FishingSpotSidebar />
     </div>
   );
 };

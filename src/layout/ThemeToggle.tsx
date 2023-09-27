@@ -42,7 +42,7 @@ const ThemeToggle = () => {
         <TooltipTrigger asChild>
           <Button
             id="theme-toggle"
-            className="justify-start"
+            className="justify-start px-2"
             variant="ghost"
             onClick={toggleTheme}
           >

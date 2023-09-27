@@ -37,7 +37,11 @@ const SearchSpots = () => {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
       <DialogTrigger asChild>
-        <Button onClick={() => setIsOpen(true)} variant="ghost">
+        <Button
+          className="px-2"
+          onClick={() => setIsOpen(true)}
+          variant="ghost"
+        >
           <IconSearch />
         </Button>
       </DialogTrigger>

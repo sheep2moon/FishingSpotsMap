@@ -3,12 +3,22 @@ import StarRating from "../ui/star-rating";
 import { api } from "../../lib/utils/api";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
 
 type AddReviewProps = {
   spotId: string;
 };
 
-const AddReview = ({ spotId }: AddReviewProps) => {
+const AddReview = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement> & AddReviewProps
+>(({ spotId, ...props }, ref) => {
   const ctx = api.useContext();
   const [comment, setComment] = useState<string>("");
   const [rate, setRate] = useState<number>(0);
@@ -28,30 +38,38 @@ const AddReview = ({ spotId }: AddReviewProps) => {
   };
 
   return (
-    <div className="mx-2 mt-2 rounded-md p-2 dark:bg-primary-dark">
-      <span className="text-base ">
-        Widziałeś to miejsce? Przekaż swoją opinie.
-      </span>
-      <StarRating disabled={false} rate={rate} setRate={setRate} />
-      <div>
+    <Card ref={ref} {...props}>
+      <CardHeader className="pb-2">
+        <CardTitle>Twoja opinia</CardTitle>
+        <CardDescription>
+          Jeżeli odwiedziłeś to łowisko, przekaż swoją opinie
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="mt-0 flex flex-col gap-2">
+        <div className="flex items-center gap-4">
+          <p>Ocena</p>
+          <StarRating disabled={false} rate={rate} setRate={setRate} />
+        </div>
         <Textarea
           placeholder="Opisz swoje doświadczenie z tym miejscem."
           name="comment"
           value={comment}
           onChange={(e) => setComment(e.target.value)}
         />
-      </div>
 
-      <Button
-        onClick={handleAddReview}
-        className="ml-auto mt-2 w-fit "
-        variant="default"
-        disabled={isSubmitDisabled}
-      >
-        Dodaj recenzje
-      </Button>
-    </div>
+        <Button
+          onClick={handleAddReview}
+          className="ml-auto mt-2 w-fit "
+          variant="default"
+          disabled={isSubmitDisabled}
+        >
+          Dodaj recenzje
+        </Button>
+      </CardContent>
+    </Card>
   );
-};
+});
+
+AddReview.displayName = "AddReview";
 
 export default AddReview;
