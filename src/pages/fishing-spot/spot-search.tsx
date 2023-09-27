@@ -5,7 +5,7 @@ import { getSpotImageSrc } from "../../lib/utils/getImageSrc";
 import { api } from "../../lib/utils/api";
 import Button from "../../components/common/Button";
 import Link from "next/link";
-import LoadingSpinner from "../../components/common/LoadingSpinner";
+import LoadingSpinner from "../../components/ui/loading-spinner";
 import autoAnimate from "@formkit/auto-animate";
 
 const SpotSearchList = () => {
@@ -31,7 +31,7 @@ const SpotSearchList = () => {
                 className="hover:shadow-dark/60 w-full max-w-md rounded-md p-2 hover:shadow-sm sm:max-w-xs"
                 key={spot.id}
               >
-                <div className="ring-primary-950/40 hover:bg-primary-dark dark:bg-primary-950/20 w-full  rounded-md ring transition-all hover:ring-2 ">
+                <div className="w-full rounded-md ring ring-primary-950/40  transition-all hover:bg-primary-dark hover:ring-2 dark:bg-primary-950/20 ">
                   <div className="relative aspect-video w-full ">
                     <Image
                       alt="widok"
@@ -43,7 +43,7 @@ const SpotSearchList = () => {
                   </div>
                   <div className="flex flex-col px-1 py-2">
                     <span className="truncate">{spot.name || "bez nazwy"}</span>
-                    <span className="text-primary-300 text-xs font-semibold">
+                    <span className="text-xs font-semibold text-primary-300">
                       {spot.city}, {spot.province}
                     </span>
                   </div>

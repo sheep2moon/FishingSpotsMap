@@ -3,37 +3,48 @@ import React, { useEffect, useRef, useState } from "react";
 import { api } from "../../lib/utils/api";
 import Image from "next/image";
 import { getSpotImageSrc } from "../../lib/utils/getImageSrc";
-import EditableBlock from "../../components/fishing-spot/EditableBlock";
 import PricingTable from "../../components/fishing-spot/PricingTable";
 import AddReview from "../../components/fishing-spot/AddReview";
 import Reviews from "../../components/fishing-spot/Reviews";
-import { IconEdit, IconMapPinPin, IconRuler } from "@tabler/icons-react";
+import {
+  IconEdit,
+  IconMapPinPin,
+  IconNavigation,
+  IconNavigationFilled,
+  IconRuler,
+} from "@tabler/icons-react";
 import { useSession } from "next-auth/react";
-import Button from "../../components/common/Button";
 import { IconMapSearch } from "@tabler/icons-react";
 import Link from "next/link";
-import InternalLink from "../../components/common/InternalLink";
-import HorizontalLine from "../../components/common/HorizontalLine";
-import { marked } from "marked";
 import ReactMarkdown from "react-markdown";
 import ModeratorOnly from "../../components/ModeratorOnly";
+import { InternalLink } from "../../components/ui/internal-link";
+import {
+  ViewHeader,
+  ViewSubtitle,
+  ViewTitle,
+} from "../../components/ui/view-header";
+import ImageCarousel from "../../components/fishing-spot/image-carousel";
+import MarkdownContent from "../../components/markdown-editor/MarkdownContent";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../../components/ui/card";
+import { Button } from "../../components/ui/button";
 
 const FishingSpot = () => {
   const router = useRouter();
   const { id } = router.query as { id: string };
   const spotQuery = api.fishery.getFishingSpot.useQuery({ id });
-  const [selectedImage, setSelectedImage] = useState("");
   const session = useSession();
-  useEffect(() => {
-    if (spotQuery.data?.images[0]) {
-      setSelectedImage(spotQuery.data.images[0].id);
-    }
-  }, [spotQuery.data]);
 
   if (!spotQuery.data || spotQuery.isLoading) return <div>skeleton</div>;
   return (
     <div className="shadow-dark/40 mx-auto mt-16 flex min-h-screen w-full max-w-7xl flex-col pb-24 shadow-lg">
-      <div className="flex justify-between px-4">
+      {/* <div className="flex justify-between px-4">
         <div className="text-dark flex w-full flex-col justify-center py-2">
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-bold">{spotQuery.data.name}</h1>
@@ -63,35 +74,48 @@ const FishingSpot = () => {
             </InternalLink>
           )}
         </div>
-      </div>
-      <div className="mt-4 grid w-full grid-cols-1 lg:grid-cols-3">
-        <div className="p-2 lg:col-span-2">
-          <div className="relative aspect-video max-h-[500px] w-full bg-primary-200 object-cover dark:bg-primary-800/10">
-            <Image
-              alt="widok"
-              className="rounded-md object-contain"
-              fill
-              src={getSpotImageSrc(selectedImage)}
-            />
-          </div>
-          <div className="overeflow-x-auto flex gap-1">
-            {spotQuery.data.images.map((image) => (
-              <div
-                onClick={() => setSelectedImage(image.id)}
-                className="relative aspect-square w-28"
-                key={image.id}
-              >
-                <Image
-                  className="rounded-sm object-cover"
-                  alt="widok"
-                  fill
-                  src={getSpotImageSrc(image.id)}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
+      </div> */}
+      <ViewHeader>
+        <ViewTitle>{spotQuery.data.name}</ViewTitle>
+        <ViewSubtitle className="flex items-center gap-2">
+          <IconMapPinPin className="" />
+          {spotQuery.data.city}
+          {", woj. "}
+          {spotQuery.data.province}
+        </ViewSubtitle>
+      </ViewHeader>
+      <ImageCarousel images={spotQuery.data.images} />
 
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            <IconMapPinPin />
+            Lokalizacja
+          </CardTitle>
+          <CardDescription>
+            {spotQuery.data.city}
+            {", woj. "}
+            {spotQuery.data.province}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex max-w-lg items-center gap-2">
+            <InternalLink
+              className="w-full"
+              href={`/fishing-spots-map?flyTo=${spotQuery.data.lat},${spotQuery.data.lng}`}
+            >
+              <IconMapSearch />
+              <span>Zobacz na mapie</span>
+            </InternalLink>
+            <Button className="w-full">
+              <IconNavigation />
+              Nawiguj
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+      {/* 
+      <div className="mt-4 grid w-full grid-cols-1 lg:grid-cols-3">
         <div className="flex w-full flex-col justify-center">
           <div className="flex items-center justify-center gap-2">
             <span>średnia ocena</span>
@@ -101,70 +125,75 @@ const FishingSpot = () => {
             <span>{spotQuery.data.reviews.length}</span>
             <span>opini użytkowników</span>
           </div>
-          <div className="text-dark mt-8 flex flex-col gap-1 px-4">
-            <div className="flex items-center justify-between gap-3 rounded-sm  py-1">
-              <span className="text-center">Nocleg</span>
-              <span className="font-bold">
-                {spotQuery.data.accommodation ? "TAK" : "NIE"}
-              </span>
-            </div>
-            <HorizontalLine />
-            <div className="flex items-center justify-between gap-3 rounded-sm   py-1">
-              <span className="text-center">Spinning</span>
-              <span className="font-bold">
-                {spotQuery.data.spinning ? "TAK" : "NIE"}
-              </span>
-            </div>
-            <HorizontalLine />
-            <div className="flex items-center justify-between gap-3 rounded-sm   py-2">
-              <span className="text-center">Miejsce namiotowe</span>
-              <span className="font-bold">
-                {spotQuery.data.tent ? "TAK" : "NIE"}
-              </span>
-            </div>
-            <HorizontalLine />
-            <div className="flex  items-center justify-between gap-3 rounded-sm   py-1">
-              <span className="text-center">Łowienie w nocy</span>
-              <span className="font-bold">
-                {spotQuery.data.night_fishing ? "TAK" : "NIE"}
-              </span>
-            </div>
-            <HorizontalLine />
-          </div>
         </div>
+      </div> */}
+
+      <div className="grid grid-cols-1 sm:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>Podstawowe informacje</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-dark mt-8 flex flex-col gap-1 px-4">
+              <div className="flex items-center justify-between gap-3 rounded-sm  py-1">
+                <span className="text-center">Nocleg</span>
+                <span className="font-bold">
+                  {spotQuery.data.accommodation ? "TAK" : "NIE"}
+                </span>
+              </div>
+              <div className="flex items-center justify-between gap-3 rounded-sm   py-1">
+                <span className="text-center">Spinning</span>
+                <span className="font-bold">
+                  {spotQuery.data.spinning ? "TAK" : "NIE"}
+                </span>
+              </div>
+              <div className="flex items-center justify-between gap-3 rounded-sm   py-2">
+                <span className="text-center">Miejsce namiotowe</span>
+                <span className="font-bold">
+                  {spotQuery.data.tent ? "TAK" : "NIE"}
+                </span>
+              </div>
+              <div className="flex  items-center justify-between gap-3 rounded-sm   py-1">
+                <span className="text-center">Łowienie w nocy</span>
+                <span className="font-bold">
+                  {spotQuery.data.night_fishing ? "TAK" : "NIE"}
+                </span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Występujące gatunki ryb</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-dark flex flex-wrap gap-1">
+              {spotQuery.data.fish_types.map((fishType) => (
+                <div
+                  className="rounded-sm border  px-2 py-1 dark:bg-primary-800"
+                  key={fishType}
+                >
+                  {fishType}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
-      {/* <HorizontalLine className="mb-2" /> */}
-      {/* <div className=" rounded-t-2xl border-t-2 border-t-secondary bg-light px-2 pt-4 leading-3 text-dark" /> */}
-      <div className="mt-2 px-3 pr-6">
-        <h5 className="text-dark/80 mt-4 text-lg font-bold uppercase">
-          Występujące typy ryb
-        </h5>
-        <div className="text-dark flex flex-wrap gap-1">
-          {spotQuery.data.fish_types.map((fishType) => (
-            <div
-              className="rounded-sm border  px-2 py-1 dark:bg-primary-800"
-              key={fishType}
-            >
-              {fishType}
-            </div>
-          ))}
-        </div>
+      <Card>
+        <CardContent className="mt-8">
+          <MarkdownContent text={spotQuery.data.description} />
+        </CardContent>
+      </Card>
 
-        <h5 className="text-dark/80 mt-4 text-lg font-bold uppercase">Opis</h5>
-
-        <div className="shadow-dark/40 rounded-sm px-4 py-2 shadow-sm dark:bg-primary-dark">
-          <ReactMarkdown>{spotQuery.data.description}</ReactMarkdown>
-          {/* <pre>{marked.parse(spotQuery.data.description)}</pre> */}
-        </div>
-
-        <h5 className="text-dark/80 py-2 text-lg font-bold uppercase">
-          {spotQuery.data.prices.length > 0
-            ? "Cennik"
-            : "To miejsce nie posiada cennika"}
-        </h5>
-        <PricingTable prices={spotQuery.data.prices} />
-      </div>
+      <h5 className="text-dark/80 py-2 text-lg font-bold uppercase">
+        {spotQuery.data.prices.length > 0
+          ? "Cennik"
+          : "To miejsce nie posiada cennika"}
+      </h5>
+      <PricingTable prices={spotQuery.data.prices} />
       {session.data?.user &&
         !spotQuery.data.reviews.some(
           (review) => review.createdBy === session.data.user.id

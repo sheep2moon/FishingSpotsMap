@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { authOptions } from "../../../server/auth";
 import { useRouter } from "next/router";
 import { api } from "../../../lib/utils/api";
-import LoadingSpinner from "../../../components/common/LoadingSpinner";
+import LoadingSpinner from "../../../components/ui/loading-spinner";
 import {
   IconAdjustmentsHorizontal,
   IconFileDescription,

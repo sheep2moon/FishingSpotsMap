@@ -33,8 +33,8 @@ export const fishingSpotSchema = z.object({
   images: z.array(
     z.object({
       id: z.string(),
-      comment: z.string(),
-      source: z.string(),
+      comment: z.string().nullable(),
+      source: z.string().nullable(),
     })
   ),
   description: z

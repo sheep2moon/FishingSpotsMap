@@ -1,10 +1,3 @@
-import { S3 } from "aws-sdk";
-import { env } from "../env.mjs";
-import { v4 as uuidv4 } from "uuid";
-import { type PresignedPost } from "aws-sdk/clients/s3";
-
-type Fields = Record<string, string>;
-
 export const uploadFile = async ({
   url,
   fields,

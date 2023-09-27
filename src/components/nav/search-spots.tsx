@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import useDebounce from "../../hooks/useDebounce";
 import { api } from "../../lib/utils/api";
-import { useRouter } from "next/router";
 import { type FishingSpot } from "@prisma/client";
-import { IconMap2, IconSearch } from "@tabler/icons-react";
-import LoadingSpinner from "../common/LoadingSpinner";
+import { IconSearch } from "@tabler/icons-react";
+import LoadingSpinner from "../ui/loading-spinner";
 import {
   Dialog,
   DialogContent,
@@ -21,7 +20,6 @@ const SearchSpots = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const deboncedSearchQuery = useDebounce<string>(searchQuery, 600);
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
   const {
     data: searchResults,
     isLoading,
@@ -35,11 +33,6 @@ const SearchSpots = () => {
   useEffect(() => {
     if (deboncedSearchQuery.length >= 3) void refetch();
   }, [deboncedSearchQuery, refetch]);
-
-  //   const handleSelectSearchSpot = (spot: FishingSpot) => {
-  //     console.log("spot");
-  //     void router.push(`/fishing-spot/${spot.id}`);
-  //   };
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>

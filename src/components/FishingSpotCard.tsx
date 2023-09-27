@@ -11,13 +11,13 @@ type FishingSpotCardProps = {
   slide?: boolean;
 };
 
-const FishingSpotCard = ({ fishingSpot, slide }: FishingSpotCardProps) => {
+const FishingSpotCard = ({ fishingSpot }: FishingSpotCardProps) => {
   return (
     <div className="w-full">
       <Link
         href={`/fishing-spot/${fishingSpot.id}`}
         className={clsx(
-          "hover:shadow-dark/20 text-secondary-foreground shadow-primary-700 ring-primary/30 dark:bg-primary-dark dark:text-primary-300 mb-4 flex cursor-pointer flex-col justify-start rounded-md shadow-md ring-1 transition-all hover:ring-2 hover:transition-all"
+          "hover:shadow-dark/20 text-secondary-foreground mb-4 flex cursor-pointer flex-col justify-start rounded-md shadow-md shadow-primary-700 ring-1 ring-primary/30 transition-all hover:ring-2 hover:transition-all dark:bg-primary-dark dark:text-primary-300"
         )}
       >
         <div className="relative aspect-video w-full">
@@ -35,7 +35,7 @@ const FishingSpotCard = ({ fishingSpot, slide }: FishingSpotCardProps) => {
           </h4>
           <div className="flex items-center gap-1">
             <IconMapPinFilled className="w-4 sm:w-8" />
-            <p className="dark:text-primary-500 truncate text-sm">{`${fishingSpot.city}, ${fishingSpot.province}`}</p>
+            <p className="truncate text-sm dark:text-primary-500">{`${fishingSpot.city}, ${fishingSpot.province}`}</p>
           </div>
         </div>
       </Link>

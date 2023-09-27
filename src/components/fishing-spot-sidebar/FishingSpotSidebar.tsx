@@ -5,7 +5,7 @@ import { type RouterOutputs, api } from "../../lib/utils/api";
 import { IconCaretRight, IconMapPinPin } from "@tabler/icons-react";
 import Image from "next/image";
 import { getSpotImageSrc } from "../../lib/utils/getImageSrc";
-import LoadingSpinner from "../common/LoadingSpinner";
+import LoadingSpinner from "../ui/loading-spinner";
 import { useSession } from "next-auth/react";
 import AddReview from "../fishing-spot/AddReview";
 import Reviews from "../fishing-spot/Reviews";
@@ -37,7 +37,7 @@ const FishingSpotSidebar = () => {
     >
       {fishingSpotQuery.data && (
         <button
-          className="border-dark bg-accent absolute top-1/2 w-fit -translate-x-full -translate-y-16 rounded-l-md border-2 border-r-0 p-2 py-4"
+          className="border-dark absolute top-1/2 w-fit -translate-x-full -translate-y-16 rounded-l-md border-2 border-r-0 bg-accent p-2 py-4"
           onClick={toggleIsOpen}
         >
           <IconCaretRight
@@ -48,7 +48,7 @@ const FishingSpotSidebar = () => {
           />
         </button>
       )}
-      <div className="bg-light text-dark border-primary h-full w-full overflow-y-auto border-l-2">
+      <div className="bg-light text-dark h-full w-full overflow-y-auto border-l-2 border-primary">
         {fishingSpotQuery.data && (
           <SidebarContent fishingSpot={fishingSpotQuery.data} />
         )}
@@ -99,7 +99,7 @@ const SidebarContent = ({
           <div className="flex flex-wrap gap-1">
             {fishingSpot.fish_types.map((fishType) => (
               <div
-                className="bg-primary/10 shadow-primary/20 rounded-sm border border-gray-600/20 p-2 shadow"
+                className="rounded-sm border border-gray-600/20 bg-primary/10 p-2 shadow shadow-primary/20"
                 key={fishType}
               >
                 {fishType}

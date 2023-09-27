@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import StarRating from "../common/indicators/StarRating";
-import { Textarea } from "../common/TextArea";
-import Button from "../common/Button";
+import StarRating from "../ui/star-rating";
 import { api } from "../../lib/utils/api";
-import HorizontalLine from "../common/HorizontalLine";
+import { Textarea } from "../ui/textarea";
+import { Button } from "../ui/button";
 
 type AddReviewProps = {
   spotId: string;
@@ -29,8 +28,7 @@ const AddReview = ({ spotId }: AddReviewProps) => {
   };
 
   return (
-    <div className="dark:bg-primary-dark mx-2 mt-2 rounded-md p-2">
-      <HorizontalLine />
+    <div className="mx-2 mt-2 rounded-md p-2 dark:bg-primary-dark">
       <span className="text-base ">
         Widziałeś to miejsce? Przekaż swoją opinie.
       </span>
@@ -45,10 +43,9 @@ const AddReview = ({ spotId }: AddReviewProps) => {
       </div>
 
       <Button
-        isLoading={addReviewMutation.isLoading}
         onClick={handleAddReview}
         className="ml-auto mt-2 w-fit "
-        variant="secondary"
+        variant="default"
         disabled={isSubmitDisabled}
       >
         Dodaj recenzje

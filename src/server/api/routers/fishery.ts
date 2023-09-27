@@ -8,7 +8,7 @@ import {
 import type { Image, Image as SpotImage } from "@prisma/client";
 import { type FishType } from "../../../types/global";
 import { fishingSpotSchema } from "../../../../schemas/fishing-spot.schema";
-import { uploadFile } from "../../image-handlers";
+import { uploadFile } from "../../uploadFile";
 
 export const fisheryRouter = createTRPCRouter({
   getFishingSpot: publicProcedure

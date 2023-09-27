@@ -1,5 +1,4 @@
 import React, { forwardRef, useState } from "react";
-import ImageInput from "../common/ImageInput";
 import Image from "next/image";
 import { v4 as uuidv4 } from "uuid";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
@@ -19,6 +18,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import ImageInput from "../ui/image-input";
 
 const NewSpotImagesForm = forwardRef<
   HTMLDivElement,

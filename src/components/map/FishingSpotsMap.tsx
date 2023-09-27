@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import L, { type MarkerCluster } from "leaflet";
-import LoadingSpinner from "../common/LoadingSpinner";
+import LoadingSpinner from "../ui/loading-spinner";
 import { api } from "../../lib/utils/api";
 import SpotMarker from "./SpotMarker";
 import { useRouter } from "next/router";

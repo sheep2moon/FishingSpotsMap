@@ -32,8 +32,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
         crossOrigin=""
       ></Script>
-
-      {/* <Nav /> */}
       <Nav />
       <main className="items-cente flex min-h-screen flex-col">{children}</main>
     </>

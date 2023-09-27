@@ -30,9 +30,9 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "../ui/hover-card";
-import { type FishingSpotData } from "../../../schemas/fishing-spot.schema";
+import { type FSpotData } from "../../../schemas/fishing-spot.schema";
 
-type DescriptionSpotFormProps = Pick<FishingSpotData, "description"> & {
+type DescriptionSpotFormProps = Pick<FSpotData, "description"> & {
   setDescription: (d: string) => void;
 };
 
