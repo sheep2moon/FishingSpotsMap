@@ -3,6 +3,7 @@ import React from "react";
 import StarRating from "../ui/star-rating";
 import Image from "next/image";
 import { api } from "../../lib/utils/api";
+import { CardContent } from "../ui/card";
 
 type ReviewsProps = {
   reviews: Review[];
@@ -10,7 +11,7 @@ type ReviewsProps = {
 
 const Reviews = ({ reviews }: ReviewsProps) => {
   return (
-    <div className="mt-4 flex flex-col gap-2 px-2">
+    <div className="mt-4 flex flex-col gap-2">
       {reviews.map((review) => (
         <Review key={review.id} review={review} />
       ))}
@@ -26,7 +27,7 @@ const Review = ({ review }: { review: Review }) => {
   });
 
   return (
-    <div className="rounded-sm bg-gray-200 p-2 ring-1 ring-primary-700 dark:bg-primary-dark">
+    <div className="rounded-md border border-primary-200 bg-primary p-2 dark:border-primary-800 dark:bg-primary-950">
       <div className="flex items-center gap-2">
         <div className="relative aspect-square w-12 ">
           <Image

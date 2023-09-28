@@ -29,7 +29,7 @@ const FishingSpot = () => {
 
   if (!spotQuery.data || spotQuery.isLoading) return <div>skeleton</div>;
   return (
-    <div className="shadow-dark/40 mx-auto mt-16 flex min-h-screen w-full max-w-7xl flex-col pb-24 shadow-lg">
+    <div className="shadow-dark/40 mx-auto mt-16 flex min-h-screen w-full max-w-7xl flex-col gap-2 px-2 pb-24 shadow-lg">
       <ModeratorOnly>
         <InternalLink
           variant="destructive"
@@ -85,7 +85,7 @@ const FishingSpot = () => {
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle>Podstawowe informacje</CardTitle>
@@ -162,13 +162,19 @@ const FishingSpot = () => {
         </CardContent>
       </Card>
 
-      <ViewHeader>
-        <ViewTitle>Opinie</ViewTitle>
-      </ViewHeader>
-      <AuthOnly>
-        <AddReview className="mt-4" spotId={spotQuery.data.id} />
-      </AuthOnly>
-      <Reviews reviews={spotQuery.data.reviews} />
+      <Card className="">
+        <CardHeader>
+          <CardTitle className="block w-full text-center">Opinie</CardTitle>
+          <CardDescription>{}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <AuthOnly>
+            <AddReview className="mt-4" spotId={spotQuery.data.id} />
+          </AuthOnly>
+
+          <Reviews reviews={spotQuery.data.reviews} />
+        </CardContent>
+      </Card>
     </div>
   );
 };

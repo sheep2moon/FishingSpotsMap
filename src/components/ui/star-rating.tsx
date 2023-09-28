@@ -46,7 +46,7 @@ const StarRating = (props: StarRatingProps) => {
           {(hoveredStars || props.rate) >= starIndex ? (
             <IconStarFilled className="text-amber-400" />
           ) : (
-            <IconStar className="text-primary-dark dark:text-primary" />
+            <IconStar className="text-primary-dark/50 dark:text-primary/30" />
           )}
         </button>
       ))}
