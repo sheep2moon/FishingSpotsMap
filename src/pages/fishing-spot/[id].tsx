@@ -2,8 +2,14 @@ import { useRouter } from "next/router";
 import React from "react";
 import { api } from "../../lib/utils/api";
 import Reviews from "../../components/fishing-spot/Reviews";
-import { IconEdit, IconMapPinPin, IconNavigation } from "@tabler/icons-react";
-import { useSession } from "next-auth/react";
+import {
+  IconChevronLeft,
+  IconEdit,
+  IconMapPinPin,
+  IconNavigation,
+  IconStar,
+  IconStarFilled,
+} from "@tabler/icons-react";
 import { IconMapSearch } from "@tabler/icons-react";
 import ModeratorOnly from "../../components/ModeratorOnly";
 import { InternalLink } from "../../components/ui/internal-link";
@@ -25,29 +31,74 @@ const FishingSpot = () => {
   const router = useRouter();
   const { id } = router.query as { id: string };
   const spotQuery = api.fishery.getFishingSpot.useQuery({ id });
-  const session = useSession();
+  const userQuery = api.users.getPrivateUser.useQuery();
+  const followMutation = api.users.followFishingSpot.useMutation();
+  const unfollowMutation = api.users.unfollowFishingSpot.useMutation();
+
+  const followFishingSpot = async () => {
+    await followMutation.mutateAsync({ spotId: id });
+    await userQuery.refetch();
+    console.log("ee");
+  };
+  const unfollowFishingSpot = async () => {
+    await unfollowMutation.mutateAsync({ spotId: id });
+    await userQuery.refetch();
+  };
+
+  React.useEffect(() => {
+    console.log(followMutation);
+  }, [followMutation]);
 
   if (!spotQuery.data || spotQuery.isLoading) return <div>skeleton</div>;
   return (
     <div className="shadow-dark/40 mx-auto mt-16 flex min-h-screen w-full max-w-7xl flex-col gap-2 px-2 pb-24 shadow-lg">
-      <ModeratorOnly>
+      <div className="flex w-full items-center">
         <InternalLink
-          variant="destructive"
-          href={`/fishing-spot/edit/${spotQuery.data.id}`}
-          className="gap-2"
+          variant="link"
+          href={`/fishing-spots-map?flyTo=${spotQuery.data.lat},${spotQuery.data.lng}`}
         >
-          <IconEdit />
-          Edytuj
+          <IconChevronLeft />
+          <span>Powrót do mapy</span>
+          <IconMapSearch />
         </InternalLink>
-      </ModeratorOnly>
+        <div className="ml-auto flex items-center gap-2">
+          <AuthOnly>
+            {userQuery.data?.followedSpots.some(
+              (followedSpot) => followedSpot.id === id
+            ) ? (
+              <Button
+                variant="outline"
+                disabled={!!unfollowMutation.isLoading}
+                onClick={() => void unfollowFishingSpot()}
+              >
+                <IconStarFilled className="text-amber-300" />
+                Obserwujesz
+              </Button>
+            ) : (
+              <Button
+                variant="outline"
+                disabled={!!followMutation.isLoading}
+                onClick={() => void followFishingSpot()}
+              >
+                <IconStar />
+                Obserwuj
+              </Button>
+            )}
+          </AuthOnly>
+          <ModeratorOnly>
+            <InternalLink
+              variant="destructive"
+              href={`/fishing-spot/edit/${spotQuery.data.id}`}
+              className="gap-2"
+            >
+              <IconEdit />
+              Edytuj
+            </InternalLink>
+          </ModeratorOnly>
+        </div>
+      </div>
       <ViewHeader>
         <ViewTitle>{spotQuery.data.name}</ViewTitle>
-        {/* <ViewSubtitle className="flex items-center gap-2">
-          <IconMapPinPin className="" />
-          {spotQuery.data.city}
-          {", woj. "}
-          {spotQuery.data.province}
-        </ViewSubtitle> */}
       </ViewHeader>
 
       <Card>

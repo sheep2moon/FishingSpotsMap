@@ -5,10 +5,10 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
-import type { Image, Image as SpotImage } from "@prisma/client";
+import { NotificationType, type Image } from "@prisma/client";
 import { type FishType } from "../../../types/global";
 import { fishingSpotSchema } from "../../../../schemas/fishing-spot.schema";
-import { uploadFile } from "../../uploadFile";
+import { get_notification_message } from "../../../lib/utils/notifications";
 
 export const fisheryRouter = createTRPCRouter({
   getFishingSpot: publicProcedure
@@ -173,6 +173,27 @@ export const fisheryRouter = createTRPCRouter({
           createdBy: ctx.session.user.id,
         },
       });
+
+      const FishingSpotData = await ctx.prisma.fishingSpot.findFirst({
+        where: { id: input.spotId },
+        select: { name: true, followingUsers: { select: { id: true } } },
+      });
+      // Notify followers
+      const hasFollowers = !!FishingSpotData?.followingUsers.length;
+      if (hasFollowers) {
+        const notificationData = FishingSpotData.followingUsers.map(
+          (follower) => ({
+            fishingSpotId: input.spotId,
+            notifiedId: follower.id,
+            notifierId: ctx.session.user.id,
+            comment: get_notification_message("new-review", {
+              spotName: FishingSpotData.name,
+            }),
+            type: NotificationType["SPOT"],
+          })
+        );
+        await ctx.prisma.notification.createMany({ data: notificationData });
+      }
     }),
   addImageToSpot: protectedProcedure
     .input(

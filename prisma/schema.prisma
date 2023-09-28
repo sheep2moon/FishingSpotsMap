@@ -17,6 +17,12 @@ enum Role {
     MODERATOR
 }
 
+enum NotificationType {
+    MODERATE
+    INFORMATION
+    SPOT
+}
+
 // Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())
@@ -49,17 +55,19 @@ model Session {
 }
 
 model User {
-    id            String       @id @default(cuid())
+    id            String         @id @default(cuid())
     name          String?
-    email         String?      @unique
-    role          Role         @default(USER)
+    email         String?        @unique
+    role          Role           @default(USER)
     emailVerified DateTime?
     image         String?
     accounts      Account[]
     sessions      Session[]
-    UserLibrary   UserLibrary?
     Review        Review[]
     Image         Image[]
+    notified      Notification[] @relation(name: "NotifiedUser")
+    notifier      Notification[] @relation(name: "NotifierUser")
+    followedSpots FishingSpot[]
 }
 
 model VerificationToken {
@@ -70,14 +78,23 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
-// model Image {
-//     id            String       @id @default(cuid())
-//     url           String?
-//     FishingSpot   FishingSpot? @relation(fields: [fishingSpotId], references: [id], onDelete: Cascade)
-//     fishingSpotId String?
+model Notification {
+    id            String           @id @default(cuid())
+    fishingSpot   FishingSpot?     @relation(fields: [fishingSpotId], references: [id])
+    fishingSpotId String?
+    notified      User             @relation(name: "NotifiedUser", fields: [notifiedId], references: [id])
+    notifiedId    String
+    notifier      User             @relation(name: "NotifierUser", fields: [notifierId], references: [id])
+    notifierId    String
+    read          Boolean          @default(false)
+    createdAt     DateTime         @default(now())
+    comment       String
+    type          NotificationType @default(INFORMATION)
 
-//     @@index([fishingSpotId])
-// }
+    @@index([fishingSpotId])
+    @@index([notifiedId])
+    @@index([notifierId])
+}
 
 model Image {
     id            String       @id @default(cuid())
@@ -87,14 +104,9 @@ model Image {
     comment       String?
     FishingSpot   FishingSpot? @relation(fields: [fishingSpotId], references: [id])
     fishingSpotId String?
-}
 
-model UserLibrary {
-    id       String        @id @default(cuid())
-    user     User          @relation(fields: [userId], references: [id])
-    wishlist FishingSpot[] @relation("Wishlist")
-    visited  FishingSpot[] @relation("Visited")
-    userId   String        @unique
+    @@index([fishingSpotId])
+    @@index([userId])
 }
 
 model Review {
@@ -112,11 +124,9 @@ model Review {
 }
 
 model FishingSpot {
-    id                String        @id @default(cuid())
-    createdAt         DateTime      @default(now())
+    id                String         @id @default(cuid())
+    createdAt         DateTime       @default(now())
     acceptedBy        String?
-    wishlistedBy      UserLibrary[] @relation("Wishlist")
-    visitedBy         UserLibrary[] @relation("Visited")
     published         Boolean
     reviews           Review[]
     images            Image[]
@@ -124,10 +134,10 @@ model FishingSpot {
     lat               Float
     lng               Float
     name              String
-    description       String        @db.Text
+    description       String         @db.Text
     province          String
     city              String
-    fish_types        String        @db.Text
+    fish_types        String         @db.Text
     area              String
     contact_page      String?
     contact_phone     Int?
@@ -137,4 +147,6 @@ model FishingSpot {
     tent              Boolean
     accommodation     Boolean
     spinning          Boolean
+    followingUsers    User[]
+    notifications     Notification[]
 }
