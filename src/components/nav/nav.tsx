@@ -27,6 +27,9 @@ import Image from "next/image";
 import { InternalLink } from "../ui/internal-link";
 import { signOut, useSession } from "next-auth/react";
 import ThemeToggle from "../../layout/ThemeToggle";
+import NotAuthOnly from "../not-auth-only";
+import AuthOnly from "../auth-only";
+import NotificationsPopover from "./notifications-popover";
 
 const links: { text: string; href: string; icon: React.ReactNode }[] = [
   {
@@ -99,7 +102,10 @@ const Nav = () => {
         <div className="ml-auto flex items-center gap-2 p-2 pr-4">
           <ThemeToggle />
           <SearchSpots />
-          {session.data?.user ? (
+          <AuthOnly>
+            <NotificationsPopover />
+          </AuthOnly>
+          {session.data?.user && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button>
@@ -168,9 +174,10 @@ const Nav = () => {
                 </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
-          ) : (
-            <InternalLink href="/auth/signin">Zaloguj</InternalLink>
           )}
+          <NotAuthOnly>
+            <InternalLink href="/auth/signin">Zaloguj</InternalLink>
+          </NotAuthOnly>
         </div>
       </nav>
     </header>

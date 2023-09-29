@@ -1,4 +1,4 @@
-type Notifications = {
+export type Notifications = {
   "new-review": { spotName: string };
 };
 

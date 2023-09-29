@@ -25,7 +25,7 @@ import {
 } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import AddReview from "../../components/fishing-spot/add-review";
-import AuthOnly from "../../components/AuthOnly";
+import AuthOnly from "../../components/auth-only";
 
 const FishingSpot = () => {
   const router = useRouter();

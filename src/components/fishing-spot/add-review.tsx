@@ -32,9 +32,10 @@ const AddReview = React.forwardRef<
     },
   });
 
-  const handleAddReview = () => {
+  const handleAddReview = async () => {
     setIsSubmitDisabled(true);
-    void addReviewMutation.mutateAsync({ comment, rate, spotId });
+    await addReviewMutation.mutateAsync({ comment, rate, spotId });
+    // await
   };
 
   return (
@@ -58,7 +59,7 @@ const AddReview = React.forwardRef<
         />
 
         <Button
-          onClick={handleAddReview}
+          onClick={() => void handleAddReview()}
           className="ml-auto mt-2 w-fit "
           variant="default"
           disabled={isSubmitDisabled}
