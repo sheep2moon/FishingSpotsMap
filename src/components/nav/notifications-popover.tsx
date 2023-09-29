@@ -15,6 +15,12 @@ import { Separator } from "../ui/separator";
 import { type NotificationType } from "@prisma/client";
 import Link from "next/link";
 import { cn } from "../../lib/utils/cn";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 export const notification_icons: Record<NotificationType, React.ReactNode> = {
   SPOT: <IconMapPinStar className="text-emerald-300" />,
@@ -40,20 +46,27 @@ const NotificationsPopover = () => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <div className="relative">
-          <Button
-            onClick={() => void notificationQuery.refetch()}
-            variant="ghost"
-            className="p-2"
-          >
-            <IconBell />
-          </Button>
-          {notificationQuery.data?.some(
-            (notification) => !notification.read
-          ) && (
-            <span className="absolute bottom-1 left-1 block aspect-square w-2 rounded-full bg-emerald-300"></span>
-          )}
-        </div>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="relative">
+                <Button
+                  onClick={() => void notificationQuery.refetch()}
+                  variant="ghost"
+                  className="p-2"
+                >
+                  <IconBell />
+                </Button>
+                {notificationQuery.data?.some(
+                  (notification) => !notification.read
+                ) && (
+                  <span className="absolute bottom-1 left-1 block aspect-square w-2 rounded-full bg-emerald-300"></span>
+                )}
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>Powiadomienia</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </PopoverTrigger>
       <PopoverContent align="end" className="z-[1001] w-full max-w-md">
         <div className="p-2">

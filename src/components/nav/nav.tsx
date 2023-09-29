@@ -128,7 +128,7 @@ const Nav = () => {
                     <InternalLink
                       className="w-full justify-start"
                       variant="ghost"
-                      href="/"
+                      href="/user/profile"
                     >
                       <IconUserCircle />
                       Mój profil

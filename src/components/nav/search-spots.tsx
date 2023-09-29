@@ -15,6 +15,12 @@ import {
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { InternalLink } from "../ui/internal-link";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 const SearchSpots = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -37,13 +43,20 @@ const SearchSpots = () => {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
       <DialogTrigger asChild>
-        <Button
-          className="px-2"
-          onClick={() => setIsOpen(true)}
-          variant="ghost"
-        >
-          <IconSearch />
-        </Button>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                className="px-2"
+                onClick={() => setIsOpen(true)}
+                variant="ghost"
+              >
+                <IconSearch />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Wyszukaj łowiska</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </DialogTrigger>
       <DialogContent className="inset-0 top-0 z-[1001] w-screen max-w-none translate-x-0 translate-y-0 sm:bottom-auto sm:left-1/2 sm:top-16 sm:max-w-lg sm:-translate-x-1/2">
         <DialogHeader>

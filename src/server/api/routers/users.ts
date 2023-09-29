@@ -18,13 +18,6 @@ export const usersRouter = createTRPCRouter({
   getPrivateUser: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.user.findUnique({
       where: { id: ctx.session.user.id },
-      include: {
-        followedSpots: {
-          select: {
-            id: true,
-          },
-        },
-      },
     });
   }),
   followFishingSpot: protectedProcedure
