@@ -173,12 +173,64 @@ export const fisheryRouter = createTRPCRouter({
           createdBy: ctx.session.user.id,
         },
       });
+      // Update achievements
+      // There is 3 levels of add review achievement, this query finds only that which isn't earned or locked
+      const userAchievement = await ctx.prisma.userAchievement.findFirst({
+        where: {
+          achievementId: "reviews-achievement",
+        },
+        include: {
+          achievement: {
+            select: {
+              max_level: true,
+              points: true,
+              level_multiplication: true,
+            },
+          },
+        },
+      });
+      // achievement already exists
+      if (userAchievement) {
+        const { max_level, level_multiplication, points } =
+          userAchievement.achievement;
 
+        const isNewLevel =
+          userAchievement.current_level < max_level &&
+          userAchievement.progress >=
+            Math.pow(level_multiplication, userAchievement.current_level) *
+              points;
+        await ctx.prisma.userAchievement.update({
+          where: {
+            userId_achievementId: {
+              userId: ctx.session.user.id,
+              achievementId: userAchievement.achievementId,
+            },
+          },
+          data: {
+            progress: {
+              increment: 1,
+            },
+            current_level: isNewLevel
+              ? userAchievement.current_level + 1
+              : userAchievement.current_level,
+          },
+        });
+      } else {
+        await ctx.prisma.userAchievement.create({
+          data: {
+            achievementId: "reviews-achievement",
+            userId: ctx.session.user.id,
+            current_level: 0,
+            progress: 1,
+          },
+        });
+      }
+
+      // Notify followers
       const FishingSpotData = await ctx.prisma.fishingSpot.findFirst({
         where: { id: input.spotId },
         select: { name: true, followingUsers: { select: { id: true } } },
       });
-      // Notify followers
       const hasFollowers = !!FishingSpotData?.followingUsers.length;
       if (hasFollowers) {
         const notificationData = FishingSpotData.followingUsers.map(

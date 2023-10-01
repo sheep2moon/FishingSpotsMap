@@ -43,6 +43,32 @@ model Account {
     @@index([userId])
 }
 
+model Achievement {
+    id                   String            @id @default(cuid())
+    name                 String
+    description          String
+    points               Int
+    max_level            Int               @db.TinyInt
+    level_multiplication Int
+    icon_url             String
+    userAchievements     UserAchievement[]
+}
+
+model UserAchievement {
+    userId        String
+    achievementId String
+    progress      Int
+    earnedAt      DateTime?
+    current_level Int         @db.TinyInt
+    locked        Boolean     @default(false)
+    user          User        @relation(fields: [userId], references: [id])
+    achievement   Achievement @relation(fields: [achievementId], references: [id])
+
+    @@id([userId, achievementId])
+    @@index([achievementId])
+    @@index([userId])
+}
+
 //#section
 model Session {
     id           String   @id @default(cuid())
@@ -55,19 +81,21 @@ model Session {
 }
 
 model User {
-    id            String         @id @default(cuid())
-    name          String?
-    email         String?        @unique
-    role          Role           @default(USER)
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
-    Review        Review[]
-    Image         Image[]
-    notified      Notification[] @relation(name: "NotifiedUser")
-    notifier      Notification[] @relation(name: "NotifierUser")
-    followedSpots FishingSpot[]
+    id               String            @id @default(cuid())
+    name             String?
+    email            String?           @unique
+    role             Role              @default(USER)
+    emailVerified    DateTime?
+    image            String?
+    accounts         Account[]
+    sessions         Session[]
+    Review           Review[]
+    Image            Image[]
+    notified         Notification[]    @relation(name: "NotifiedUser")
+    notifier         Notification[]    @relation(name: "NotifierUser")
+    followedSpots    FishingSpot[]
+    userAchievements UserAchievement[]
+    achievementId    String?
 }
 
 model VerificationToken {

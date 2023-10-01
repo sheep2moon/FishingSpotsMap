@@ -46,27 +46,20 @@ const NotificationsPopover = () => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div className="relative">
-                <Button
-                  onClick={() => void notificationQuery.refetch()}
-                  variant="ghost"
-                  className="p-2"
-                >
-                  <IconBell />
-                </Button>
-                {notificationQuery.data?.some(
-                  (notification) => !notification.read
-                ) && (
-                  <span className="absolute bottom-1 left-1 block aspect-square w-2 rounded-full bg-emerald-300"></span>
-                )}
-              </div>
-            </TooltipTrigger>
-            <TooltipContent>Powiadomienia</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <div className="relative">
+          <Button
+            onClick={() => void notificationQuery.refetch()}
+            variant="ghost"
+            className="p-2"
+          >
+            <IconBell />
+          </Button>
+          {notificationQuery.data?.some(
+            (notification) => !notification.read
+          ) && (
+            <span className="absolute bottom-1 left-1 block aspect-square w-2 rounded-full bg-emerald-300"></span>
+          )}
+        </div>
       </PopoverTrigger>
       <PopoverContent align="end" className="z-[1001] w-full max-w-md">
         <div className="p-2">
@@ -101,6 +94,7 @@ const NotificationsPopover = () => {
                   {notification.read ? <IconMailOpened /> : <IconMail />}
                 </Button>
                 <Button
+                  disabled={deleteMutation.isLoading}
                   onClick={() => void handleDeleteNotification(notification.id)}
                   variant="ghost"
                   className="p-2"

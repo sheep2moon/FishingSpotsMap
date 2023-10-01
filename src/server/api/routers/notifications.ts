@@ -5,6 +5,7 @@ export const notificationsRouter = createTRPCRouter({
   getNotifications: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.notification.findMany({
       where: { notifiedId: ctx.session.user.id },
+      take: 5,
     });
   }),
   readNotification: protectedProcedure

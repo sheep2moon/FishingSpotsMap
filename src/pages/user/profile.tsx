@@ -61,7 +61,7 @@ const UserProfile = () => {
             </Button>
           ))}
         </div>
-        <div>
+        <div className="mt-2">
           {activeTabKey === "user-settings" && (
             <UserSettings userData={userQuery.data} />
           )}
