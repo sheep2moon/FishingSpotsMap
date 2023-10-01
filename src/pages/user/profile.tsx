@@ -12,6 +12,7 @@ import { cn } from "../../lib/utils/cn";
 import AccountSettings from "../../components/user-profile-tabs/user-settings";
 import UserSettings from "../../components/user-profile-tabs/user-settings";
 import LoadingSpinner from "../../components/ui/loading-spinner";
+import UserAchievements from "../../components/user-profile-tabs/user-achievements";
 
 const userTabs = [
   {
@@ -20,8 +21,8 @@ const userTabs = [
     icon: <IconUserEdit />,
   },
   {
-    key: "badges",
-    name: "Odznaki",
+    key: "achievements",
+    name: "Osiągnięcia",
     icon: <IconAward />,
   },
   {
@@ -64,6 +65,7 @@ const UserProfile = () => {
           {activeTabKey === "user-settings" && (
             <UserSettings userData={userQuery.data} />
           )}
+          {activeTabKey === "achievements" && <UserAchievements />}
         </div>
       </div>
     </div>

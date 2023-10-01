@@ -20,6 +20,16 @@ export const usersRouter = createTRPCRouter({
       where: { id: ctx.session.user.id },
     });
   }),
+  getFollowedSpots: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.user.findFirst({
+      where: {
+        id: ctx.session.user.id,
+      },
+      select: {
+        followedSpots: true,
+      },
+    });
+  }),
   followFishingSpot: protectedProcedure
     .input(
       z.object({
