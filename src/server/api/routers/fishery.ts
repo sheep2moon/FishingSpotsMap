@@ -174,7 +174,6 @@ export const fisheryRouter = createTRPCRouter({
         },
       });
       // Update achievements
-      // There is 3 levels of add review achievement, this query finds only that which isn't earned or locked
       const userAchievement = await ctx.prisma.userAchievement.findFirst({
         where: {
           achievementId: "reviews-achievement",
@@ -189,7 +188,6 @@ export const fisheryRouter = createTRPCRouter({
           },
         },
       });
-      // achievement already exists
       if (userAchievement) {
         const { max_level, level_multiplication, points } =
           userAchievement.achievement;

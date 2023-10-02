@@ -7,13 +7,10 @@ import {
   IconEdit,
   IconMapPinPin,
   IconNavigation,
-  IconStar,
-  IconStarFilled,
 } from "@tabler/icons-react";
 import { IconMapSearch } from "@tabler/icons-react";
 import ModeratorOnly from "../../components/ModeratorOnly";
 import { InternalLink } from "../../components/ui/internal-link";
-import { ViewHeader, ViewTitle } from "../../components/ui/view-header";
 import ImageCarousel from "../../components/fishing-spot/image-carousel";
 import MarkdownContent from "../../components/markdown-editor/MarkdownContent";
 import {
@@ -27,29 +24,12 @@ import { Button } from "../../components/ui/button";
 import AddReview from "../../components/fishing-spot/add-review";
 import AuthOnly from "../../components/auth-only";
 import Footer from "../../components/footer/footer";
+import FollowSpot from "../../components/fishing-spot/follow-spot";
 
 const FishingSpot = () => {
   const router = useRouter();
   const { id } = router.query as { id: string };
   const spotQuery = api.fishery.getFishingSpot.useQuery({ id });
-  const userQuery = api.users.getPrivateUser.useQuery();
-  const followedSpotsQuery = api.users.getFollowedSpots.useQuery();
-  const followMutation = api.users.followFishingSpot.useMutation();
-  const unfollowMutation = api.users.unfollowFishingSpot.useMutation();
-
-  const followFishingSpot = async () => {
-    await followMutation.mutateAsync({ spotId: id });
-    await userQuery.refetch();
-    console.log("ee");
-  };
-  const unfollowFishingSpot = async () => {
-    await unfollowMutation.mutateAsync({ spotId: id });
-    await userQuery.refetch();
-  };
-
-  React.useEffect(() => {
-    console.log(followMutation);
-  }, [followMutation]);
 
   if (!spotQuery.data || spotQuery.isLoading) return <div>skeleton</div>;
   return (
@@ -66,27 +46,7 @@ const FishingSpot = () => {
           </InternalLink>
           <div className="ml-auto flex items-center gap-2">
             <AuthOnly>
-              {followedSpotsQuery.data?.followedSpots.some(
-                (followedSpot) => followedSpot.id === id
-              ) ? (
-                <Button
-                  variant="outline"
-                  disabled={!!unfollowMutation.isLoading}
-                  onClick={() => void unfollowFishingSpot()}
-                >
-                  <IconStarFilled className="text-amber-300" />
-                  Obserwujesz
-                </Button>
-              ) : (
-                <Button
-                  variant="outline"
-                  disabled={!!followMutation.isLoading}
-                  onClick={() => void followFishingSpot()}
-                >
-                  <IconStar />
-                  Obserwuj
-                </Button>
-              )}
+              <FollowSpot spotId={spotQuery.data.id} />
             </AuthOnly>
             <ModeratorOnly>
               <InternalLink

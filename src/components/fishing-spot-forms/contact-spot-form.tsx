@@ -15,10 +15,10 @@ import {
   IconWorldWww,
 } from "@tabler/icons-react";
 import InputWithLabel from "../ui/input-with-label";
-import { type FishingSpotData } from "../../../schemas/fishing-spot.schema";
+import { type FSpotData } from "../../../schemas/fishing-spot.schema";
 
 type ContactSpotFormProps = Pick<
-  FishingSpotData,
+  FSpotData,
   "contact_email" | "contact_instagram" | "contact_page" | "contact_phone"
 > & {
   setPhone: (phone: number) => void;
@@ -60,8 +60,8 @@ const ContactSpotForm = React.forwardRef<
               <IconPhone /> Telefon
             </>
           }
-          name="phone"
-          type="number"
+          id="phone"
+          type="tel"
           value={contact_phone || ""}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setPhone(parseInt(e.target.value))
@@ -73,7 +73,8 @@ const ContactSpotForm = React.forwardRef<
               <IconWorldWww /> Strona Internetowa
             </>
           }
-          name="page"
+          id="page"
+          type="url"
           value={contact_page || ""}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setPage(e.target.value)
@@ -85,7 +86,7 @@ const ContactSpotForm = React.forwardRef<
               <IconBrandInstagram /> Instagram
             </>
           }
-          name="instagram"
+          id="instagram"
           value={contact_instagram || ""}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setInstagram(e.target.value)
@@ -97,8 +98,8 @@ const ContactSpotForm = React.forwardRef<
               <IconMail /> Email
             </>
           }
-          name="email"
           type="email"
+          id="email"
           value={contact_email || ""}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setEmail(e.target.value)
