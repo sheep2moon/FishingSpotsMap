@@ -211,14 +211,14 @@ const ImageDetailsDialogContent = ({
         </div>
 
         <Input
-          value={comment}
+          value={comment || ""}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setComment(e.target.value)
           }
           placeholder="Komentarz"
         />
         <Input
-          value={source}
+          value={source || ""}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setSource(e.target.value)
           }

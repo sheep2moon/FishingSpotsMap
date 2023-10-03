@@ -1,4 +1,4 @@
-import type { FishingSpot, User } from "@prisma/client";
+import type { User } from "@prisma/client";
 import React, { useState } from "react";
 import {
   Card,
@@ -7,12 +7,9 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import InputWithLabel from "../ui/input-with-label";
 import Avatar from "../ui/avatar";
-import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 type UserSettingsProps = {
   userData: User;

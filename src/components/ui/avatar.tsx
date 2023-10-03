@@ -3,7 +3,7 @@ import { cn } from "../../lib/utils/cn";
 import Image from "next/image";
 
 type AvatarProps = {
-  imageSrc: string | File;
+  imageSrc: string;
 };
 
 const Avatar = React.forwardRef<

@@ -21,6 +21,13 @@ enum NotificationType {
     MODERATE
     INFORMATION
     SPOT
+    REPLY
+}
+
+enum ReactionType {
+    LIKE
+    DISLIKE
+    HELPFUL
 }
 
 // Necessary for Next auth
@@ -69,6 +76,72 @@ model UserAchievement {
     @@index([userId])
 }
 
+model Comment {
+    id           String     @id @default(cuid())
+    content      String
+    authorId     String
+    createdAt    DateTime   @default(now())
+    updatedAt    DateTime   @updatedAt
+    discussionId String
+    discussion   Discussion @relation(fields: [discussionId], references: [id])
+    parentId     String? // Referencja do nadrzędnego komentarza
+    parent       Comment?   @relation("CommentToComment", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    replies      Comment[]  @relation("CommentToComment")
+    reactions    Reaction[] // Nowa relacja z modelem Reaction
+    author       User       @relation(fields: [authorId], references: [id])
+
+    @@index([discussionId])
+    @@index([parentId])
+    @@index([authorId])
+}
+
+model Reaction {
+    id        String       @id @default(cuid())
+    type      ReactionType
+    authorId  String
+    commentId String
+    comment   Comment      @relation(fields: [commentId], references: [id])
+    createdAt DateTime     @default(now())
+    updatedAt DateTime     @updatedAt
+    author    User         @relation(fields: [authorId], references: [id])
+
+    @@index([commentId])
+    @@index([authorId])
+}
+
+model Tag {
+    id          String            @id @default(cuid())
+    name        String            @unique
+    description String?
+    discussions TagOnDiscussion[]
+}
+
+model TagOnDiscussion {
+    tagId        String
+    discussionId String
+    tag          Tag        @relation(fields: [tagId], references: [id])
+    discussion   Discussion @relation(fields: [discussionId], references: [id])
+
+    @@id([tagId, discussionId])
+    @@index([discussionId])
+    @@index([tagId])
+}
+
+model Discussion {
+    id        String            @id @default(cuid())
+    title     String
+    content   String
+    authorId  String
+    createdAt DateTime          @default(now())
+    updatedAt DateTime          @updatedAt
+    tags      TagOnDiscussion[]
+    images    Image[]
+    comments  Comment[]
+    author    User              @relation(fields: [authorId], references: [id])
+
+    @@index([authorId])
+}
+
 //#section
 model Session {
     id           String   @id @default(cuid())
@@ -95,6 +168,9 @@ model User {
     notifier         Notification[]    @relation(name: "NotifierUser")
     followedSpots    FishingSpot[]
     userAchievements UserAchievement[]
+    discussions      Discussion[]
+    comments         Comment[]
+    reactions        Reaction[]
     achievementId    String?
 }
 
@@ -127,14 +203,18 @@ model Notification {
 model Image {
     id            String       @id @default(cuid())
     addedBy       User?        @relation(fields: [userId], references: [id])
+    url           String?
     source        String?
     userId        String?
     comment       String?
     FishingSpot   FishingSpot? @relation(fields: [fishingSpotId], references: [id])
     fishingSpotId String?
+    Discussion    Discussion?  @relation(fields: [discussionId], references: [id])
+    discussionId  String?
 
     @@index([fishingSpotId])
     @@index([userId])
+    @@index([discussionId])
 }
 
 model Review {

@@ -9,7 +9,6 @@ import {
 import {
   IconAddressBook,
   IconBrandInstagram,
-  IconInfoCircle,
   IconMail,
   IconPhone,
   IconWorldWww,
