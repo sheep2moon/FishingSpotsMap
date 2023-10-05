@@ -2,14 +2,14 @@ import React from "react";
 import { Button } from "./button";
 import { cn } from "../../lib/utils/cn";
 
-export type TabValues<Key extends string> = {
+export type Tab<Key extends string> = {
   key: Key;
   name: string;
   icon: React.ReactNode;
 };
 
 type TabsProps<T extends string> = {
-  tabList: readonly TabValues<T>[];
+  tabList: readonly Tab<T>[];
   onTabSelect: (key: T) => void;
   selectedTab: T;
 };

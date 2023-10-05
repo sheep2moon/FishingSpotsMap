@@ -3,7 +3,7 @@ import { cn } from "../../lib/utils/cn";
 import { IconPaperclip } from "@tabler/icons-react";
 
 type AttachmentInputProps = {
-  onAttachmentAdd: (file: File) => void;
+  onAttachmentAdd: (files: File[]) => void;
 };
 
 const AttachmentInput = React.forwardRef<
@@ -12,14 +12,18 @@ const AttachmentInput = React.forwardRef<
 >(({ onAttachmentAdd, className, ...props }, ref) => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const inputFile = e.currentTarget.files?.[0];
-    if (inputFile) onAttachmentAdd(inputFile);
+    const fileList = e.currentTarget.files;
+
+    if (fileList) {
+      const files: File[] = Array.from(fileList);
+      onAttachmentAdd(files);
+    }
   };
 
   return (
     <div
       className={cn(
-        "relative aspect-square max-w-[10rem] rounded-md dark:bg-primary-dark",
+        "relative h-10 w-full max-w-xs rounded-md border border-primary/20 transition-all hover:border-primary/30",
         className
       )}
       {...props}
@@ -27,9 +31,10 @@ const AttachmentInput = React.forwardRef<
     >
       <label
         htmlFor="attachmentInput"
-        className="absolute inset-0 flex items-center justify-center"
+        className="absolute inset-0 flex cursor-pointer items-center justify-center gap-2"
       >
         <input
+          multiple
           className="w-0 opacity-0"
           type="file"
           id="attachmentInput"

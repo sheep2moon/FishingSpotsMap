@@ -154,7 +154,7 @@ const Nav = () => {
                     <>
                       <DropdownMenuItem asChild>
                         <InternalLink
-                          href="/"
+                          href="/moderator"
                           className="w-full justify-start"
                           variant="ghost"
                         >
