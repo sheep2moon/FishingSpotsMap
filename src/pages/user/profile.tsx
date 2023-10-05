@@ -13,6 +13,7 @@ import AccountSettings from "../../components/user-profile-tabs/user-settings";
 import UserSettings from "../../components/user-profile-tabs/user-settings";
 import LoadingSpinner from "../../components/ui/loading-spinner";
 import UserAchievements from "../../components/user-profile-tabs/user-achievements";
+import Tabs from "../../components/ui/tabs";
 
 const userTabs = [
   {
@@ -30,13 +31,13 @@ const userTabs = [
     name: "Powiadomienia",
     icon: <IconBell />,
   },
-] as const;
-
-type TabKey = (typeof userTabs)[number]["key"];
+];
 
 const UserProfile = () => {
   const userQuery = api.users.getPrivateUser.useQuery();
-  const [activeTabKey, setActiveTabKey] = useState<TabKey>(userTabs[0].key);
+  const [activeTabKey, setActiveTabKey] = useState<string>(
+    userTabs[0]?.key || ""
+  );
   useDebugLog(userQuery.data);
   if (!userQuery.data) return <LoadingSpinner />;
   return (
@@ -46,21 +47,11 @@ const UserProfile = () => {
         <ViewSubtitle>podsumowanie</ViewSubtitle>
       </ViewHeader>
       <div className="p-2">
-        <div className="flex gap-1">
-          {userTabs.map((tab) => (
-            <Button
-              onClick={() => setActiveTabKey(tab.key)}
-              variant="secondary"
-              className={cn(
-                "",
-                activeTabKey === tab.key && "text-accent dark:text-accent"
-              )}
-              key={tab.key}
-            >
-              {tab.icon} {tab.name}
-            </Button>
-          ))}
-        </div>
+        <Tabs
+          onTabSelect={setActiveTabKey}
+          selectedTab={activeTabKey}
+          tabList={userTabs}
+        />
         <div className="mt-2">
           {activeTabKey === "user-settings" && (
             <UserSettings userData={userQuery.data} />

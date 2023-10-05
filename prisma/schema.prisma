@@ -127,17 +127,28 @@ model TagOnDiscussion {
     @@index([tagId])
 }
 
+model Attachment {
+    id           String     @id @default(cuid())
+    name         String     @default("Dołączony plik")
+    type         String     @default("nieznany")
+    discussionId String
+    url          String
+    Discussion   Discussion @relation(fields: [discussionId], references: [id])
+
+    @@index([discussionId])
+}
+
 model Discussion {
-    id        String            @id @default(cuid())
-    title     String
-    content   String
-    authorId  String
-    createdAt DateTime          @default(now())
-    updatedAt DateTime          @updatedAt
-    tags      TagOnDiscussion[]
-    images    Image[]
-    comments  Comment[]
-    author    User              @relation(fields: [authorId], references: [id])
+    id          String            @id @default(cuid())
+    title       String
+    content     String
+    authorId    String
+    createdAt   DateTime          @default(now())
+    updatedAt   DateTime          @updatedAt
+    tags        TagOnDiscussion[]
+    attachments Attachment[]
+    comments    Comment[]
+    author      User              @relation(fields: [authorId], references: [id])
 
     @@index([authorId])
 }
@@ -209,12 +220,9 @@ model Image {
     comment       String?
     FishingSpot   FishingSpot? @relation(fields: [fishingSpotId], references: [id])
     fishingSpotId String?
-    Discussion    Discussion?  @relation(fields: [discussionId], references: [id])
-    discussionId  String?
 
     @@index([fishingSpotId])
     @@index([userId])
-    @@index([discussionId])
 }
 
 model Review {

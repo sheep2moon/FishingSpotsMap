@@ -30,6 +30,7 @@ import ThemeToggle from "../../layout/ThemeToggle";
 import NotAuthOnly from "../not-auth-only";
 import AuthOnly from "../auth-only";
 import NotificationsPopover from "./notifications-popover";
+import { IconMessageCircle } from "@tabler/icons-react";
 
 const links: { text: string; href: string; icon: React.ReactNode }[] = [
   {
@@ -51,6 +52,11 @@ const links: { text: string; href: string; icon: React.ReactNode }[] = [
     text: "Lista miejsc",
     href: "/fishing-spot/spot-search",
     icon: <IconListSearch size="1.4rem" />,
+  },
+  {
+    text: "Dyskusje",
+    href: "/discussion",
+    icon: <IconMessageCircle size="1.4rem" />,
   },
 ];
 

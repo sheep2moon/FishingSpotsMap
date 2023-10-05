@@ -147,7 +147,7 @@ export const fisheryRouter = createTRPCRouter({
           acceptedBy,
         },
       });
-      const imagesData: Image[] = input.images.map((image) => ({
+      const imagesData: Partial<Image>[] = input.images.map((image) => ({
         ...image,
         fishingSpotId: newSpot.id,
         userId: ctx.session?.user.id || "",
