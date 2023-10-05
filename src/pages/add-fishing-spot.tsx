@@ -27,6 +27,7 @@ import { NewSpotImagesForm } from "../components/fishing-spot-forms/images-spot-
 import { ContactSpotForm } from "../components/fishing-spot-forms/contact-spot-form";
 import { cn } from "../lib/utils/cn";
 import { uploadFile } from "../server/uploadFile";
+import ErrorMessages from "../components/ui/error-messages";
 
 const SelectPositionMap = dynamic(
   () => import("../components/map/SelectPositionMap"),
@@ -138,7 +139,7 @@ const FormSubmit = () => {
   const { mutate: addFishery } = api.fishery.addFishery.useMutation();
   const { mutateAsync: createPresignedUrl } =
     api.images.createPresignedUrl.useMutation();
-  const [errorMesssages, setErrorMessages] = useState<Array<string>>([]);
+  const [errorMessages, setErrorMessages] = useState<Array<string>>([]);
   const [parent] = useAutoAnimate();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -182,27 +183,7 @@ const FormSubmit = () => {
 
   return (
     <div className="flex w-full flex-col gap-2" ref={parent}>
-      {errorMesssages.length > 0 && (
-        <div className="flex flex-col gap-1 text-sm">
-          <Alert variant="destructive">
-            <IconAlertHexagonFilled />
-            <AlertTitle className="text-lg">Błąd</AlertTitle>
-            <AlertDescription className="flex flex-col gap-1">
-              {errorMesssages.map((message, index) => (
-                <div
-                  key={`error-message${index}`}
-                  className="flex items-center gap-1 text-base"
-                >
-                  <IconPlayerStopFilled />
-                  <span className="text-primary-dark dark:text-primary ">
-                    {message}
-                  </span>
-                </div>
-              ))}
-            </AlertDescription>
-          </Alert>
-        </div>
-      )}
+      <ErrorMessages errorMessages={errorMessages} />
       <Button
         disabled={isLoading}
         onClick={() => void handleSubmit()}

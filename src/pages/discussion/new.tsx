@@ -1,11 +1,6 @@
-import React, { FormEvent, useState } from "react";
-import { ViewHeader, ViewTitle } from "../../components/ui/view-header";
-import { useForm, type SubmitHandler } from "react-hook-form";
-import InputWithLabel from "../../components/ui/input-with-label";
+import React, { useState } from "react";
 import { Textarea } from "../../components/ui/textarea";
-import { Label } from "../../components/ui/label";
 import { Button } from "../../components/ui/button";
-import ImageInput from "../../components/ui/image-input";
 import AttachmentInput from "../../components/ui/attachment-input";
 import {
   Card,
@@ -15,51 +10,56 @@ import {
 } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
 import {
+  IconAlignRight,
+  IconCategory,
   IconFile,
-  IconFilePencil,
   IconFileTypePdf,
   IconHash,
-  IconPdf,
-  IconPointFilled,
+  IconWriting,
   IconX,
 } from "@tabler/icons-react";
 import { api } from "../../lib/utils/api";
 import { Toggle } from "../../components/ui/toggle";
-import { Tag } from "@prisma/client";
 import { cn } from "../../lib/utils/cn";
 import Image from "next/image";
-import { useDebugLog } from "../../hooks/useDebugLog";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { IconFileTypeTxt } from "@tabler/icons-react";
+import { discussionSchema, type DiscussionSchemaData } from "../../../schemas/discussion.schema";
+import { z } from "zod";
+import ErrorMessages from "../../components/ui/error-messages";
 
-type FormValues = {
-  discussionName: string;
-  discussionTags: string;
-  discussionContent: string;
-  discussionAttachments: FileList;
-};
 
 const NewDiscussion = () => {
-  const [attachments, setAttachments] = useState<File[]>([]);
-  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  const [newDiscussionData,setNewDiscussionData] = useState<DiscussionSchemaData>({attachments: [],content: "",tags: [],title: ""})
+  const [errorMessages, setErrorMessages] = useState<Array<string>>([]);
+  // const [attachments, setAttachments] = useState<File[]>([]);
+  // const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const tagsQuery = api.tags.getTags.useQuery();
   const [attachmentsContainer] = useAutoAnimate();
+  const [errorsContainer] = useAutoAnimate();
 
   const handleAddAttachment = (attachments: File[]) => {
-    setAttachments((prev) => [...prev, ...attachments]);
+    setNewDiscussionData(prev => ({...prev,attachments: [...prev.attachments,...attachments]}))
   };
   const handleDeleteAttachment = (attachment: File) => {
-    setAttachments((prev) => prev.filter((file) => file !== attachment));
+    setNewDiscussionData(prev => ({...prev,attachments: prev.attachments.filter(file => file !== attachment)}))
   };
 
-  const handleToggleTag = (tag: Tag, pressed: boolean) => {
+  const handleToggleTag = (tag: DiscussionSchemaData["tags"][number], pressed: boolean) => {
     if (!pressed)
-      setSelectedTags((prev) => prev.filter((t) => t.id !== tag.id));
-    if (pressed) setSelectedTags((prev) => [...prev, tag]);
+      setNewDiscussionData(prev => ({...prev,tags: prev.tags.filter(t => t !== tag)}))
+    if (pressed) setNewDiscussionData(prev => ({...prev,tags: [...prev.tags,tag]}))
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = () => {
+    const parsingResults = discussionSchema.safeParse(newDiscussionData)
+    console.log(parsingResults);
+    if (!parsingResults.success) {
+      setErrorMessages(parsingResults.error.issues.map((issue) => issue.message))
+    }else{
+      setErrorMessages([])
+    }
+    
     console.log("submit");
   };
   return (
@@ -67,30 +67,41 @@ const NewDiscussion = () => {
       <Card>
         <CardHeader>
           <CardTitle>
-            <IconFilePencil size="1.8rem" />
             Stwórz nową dyskusje
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <Label>Tytuł dyskusji</Label>
-            <Input className="text-xl" />
-            <Label>Treść</Label>
-            <Textarea className="text-xl" id="discussionContent" rows={6} />
+          <div className="flex flex-col gap-4">
+            <FormSectionTitle 
+              title="Tytuł"
+              description=""
+              icon={<IconWriting/>}
+            />
+            <Input className="text-xl" value={newDiscussionData.title} onChange={e => setNewDiscussionData(prev => ({...prev,title: e.target.value}))} />
+            <FormSectionTitle
+              title="Treść"
+              description=""
+              icon={<IconAlignRight/>}
+            />
+            <Textarea value={newDiscussionData.content} onChange={e => setNewDiscussionData(prev => ({...prev,content: e.target.value}))} className="text-xl" id="discussionContent" rows={6} />
 
-            <Label>Tagi</Label>
+            <FormSectionTitle 
+              title="Tagi"
+              description="zaznacz jakich tematów dotyczy dyskusja"
+              icon={<IconCategory/>}
+            />
             <div className="flex gap-2">
               {tagsQuery.data &&
                 tagsQuery.data.map((tag) => (
                   <Toggle
-                    pressed={selectedTags.includes(tag)}
+                    pressed={newDiscussionData.tags.includes(tag)}
                     onPressedChange={(pressed) => handleToggleTag(tag, pressed)}
                     variant="outline"
                     key={tag.id}
                   >
                     <IconHash
                       className={cn(
-                        selectedTags.includes(tag) && "text-accent"
+                        newDiscussionData.tags.includes(tag) && "text-accent"
                       )}
                     />
                     {tag.name}
@@ -99,14 +110,14 @@ const NewDiscussion = () => {
             </div>
             <FormSectionTitle
               title="Pliki"
-              description="możesz załączyć zdjęcia, pliki txt/pdf/csv i inne"
+              description="możesz załączyć zdjęcia, pliki txt, pdf, csv i inne"
               icon={<IconFile />}
             />
 
             <div className="flex flex-col gap-4">
               <AttachmentInput onAttachmentAdd={handleAddAttachment} />
               <div className="flex flex-col gap-2" ref={attachmentsContainer}>
-                {attachments.map((attachment, index) => (
+                {newDiscussionData.attachments.map((attachment, index) => (
                   <div
                     key={index}
                     className="flex items-center gap-2 transition-all hover:bg-primary-dark/40"
@@ -140,10 +151,14 @@ const NewDiscussion = () => {
                 ))}
               </div>
             </div>
-            <Button className="w-fit px-8 text-xl" type="submit">
+            <div ref={errorsContainer}>
+
+            <ErrorMessages errorMessages={errorMessages}/>
+            </div>
+            <Button onClick={handleSubmit} className="w-fit px-8 text-xl" type="submit">
               Stwórz
             </Button>
-          </form>
+          </div>
         </CardContent>
       </Card>
     </div>
@@ -162,7 +177,7 @@ const FormSectionTitle = ({
   icon: React.ReactNode;
 }) => {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 mt-6">
       {icon}
       <span className="text-xl">{title}</span>
       <p className="text-sm dark:text-primary/60">{description}</p>
