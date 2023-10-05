@@ -2,24 +2,25 @@ import React from "react";
 import { Button } from "./button";
 import { cn } from "../../lib/utils/cn";
 
-export type TabList = {
-  key: string;
+export type TabValues<Key extends string> = {
+  key: Key;
   name: string;
   icon: React.ReactNode;
-}[];
-
-type TabsProps = {
-  tabList: TabList;
-  onTabSelect: (key: string) => void;
-  selectedTab: string;
 };
 
-const Tabs = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & TabsProps
->(({ tabList, onTabSelect, selectedTab, className, ...props }, ref) => {
+type TabsProps<T extends string> = {
+  tabList: readonly TabValues<T>[];
+  onTabSelect: (key: T) => void;
+  selectedTab: T;
+};
+
+const Tabs = <T extends string>({
+  tabList,
+  onTabSelect,
+  selectedTab,
+}: TabsProps<T>): JSX.Element => {
   return (
-    <div className={cn("flex gap-1", className)} {...props} ref={ref}>
+    <div className={cn("flex gap-1")}>
       {tabList.map((tab) => (
         <Button
           onClick={() => onTabSelect(tab.key)}
@@ -35,8 +36,6 @@ const Tabs = React.forwardRef<
       ))}
     </div>
   );
-});
-
-Tabs.displayName = "Tabs";
+};
 
 export default Tabs;

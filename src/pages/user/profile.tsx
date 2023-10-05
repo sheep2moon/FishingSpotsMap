@@ -7,9 +7,6 @@ import {
   ViewTitle,
 } from "../../components/ui/view-header";
 import { IconAward, IconBell, IconUserEdit } from "@tabler/icons-react";
-import { Button } from "../../components/ui/button";
-import { cn } from "../../lib/utils/cn";
-import AccountSettings from "../../components/user-profile-tabs/user-settings";
 import UserSettings from "../../components/user-profile-tabs/user-settings";
 import LoadingSpinner from "../../components/ui/loading-spinner";
 import UserAchievements from "../../components/user-profile-tabs/user-achievements";
@@ -31,13 +28,13 @@ const userTabs = [
     name: "Powiadomienia",
     icon: <IconBell />,
   },
-];
+] as const;
 
 const UserProfile = () => {
   const userQuery = api.users.getPrivateUser.useQuery();
-  const [activeTabKey, setActiveTabKey] = useState<string>(
-    userTabs[0]?.key || ""
-  );
+  const [activeTabKey, setActiveTabKey] = useState<
+    (typeof userTabs)[number]["key"]
+  >(userTabs[0].key);
   useDebugLog(userQuery.data);
   if (!userQuery.data) return <LoadingSpinner />;
   return (

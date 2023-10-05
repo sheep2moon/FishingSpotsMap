@@ -15,17 +15,13 @@ import { Separator } from "../ui/separator";
 import { type NotificationType } from "@prisma/client";
 import Link from "next/link";
 import { cn } from "../../lib/utils/cn";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/tooltip";
+import { IconMessages } from "@tabler/icons-react";
 
 export const notification_icons: Record<NotificationType, React.ReactNode> = {
   SPOT: <IconMapPinStar className="text-emerald-300" />,
   INFORMATION: <IconInfoSquareRounded className="text-sky-600" />,
   MODERATE: <IconCrown className="text-accent" />,
+  REPLY: <IconMessages className="text-sky-600" />,
 };
 
 const NotificationsPopover = () => {
