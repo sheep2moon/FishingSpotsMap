@@ -5,8 +5,8 @@ import LoadingSpinner from "../ui/loading-spinner";
 import { api } from "../../lib/utils/api";
 import SpotMarker from "./SpotMarker";
 import { useRouter } from "next/router";
-import MarkerClusterGroup from "react-leaflet-cluster";
 import "leaflet/dist/leaflet.css";
+import MarkerClusterGroup from "react-leaflet-cluster";
 
 const createClusterCustomIcon = (cluster: MarkerCluster) => {
   return L.divIcon({

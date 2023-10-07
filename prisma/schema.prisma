@@ -127,17 +127,6 @@ model TagOnDiscussion {
     @@index([tagId])
 }
 
-model Attachment {
-    id           String     @id @default(cuid())
-    name         String     @default("Dołączony plik")
-    type         String     @default("nieznany")
-    discussionId String
-    url          String
-    Discussion   Discussion @relation(fields: [discussionId], references: [id])
-
-    @@index([discussionId])
-}
-
 model Discussion {
     id          String            @id @default(cuid())
     title       String
@@ -151,6 +140,17 @@ model Discussion {
     author      User              @relation(fields: [authorId], references: [id])
 
     @@index([authorId])
+}
+
+model Attachment {
+    id           String     @id @default(cuid())
+    name         String     @default("Dołączony plik")
+    type         String     @default("nieznany")
+    discussionId String
+    url          String
+    Discussion   Discussion @relation(fields: [discussionId], references: [id])
+
+    @@index([discussionId])
 }
 
 //#section

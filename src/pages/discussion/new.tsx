@@ -24,71 +24,157 @@ import { cn } from "../../lib/utils/cn";
 import Image from "next/image";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { IconFileTypeTxt } from "@tabler/icons-react";
-import { discussionSchema, type DiscussionSchemaData } from "../../../schemas/discussion.schema";
+
 import { z } from "zod";
 import ErrorMessages from "../../components/ui/error-messages";
+import { tagSchema } from "../../../schemas/tag.schema";
+import { type Attachment } from "@prisma/client";
+import { getAttachmentSrc } from "../../lib/utils/getImageSrc";
+import { uploadFile } from "../../server/uploadFile";
 
+const discussionSchema = z.object({
+  title: z.string().min(20, "Tytuł powinien mieć minimum 20 znaków"),
+  content: z
+    .string()
+    .min(50, "Treść dyskusji powinna zawierać minimum 50 znaków"),
+  tags: tagSchema.array().min(1, "Dodaj przynajmniej jeden tag/kategorie"),
+  attachments: z
+    .array(z.custom<File>((file) => file instanceof File))
+    .max(4, "Maksymalna ilość załączników to 4"),
+});
+type DiscussionSchemaData = z.infer<typeof discussionSchema>;
 
 const NewDiscussion = () => {
-  const [newDiscussionData,setNewDiscussionData] = useState<DiscussionSchemaData>({attachments: [],content: "",tags: [],title: ""})
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [newDiscussionData, setNewDiscussionData] =
+    useState<DiscussionSchemaData>({
+      attachments: [],
+      content: "",
+      tags: [],
+      title: "",
+    });
   const [errorMessages, setErrorMessages] = useState<Array<string>>([]);
-  // const [attachments, setAttachments] = useState<File[]>([]);
-  // const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const tagsQuery = api.tags.getTags.useQuery();
+  const { mutateAsync: createPresignedAttachmentUrl } =
+    api.files.createPresignedAttachmentUrl.useMutation();
+  const { mutateAsync: createDiscussion } =
+    api.discussion.createDiscussion.useMutation();
   const [attachmentsContainer] = useAutoAnimate();
   const [errorsContainer] = useAutoAnimate();
 
   const handleAddAttachment = (attachments: File[]) => {
-    setNewDiscussionData(prev => ({...prev,attachments: [...prev.attachments,...attachments]}))
+    setNewDiscussionData((prev) => ({
+      ...prev,
+      attachments: [...prev.attachments, ...attachments],
+    }));
   };
   const handleDeleteAttachment = (attachment: File) => {
-    setNewDiscussionData(prev => ({...prev,attachments: prev.attachments.filter(file => file !== attachment)}))
+    setNewDiscussionData((prev) => ({
+      ...prev,
+      attachments: prev.attachments.filter((file) => file !== attachment),
+    }));
   };
 
-  const handleToggleTag = (tag: DiscussionSchemaData["tags"][number], pressed: boolean) => {
+  const handleToggleTag = (
+    tag: DiscussionSchemaData["tags"][number],
+    pressed: boolean
+  ) => {
     if (!pressed)
-      setNewDiscussionData(prev => ({...prev,tags: prev.tags.filter(t => t !== tag)}))
-    if (pressed) setNewDiscussionData(prev => ({...prev,tags: [...prev.tags,tag]}))
+      setNewDiscussionData((prev) => ({
+        ...prev,
+        tags: prev.tags.filter((t) => t !== tag),
+      }));
+    if (pressed)
+      setNewDiscussionData((prev) => ({ ...prev, tags: [...prev.tags, tag] }));
   };
 
-  const handleSubmit = () => {
-    const parsingResults = discussionSchema.safeParse(newDiscussionData)
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    const parsingResults = discussionSchema.safeParse(newDiscussionData);
     console.log(parsingResults);
     if (!parsingResults.success) {
-      setErrorMessages(parsingResults.error.issues.map((issue) => issue.message))
-    }else{
-      setErrorMessages([])
+      setErrorMessages(
+        parsingResults.error.issues.map((issue) => issue.message)
+      );
+      setIsSubmitting(false);
+      return;
     }
-    
+    setErrorMessages([]);
+    const dbAttachments: Pick<Attachment, "id" | "name" | "type" | "url">[] =
+      [];
+    // upload attachment to s3 bucket
+    for (let i = 0; i < newDiscussionData.attachments.length; i++) {
+      const currentAttachment = newDiscussionData.attachments[i];
+      if (currentAttachment) {
+        const { id, url, fields } = await createPresignedAttachmentUrl({
+          fileType: currentAttachment.type,
+        });
+        await uploadFile({ url, fields, file: currentAttachment });
+        const attachmentUrl = getAttachmentSrc(id);
+        dbAttachments.push({
+          id,
+          name: currentAttachment.name,
+          type: currentAttachment.type,
+          url: attachmentUrl,
+        });
+      }
+    }
+    await createDiscussion({
+      attachments: dbAttachments,
+      content: newDiscussionData.content,
+      tags: newDiscussionData.tags,
+      title: newDiscussionData.title,
+    });
+    setIsSubmitting(false);
+    console.log(newDiscussionData);
+
     console.log("submit");
   };
   return (
     <div className="mx-auto mt-16 flex w-full max-w-screen-xl flex-col gap-6 p-2 pb-16 text-xl">
       <Card>
         <CardHeader>
-          <CardTitle>
-            Stwórz nową dyskusje
-          </CardTitle>
+          <CardTitle>Stwórz nową dyskusje</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-4">
-            <FormSectionTitle 
+            <FormSectionTitle
               title="Tytuł"
               description=""
-              icon={<IconWriting/>}
+              icon={<IconWriting />}
             />
-            <Input className="text-xl" value={newDiscussionData.title} onChange={e => setNewDiscussionData(prev => ({...prev,title: e.target.value}))} />
+            <Input
+              className="text-xl"
+              value={newDiscussionData.title}
+              onChange={(e) =>
+                setNewDiscussionData((prev) => ({
+                  ...prev,
+                  title: e.target.value,
+                }))
+              }
+            />
             <FormSectionTitle
               title="Treść"
               description=""
-              icon={<IconAlignRight/>}
+              icon={<IconAlignRight />}
             />
-            <Textarea value={newDiscussionData.content} onChange={e => setNewDiscussionData(prev => ({...prev,content: e.target.value}))} className="text-xl" id="discussionContent" rows={6} />
+            <Textarea
+              value={newDiscussionData.content}
+              onChange={(e) =>
+                setNewDiscussionData((prev) => ({
+                  ...prev,
+                  content: e.target.value,
+                }))
+              }
+              className="text-xl"
+              id="discussionContent"
+              rows={6}
+            />
 
-            <FormSectionTitle 
+            <FormSectionTitle
               title="Tagi"
               description="zaznacz jakich tematów dotyczy dyskusja"
-              icon={<IconCategory/>}
+              icon={<IconCategory />}
             />
             <div className="flex gap-2">
               {tagsQuery.data &&
@@ -152,10 +238,14 @@ const NewDiscussion = () => {
               </div>
             </div>
             <div ref={errorsContainer}>
-
-            <ErrorMessages errorMessages={errorMessages}/>
+              <ErrorMessages errorMessages={errorMessages} />
             </div>
-            <Button onClick={handleSubmit} className="w-fit px-8 text-xl" type="submit">
+            <Button
+              onClick={() => void handleSubmit()}
+              className="w-fit px-8 text-xl"
+              type="submit"
+              disabled={isSubmitting}
+            >
               Stwórz
             </Button>
           </div>
@@ -177,7 +267,7 @@ const FormSectionTitle = ({
   icon: React.ReactNode;
 }) => {
   return (
-    <div className="flex items-center gap-2 mt-6">
+    <div className="mt-6 flex items-center gap-2">
       {icon}
       <span className="text-xl">{title}</span>
       <p className="text-sm dark:text-primary/60">{description}</p>

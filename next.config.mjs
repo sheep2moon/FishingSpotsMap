@@ -4,6 +4,9 @@ await import("./src/env.mjs");
 const config = {
   reactStrictMode: true,
   transpilePackages: ["react-leaflet-cluster", "leaflet"],
+  experimental: {
+    esmExternals: "loose",
+  },
   images: {
     domains: [
       "fishery-spots.s3.eu-central-1.amazonaws.com",

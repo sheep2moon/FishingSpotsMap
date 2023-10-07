@@ -1,11 +1,12 @@
 import { fisheryRouter } from "~/server/api/routers/fishery";
 import { createTRPCRouter } from "~/server/api/trpc";
-import { imagesRouter } from "./routers/images";
 import { usersRouter } from "./routers/users";
 import { moderatorRouter } from "./routers/moderator";
 import { notificationsRouter } from "./routers/notifications";
 import { achievementsRouter } from "./routers/achievements";
 import { tagsRouter } from "./routers/tags";
+import { filesRouter } from "./routers/files";
+import { discussionRouter } from "./routers/discussion";
 
 /**
  * This is the primary router for your server.
@@ -14,11 +15,12 @@ import { tagsRouter } from "./routers/tags";
  */
 export const appRouter = createTRPCRouter({
   fishery: fisheryRouter,
-  images: imagesRouter,
+  files: filesRouter,
   users: usersRouter,
   moderator: moderatorRouter,
   notifications: notificationsRouter,
   achievements: achievementsRouter,
+  discussion: discussionRouter,
   tags: tagsRouter,
 });
 

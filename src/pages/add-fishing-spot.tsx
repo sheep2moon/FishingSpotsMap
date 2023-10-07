@@ -3,12 +3,7 @@ import { useNewSpotStore } from "../zustand/new-spot-store";
 import { api } from "../lib/utils/api";
 import { FishTypeSpotForm } from "../components/fishing-spot-forms/fish-types-spot-form";
 import { useState } from "react";
-import {
-  IconAlertHexagonFilled,
-  IconPlayerStopFilled,
-} from "@tabler/icons-react";
 import { Button } from "../components/ui/button";
-import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import {
   ViewHeader,
@@ -138,7 +133,7 @@ export default AddFishingSpot;
 const FormSubmit = () => {
   const { mutate: addFishery } = api.fishery.addFishery.useMutation();
   const { mutateAsync: createPresignedUrl } =
-    api.images.createPresignedUrl.useMutation();
+    api.files.createPresignedImageUrl.useMutation();
   const [errorMessages, setErrorMessages] = useState<Array<string>>([]);
   const [parent] = useAutoAnimate();
   const [isLoading, setIsLoading] = useState(false);
