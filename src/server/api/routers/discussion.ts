@@ -1,8 +1,56 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { tagSchema } from "../../../../schemas/tag.schema";
+import { TRPCClientError } from "@trpc/client";
 
 export const discussionRouter = createTRPCRouter({
+  getDiscussionById: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      const discussion = await ctx.prisma.discussion.findFirst({
+        where: {
+          id: input.id,
+        },
+        include: {
+          attachments: true,
+          author: true,
+          comments: {
+            include: {
+              author: {
+                select: {
+                  image: true,
+                  name: true,
+                  id: true,
+                },
+              },
+            },
+          },
+          tags: {
+            include: {
+              tag: true,
+            },
+          },
+        },
+      });
+      if (!discussion) throw new TRPCClientError("No discussion found");
+      return discussion;
+    }),
+  getDiscussions: publicProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.discussion.findMany({
+      include: {
+        tags: { include: { tag: { select: { name: true } } } },
+        comments: { select: { _count: true } },
+        author: { select: { name: true, image: true } },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  }),
   createDiscussion: protectedProcedure
     .input(
       z.object({
@@ -35,6 +83,24 @@ export const discussionRouter = createTRPCRouter({
           tags: {
             create: input.tags.map((tag) => ({ tagId: tag.id })),
           },
+        },
+      });
+    }),
+  commentDiscussion: protectedProcedure
+    .input(
+      z.object({
+        content: z.string(),
+        discussionId: z.string(),
+        parendId: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      await ctx.prisma.comment.create({
+        data: {
+          content: input.content,
+          authorId: ctx.session.user.id,
+          discussionId: input.discussionId,
+          parentId: input.parendId,
         },
       });
     }),

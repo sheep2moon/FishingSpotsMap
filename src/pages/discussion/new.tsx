@@ -13,7 +13,6 @@ import {
   IconAlignRight,
   IconCategory,
   IconFile,
-  IconFileTypePdf,
   IconHash,
   IconWriting,
   IconX,
@@ -21,9 +20,7 @@ import {
 import { api } from "../../lib/utils/api";
 import { Toggle } from "../../components/ui/toggle";
 import { cn } from "../../lib/utils/cn";
-import Image from "next/image";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { IconFileTypeTxt } from "@tabler/icons-react";
 
 import { z } from "zod";
 import ErrorMessages from "../../components/ui/error-messages";
@@ -31,6 +28,7 @@ import { tagSchema } from "../../../schemas/tag.schema";
 import { type Attachment } from "@prisma/client";
 import { getAttachmentSrc } from "../../lib/utils/getImageSrc";
 import { uploadFile } from "../../server/uploadFile";
+import AttachmentPreview from "../../components/ui/attachment-preview";
 
 const discussionSchema = z.object({
   title: z.string().min(20, "Tytuł powinien mieć minimum 20 znaków"),
@@ -206,29 +204,15 @@ const NewDiscussion = () => {
                 {newDiscussionData.attachments.map((attachment, index) => (
                   <div
                     key={index}
-                    className="flex items-center gap-2 transition-all hover:bg-primary-dark/40"
+                    className="flex items-center justify-between transition-all hover:bg-primary-dark/40"
                   >
-                    <div className="relative flex aspect-square w-12 items-center justify-center rounded-md dark:bg-primary-dark">
-                      {attachment.type.startsWith("image/") && (
-                        <Image
-                          className="object-cover"
-                          src={URL.createObjectURL(attachment)}
-                          alt={attachment.name}
-                          fill
-                        />
-                      )}
-                      {attachment.type.startsWith("application/pdf") && (
-                        <IconFileTypePdf size="2.2rem" />
-                      )}
-                      {attachment.type.startsWith("text") && (
-                        <IconFileTypeTxt size="2.2rem" />
-                      )}
-                    </div>
-
-                    <div className="text-sm font-bold">{attachment.name}</div>
+                    <AttachmentPreview
+                      type={attachment.type}
+                      url={URL.createObjectURL(attachment)}
+                      name={attachment.name}
+                    />
                     <Button
                       onClick={() => handleDeleteAttachment(attachment)}
-                      className="ml-auto"
                       variant="ghost"
                     >
                       <IconX />

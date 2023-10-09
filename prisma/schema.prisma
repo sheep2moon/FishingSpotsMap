@@ -78,7 +78,7 @@ model UserAchievement {
 
 model Comment {
     id           String     @id @default(cuid())
-    content      String
+    content      String     @db.Text
     authorId     String
     createdAt    DateTime   @default(now())
     updatedAt    DateTime   @updatedAt
@@ -130,7 +130,7 @@ model TagOnDiscussion {
 model Discussion {
     id          String            @id @default(cuid())
     title       String
-    content     String
+    content     String            @db.Text
     authorId    String
     createdAt   DateTime          @default(now())
     updatedAt   DateTime          @updatedAt
