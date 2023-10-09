@@ -27,6 +27,7 @@ export const discussionRouter = createTRPCRouter({
                   id: true,
                 },
               },
+              attachment: true,
             },
           },
           tags: {
@@ -92,16 +93,40 @@ export const discussionRouter = createTRPCRouter({
         content: z.string(),
         discussionId: z.string(),
         parendId: z.string().optional(),
+        attachmentData: z
+          .object({
+            id: z.string(),
+            name: z.string(),
+            type: z.string(),
+            url: z.string(),
+          })
+          .optional(),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      await ctx.prisma.comment.create({
-        data: {
-          content: input.content,
-          authorId: ctx.session.user.id,
-          discussionId: input.discussionId,
-          parentId: input.parendId,
-        },
-      });
+      if (input.attachmentData) {
+        await ctx.prisma.comment.create({
+          data: {
+            content: input.content,
+            authorId: ctx.session.user.id,
+            discussionId: input.discussionId,
+            parentId: input.parendId,
+            attachment: {
+              create: {
+                ...input.attachmentData,
+              },
+            },
+          },
+        });
+      } else {
+        await ctx.prisma.comment.create({
+          data: {
+            content: input.content,
+            authorId: ctx.session.user.id,
+            discussionId: input.discussionId,
+            parentId: input.parendId,
+          },
+        });
+      }
     }),
 });

@@ -77,22 +77,37 @@ model UserAchievement {
 }
 
 model Comment {
-    id           String     @id @default(cuid())
-    content      String     @db.Text
+    id           String       @id @default(cuid())
+    content      String       @db.Text
     authorId     String
-    createdAt    DateTime   @default(now())
-    updatedAt    DateTime   @updatedAt
+    createdAt    DateTime     @default(now())
+    updatedAt    DateTime     @updatedAt
     discussionId String
-    discussion   Discussion @relation(fields: [discussionId], references: [id])
+    attachment   Attachment[]
+    discussion   Discussion   @relation(fields: [discussionId], references: [id])
     parentId     String? // Referencja do nadrzędnego komentarza
-    parent       Comment?   @relation("CommentToComment", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    replies      Comment[]  @relation("CommentToComment")
-    reactions    Reaction[] // Nowa relacja z modelem Reaction
-    author       User       @relation(fields: [authorId], references: [id])
+    parent       Comment?     @relation("CommentToComment", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    replies      Comment[]    @relation("CommentToComment")
+    reactions    Reaction[]
+    author       User         @relation(fields: [authorId], references: [id])
 
     @@index([discussionId])
     @@index([parentId])
     @@index([authorId])
+}
+
+model Attachment {
+    id           String      @id @default(cuid())
+    name         String      @default("Dołączony plik")
+    type         String      @default("nieznany")
+    url          String
+    Discussion   Discussion? @relation(fields: [discussionId], references: [id])
+    Comment      Comment?    @relation(fields: [commentId], references: [id])
+    discussionId String?
+    commentId    String?
+
+    @@index([commentId])
+    @@index([discussionId])
 }
 
 model Reaction {
@@ -142,18 +157,6 @@ model Discussion {
     @@index([authorId])
 }
 
-model Attachment {
-    id           String     @id @default(cuid())
-    name         String     @default("Dołączony plik")
-    type         String     @default("nieznany")
-    discussionId String
-    url          String
-    Discussion   Discussion @relation(fields: [discussionId], references: [id])
-
-    @@index([discussionId])
-}
-
-//#section
 model Session {
     id           String   @id @default(cuid())
     sessionToken String   @unique

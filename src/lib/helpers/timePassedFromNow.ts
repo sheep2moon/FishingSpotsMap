@@ -8,7 +8,7 @@ export const timePassedFromNow = (targetDate: Date) => {
   const days = Math.floor(hours / 24);
 
   if (seconds < 60) {
-    return `${seconds} sekund${seconds !== 1 ? "s" : ""} temu`;
+    return `${seconds} sekund temu`;
   } else if (minutes < 60) {
     return `${minutes} minut${minutes == 1 ? "e" : ""} temu`;
   } else if (hours < 24) {

@@ -10,5 +10,5 @@ export const getSpotImageSrc = (id: string | null | undefined) => {
 };
 
 export const getAttachmentSrc = (id: string) => {
-  return `${baseUrl}/discussion-attachment/${id}`;
+  return `${baseUrl}/discussion-attachments/${id}`;
 };
