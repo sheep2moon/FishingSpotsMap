@@ -9,6 +9,7 @@ import { api } from "../../lib/utils/api";
 import { IconPaperclip, IconPhoto } from "@tabler/icons-react";
 import { uploadFile } from "../../server/uploadFile";
 import { getAttachmentSrc } from "../../lib/utils/getImageSrc";
+import LoadingSpinner from "../ui/loading-spinner";
 
 type NewCommentProps = {
   parentComment?: Comment;
@@ -67,15 +68,22 @@ const NewComment = (props: NewCommentProps) => {
           onChange={(e) => setCommentValue(e.target.value)}
           rows={5}
         />
-        <div className="flex items-center justify-between dark:border-gray-600">
+        <div className="flex items-center dark:border-gray-600">
           <Button
             variant="secondary"
             onClick={() => void handleAddComment()}
             disabled={commentMutation.isLoading}
           >
-            Dodaj komentarz
+            {commentMutation.isLoading ? (
+              <div className="relative h-12 w-12">
+                <LoadingSpinner />
+              </div>
+            ) : (
+              "Dodaj komentarz"
+            )}
           </Button>
-          <div className="flex space-x-1 pl-0 sm:pl-2">
+          <div className="px-4">{attachedFile && attachedFile.name}</div>
+          <div className="ml-auto flex space-x-1 pl-0 sm:pl-2">
             <label htmlFor="attachment-upload" className="flex items-center">
               <input
                 className="peer h-0 w-0 opacity-10"

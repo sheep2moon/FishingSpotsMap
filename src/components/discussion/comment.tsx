@@ -14,6 +14,8 @@ import { useDebugLog } from "../../hooks/useDebugLog";
 import { Button } from "../ui/button";
 import NewComment from "./new-comment";
 import Image from "next/image";
+import AttachmentPreview from "../ui/attachment-preview";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 type Reaction = (typeof ReactionType)[keyof typeof ReactionType];
 
@@ -40,9 +42,9 @@ type CommentProps = {
 };
 const Comment = (props: CommentProps) => {
   const [isReplying, setIsReplying] = useState(false);
-
+  const [newCommentContainer] = useAutoAnimate();
   useDebugLog(props);
-
+  const attachment = props.comment.attachment[0];
   return (
     <>
       <Card className="py-2">
@@ -62,9 +64,19 @@ const Comment = (props: CommentProps) => {
           <p className="my-1 rounded-md p-2 dark:bg-primary-dark/30">
             {props.comment.content}
           </p>
-          {props.comment.attachment[0]?.type.startsWith("image") && (
+          {/** Display attachment as image or file based on it's type **/}
+          {attachment?.type.startsWith("image") && (
             <div className="relative aspect-video w-96">
-              <Image src={props.comment.attachment[0].url} alt="" fill />
+              <Image src={attachment.url} alt="" fill />
+            </div>
+          )}
+          {attachment && !attachment.type.startsWith("image") && (
+            <div className="my-4">
+              <AttachmentPreview
+                type={attachment.type}
+                url={attachment.url}
+                name={attachment.name}
+              />
             </div>
           )}
           <div className="flex justify-between text-sm">
@@ -86,7 +98,9 @@ const Comment = (props: CommentProps) => {
           </div>
         </CardContent>
       </Card>
-      <NewComment discussionId={props.comment.discussionId} />
+      <div ref={newCommentContainer}>
+        {isReplying && <NewComment discussionId={props.comment.discussionId} />}
+      </div>
     </>
   );
 };
