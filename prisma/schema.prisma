@@ -80,20 +80,23 @@ model Comment {
     id           String       @id @default(cuid())
     content      String       @db.Text
     authorId     String
+    author       User         @relation("Author", fields: [authorId], references: [id])
     createdAt    DateTime     @default(now())
     updatedAt    DateTime     @updatedAt
     discussionId String
     attachment   Attachment[]
     discussion   Discussion   @relation(fields: [discussionId], references: [id])
+    replyToId    String?
+    replyTo      User?        @relation("ReplyingTo", fields: [replyToId], references: [id])
     parentId     String? // Referencja do nadrzędnego komentarza
     parent       Comment?     @relation("CommentToComment", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
     replies      Comment[]    @relation("CommentToComment")
     reactions    Reaction[]
-    author       User         @relation(fields: [authorId], references: [id])
 
     @@index([discussionId])
     @@index([parentId])
     @@index([authorId])
+    @@index([replyToId])
 }
 
 model Attachment {
@@ -183,9 +186,10 @@ model User {
     followedSpots    FishingSpot[]
     userAchievements UserAchievement[]
     discussions      Discussion[]
-    comments         Comment[]
     reactions        Reaction[]
     achievementId    String?
+    comments         Comment[]         @relation("Author")
+    comment_replies  Comment[]         @relation("ReplyingTo")
 }
 
 model VerificationToken {

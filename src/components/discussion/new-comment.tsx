@@ -1,19 +1,19 @@
-import { Attachment, type Comment } from "@prisma/client";
-import React, { useState } from "react";
-import { Dialog, DialogContent, DialogHeader } from "../ui/dialog";
+import type { Attachment, Comment } from "@prisma/client";
+import React, { useEffect, useRef, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent } from "../ui/card";
 import { useSession } from "next-auth/react";
-import { api } from "../../lib/utils/api";
+import { type RouterOutputs, api } from "../../lib/utils/api";
 import { IconPaperclip, IconPhoto } from "@tabler/icons-react";
 import { uploadFile } from "../../server/uploadFile";
 import { getAttachmentSrc } from "../../lib/utils/getImageSrc";
 import LoadingSpinner from "../ui/loading-spinner";
 
 type NewCommentProps = {
-  parentComment?: Comment;
   discussionId: string;
+  replyTo?: RouterOutputs["discussion"]["getDiscussionById"]["comments"][number]["author"];
+  parentId?: string;
 };
 
 const NewComment = (props: NewCommentProps) => {
@@ -23,6 +23,13 @@ const NewComment = (props: NewCommentProps) => {
     api.files.createPresignedAttachmentUrl.useMutation();
   const [attachedFile, setAttachedFile] = useState<File | null>(null);
   const session = useSession();
+  const ctx = api.useContext();
+  const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  useEffect(() => {
+    textAreaRef.current?.focus();
+  }, []);
+
   if (!session.data?.user)
     return <div className="p-2 font-bold">nie zalogowany</div>;
 
@@ -53,16 +60,35 @@ const NewComment = (props: NewCommentProps) => {
     await commentMutation.mutateAsync({
       content: commentValue,
       discussionId: props.discussionId,
-      parendId: props.parentComment?.id,
+      parendId: props.parentId,
+      replyToId: props.replyTo?.id,
       attachmentData: attachmentData || undefined,
     });
     setCommentValue("");
+    if (props.parentId) {
+      void ctx.discussion.getCommentReplies.invalidate({
+        commentId: props.parentId,
+      });
+    } else {
+      void ctx.discussion.getDiscussionById.invalidate({
+        id: props.discussionId,
+      });
+    }
   };
 
   return (
     <Card className="">
       <CardContent className="flex flex-col gap-2 px-4 pb-2 pt-6">
+        {props.replyTo && (
+          <div className="">
+            <span className="text-primary-950 dark:text-primary">
+              <span className="text-primary/60">Odpowiadasz </span>
+              {props.replyTo.name}
+            </span>
+          </div>
+        )}
         <Textarea
+          ref={textAreaRef}
           placeholder="treść"
           value={commentValue}
           onChange={(e) => setCommentValue(e.target.value)}

@@ -19,7 +19,13 @@ export const discussionRouter = createTRPCRouter({
           attachments: true,
           author: true,
           comments: {
-            include: {
+            select: {
+              id: true,
+              content: true,
+              createdAt: true,
+              discussionId: true,
+              attachment: true,
+              parentId: true,
               author: {
                 select: {
                   image: true,
@@ -27,7 +33,15 @@ export const discussionRouter = createTRPCRouter({
                   id: true,
                 },
               },
-              attachment: true,
+              replyTo: {
+                select: {
+                  name: true,
+                  id: true,
+                },
+              },
+            },
+            where: {
+              parentId: null,
             },
           },
           tags: {
@@ -87,12 +101,61 @@ export const discussionRouter = createTRPCRouter({
         },
       });
     }),
+  deleteComment: protectedProcedure
+    .input(
+      z.object({
+        commentId: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      await ctx.prisma.comment.delete({
+        where: {
+          id: input.commentId,
+          authorId: ctx.session.user.id,
+        },
+      });
+    }),
+  getCommentReplies: publicProcedure
+    .input(
+      z.object({
+        commentId: z.string(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      return await ctx.prisma.comment.findMany({
+        where: {
+          parentId: input.commentId,
+        },
+        select: {
+          id: true,
+          content: true,
+          createdAt: true,
+          discussionId: true,
+          attachment: true,
+          parentId: true,
+          author: {
+            select: {
+              image: true,
+              name: true,
+              id: true,
+            },
+          },
+          replyTo: {
+            select: {
+              name: true,
+              id: true,
+            },
+          },
+        },
+      });
+    }),
   commentDiscussion: protectedProcedure
     .input(
       z.object({
         content: z.string(),
         discussionId: z.string(),
         parendId: z.string().optional(),
+        replyToId: z.string().optional(),
         attachmentData: z
           .object({
             id: z.string(),
@@ -111,6 +174,7 @@ export const discussionRouter = createTRPCRouter({
             authorId: ctx.session.user.id,
             discussionId: input.discussionId,
             parentId: input.parendId,
+            replyToId: input.replyToId,
             attachment: {
               create: {
                 ...input.attachmentData,
@@ -125,6 +189,7 @@ export const discussionRouter = createTRPCRouter({
             authorId: ctx.session.user.id,
             discussionId: input.discussionId,
             parentId: input.parendId,
+            replyToId: input.replyToId,
           },
         });
       }

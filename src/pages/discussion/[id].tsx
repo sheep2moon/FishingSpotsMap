@@ -19,11 +19,13 @@ import { Button } from "../../components/ui/button";
 import { Separator } from "../../components/ui/separator";
 import { InternalLink } from "../../components/ui/internal-link";
 import Comment from "../../components/discussion/comment";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 const DiscussionPage = () => {
   const router = useRouter();
   const { id } = router.query as { id: string };
   const discussionQuery = api.discussion.getDiscussionById.useQuery({ id });
+  const [commentsContainer] = useAutoAnimate();
 
   if (!discussionQuery.data) return <LoadingSpinner />;
 
@@ -37,7 +39,7 @@ const DiscussionPage = () => {
           <IconArrowLeft />
           Powrót do wszystkich dyskusji
         </InternalLink>
-        <Card>
+        <Card className="bg-primary-100">
           <CardHeader>
             <CardTitle className="border-l-4 border-accent pl-2">
               {discussionQuery.data.title}
@@ -73,7 +75,7 @@ const DiscussionPage = () => {
               ))}
             </div>
             <Separator className="my-8" />
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2" ref={commentsContainer}>
               <NewComment discussionId={discussionQuery.data.id} />
               {discussionQuery.data.comments.map((comment) => (
                 <Comment key={comment.id} comment={comment} />
