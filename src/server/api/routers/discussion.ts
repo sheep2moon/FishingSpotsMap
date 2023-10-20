@@ -35,8 +35,12 @@ export const discussionRouter = createTRPCRouter({
               },
               replyTo: {
                 select: {
-                  name: true,
                   id: true,
+                  author: {
+                    select: {
+                      name: true,
+                    },
+                  },
                 },
               },
             },
@@ -142,8 +146,12 @@ export const discussionRouter = createTRPCRouter({
           },
           replyTo: {
             select: {
-              name: true,
               id: true,
+              author: {
+                select: {
+                  name: true,
+                },
+              },
             },
           },
         },

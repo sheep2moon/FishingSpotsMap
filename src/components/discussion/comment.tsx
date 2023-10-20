@@ -13,7 +13,7 @@ import Avatar from "../ui/avatar";
 import { api, type RouterOutputs } from "../../lib/utils/api";
 import { useDebugLog } from "../../hooks/useDebugLog";
 import { Button } from "../ui/button";
-import NewComment from "./new-comment";
+import NewComment, { NewCommentProps } from "./new-comment";
 import Image from "next/image";
 import AttachmentPreview from "../ui/attachment-preview";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
@@ -25,6 +25,7 @@ import {
 } from "../ui/dropdown-menu";
 import CurrentUserOnly from "../current-user-only";
 import { cn } from "../../lib/utils/cn";
+import { NewCommentTarget } from "../../pages/discussion/[id]";
 
 type Reaction = (typeof ReactionType)[keyof typeof ReactionType];
 
@@ -51,10 +52,9 @@ export type ReplyTo =
 
 type CommentProps = {
   comment: RouterOutputs["discussion"]["getDiscussionById"]["comments"][number];
+  setNewCommentProps: (props: NewCommentTarget) => void;
 };
 const Comment = (props: CommentProps) => {
-  const [replyTo, setReplyTo] = useState<ReplyTo | null>(null);
-  const [newCommentContainer] = useAutoAnimate();
   const [repliesContainer] = useAutoAnimate();
   const repliesQuery = api.discussion.getCommentReplies.useQuery({
     commentId: props.comment.id,
@@ -62,27 +62,26 @@ const Comment = (props: CommentProps) => {
 
   return (
     <>
-      <CommentCard setReplyTo={setReplyTo} comment={props.comment} />
+      <CommentCard {...props} />
       <div
         ref={repliesContainer}
         className="ml-4 flex flex-col gap-2 border-l-2 border-primary-dark/20 pl-2 dark:border-primary"
       >
         {repliesQuery.data &&
           repliesQuery.data.map((replyComment) => (
-            <CommentCard
-              key={replyComment.id}
-              comment={replyComment}
-              setReplyTo={setReplyTo}
-            />
+            <CommentCard key={replyComment.id} {...props} />
           ))}
 
-        {replyTo && (
+        {/* {replyTo && (
           <NewComment
             parentId={props.comment.id}
-            replyTo={replyTo}
+            replyTo={{
+              id: props.comment.id,
+              author: { name: props.comment.author.name },
+            }}
             discussionId={props.comment.discussionId}
           />
-        )}
+        )} */}
       </div>
     </>
   );
@@ -90,9 +89,7 @@ const Comment = (props: CommentProps) => {
 
 export default Comment;
 
-type CommentCardProps = CommentProps & {
-  setReplyTo: (u: ReplyTo) => void;
-};
+type CommentCardProps = CommentProps;
 
 const CommentCard = (props: CommentCardProps) => {
   const attachment = props.comment.attachment[0];
@@ -159,7 +156,7 @@ const CommentCard = (props: CommentCardProps) => {
           <span className="p-1 text-sm dark:text-primary/60">
             Odpowiedź do{" "}
             <span className="text-sky-700 dark:text-sky-300">
-              {props.comment.replyTo.name}
+              {props.comment.replyTo.author.name}
             </span>
           </span>
         )}
@@ -184,7 +181,17 @@ const CommentCard = (props: CommentCardProps) => {
         <div className="flex justify-between text-sm">
           <Button
             variant="ghost"
-            onClick={() => props.setReplyTo(props.comment.author)}
+            onClick={() =>
+              props.setNewCommentProps({
+                parentId: props.comment.parentId || undefined,
+                replyTo: {
+                  author: {
+                    name: props.comment.author.name,
+                  },
+                  id: props.comment.id,
+                },
+              })
+            }
           >
             <IconCornerDownRight />
             Odpowiedz

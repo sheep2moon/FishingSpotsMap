@@ -1,19 +1,18 @@
-import type { Attachment, Comment } from "@prisma/client";
+import type { Attachment } from "@prisma/client";
 import React, { useEffect, useRef, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 import { useSession } from "next-auth/react";
-import { type RouterOutputs, api } from "../../lib/utils/api";
+import { api } from "../../lib/utils/api";
 import { IconPaperclip, IconPhoto } from "@tabler/icons-react";
 import { uploadFile } from "../../server/uploadFile";
 import { getAttachmentSrc } from "../../lib/utils/getImageSrc";
 import LoadingSpinner from "../ui/loading-spinner";
+import { type NewCommentTarget } from "../../pages/discussion/[id]";
 
-type NewCommentProps = {
+export type NewCommentProps = NewCommentTarget & {
   discussionId: string;
-  replyTo?: RouterOutputs["discussion"]["getDiscussionById"]["comments"][number]["author"];
-  parentId?: string;
 };
 
 const NewComment = (props: NewCommentProps) => {
@@ -83,7 +82,7 @@ const NewComment = (props: NewCommentProps) => {
           <div className="">
             <span className="text-primary-950 dark:text-primary">
               <span className="text-primary/60">Odpowiadasz </span>
-              {props.replyTo.name}
+              {props.replyTo.author.name}
             </span>
           </div>
         )}

@@ -7,12 +7,13 @@ type AttachmentPreviewProps = {
   type: string;
   url: string;
   name: string;
+  downloadable?: boolean;
 };
 
 const AttachmentPreview = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & AttachmentPreviewProps
->(({ type, url, name, className, ...props }, ref) => {
+>(({ type, url, name, downloadable = true, className, ...props }, ref) => {
   return (
     <div
       {...props}
@@ -28,7 +29,18 @@ const AttachmentPreview = React.forwardRef<
         )}
         {type.startsWith("text") && <IconFileTypeTxt size="2.2rem" />}
       </div>
-      <div className="text-sm font-bold">{name}</div>
+      <div className="group flex flex-col text-sm font-bold">
+        {name}
+        {downloadable && (
+          <a
+            download
+            href={url}
+            className="cursor-pointer font-normal group-hover:text-accent"
+          >
+            Pobierz
+          </a>
+        )}
+      </div>
     </div>
   );
 });

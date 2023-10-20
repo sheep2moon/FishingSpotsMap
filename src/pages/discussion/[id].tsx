@@ -1,31 +1,42 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "../../components/ui/card";
-import { api } from "../../lib/utils/api";
+import { RouterOutputs, api } from "../../lib/utils/api";
 import LoadingSpinner from "../../components/ui/loading-spinner";
 import Avatar from "../../components/ui/avatar";
 import { timePassedFromNow } from "../../lib/helpers/timePassedFromNow";
 import Tag from "../../components/ui/tag";
 import AttachmentPreview from "../../components/ui/attachment-preview";
 import { IconArrowLeft, IconPaperclip } from "@tabler/icons-react";
-import NewComment from "../../components/discussion/new-comment";
+import NewComment, {
+  NewCommentProps,
+} from "../../components/discussion/new-comment";
 import { Button } from "../../components/ui/button";
 import { Separator } from "../../components/ui/separator";
 import { InternalLink } from "../../components/ui/internal-link";
 import Comment from "../../components/discussion/comment";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
+export type NewCommentTarget = {
+  replyTo?: RouterOutputs["discussion"]["getDiscussionById"]["comments"][number]["replyTo"];
+  parentId?: string;
+};
+
 const DiscussionPage = () => {
   const router = useRouter();
   const { id } = router.query as { id: string };
   const discussionQuery = api.discussion.getDiscussionById.useQuery({ id });
   const [commentsContainer] = useAutoAnimate();
+  const [newCommentProps, setNewCommentProps] = useState<NewCommentTarget>({
+    parentId: undefined,
+    replyTo: undefined,
+  });
 
   if (!discussionQuery.data) return <LoadingSpinner />;
 
@@ -75,10 +86,14 @@ const DiscussionPage = () => {
               ))}
             </div>
             <Separator className="my-8" />
+            <NewComment {...newCommentProps} discussionId={id} />
             <div className="flex flex-col gap-2" ref={commentsContainer}>
-              <NewComment discussionId={discussionQuery.data.id} />
               {discussionQuery.data.comments.map((comment) => (
-                <Comment key={comment.id} comment={comment} />
+                <Comment
+                  setNewCommentProps={setNewCommentProps}
+                  key={comment.id}
+                  comment={comment}
+                />
               ))}
             </div>
           </CardContent>

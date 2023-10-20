@@ -87,10 +87,11 @@ model Comment {
     attachment   Attachment[]
     discussion   Discussion   @relation(fields: [discussionId], references: [id])
     replyToId    String?
-    replyTo      User?        @relation("ReplyingTo", fields: [replyToId], references: [id])
+    replyTo      Comment?     @relation("ReplyingTo", fields: [replyToId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    replies      Comment[]    @relation("ReplyingTo")
     parentId     String? // Referencja do nadrzędnego komentarza
     parent       Comment?     @relation("CommentToComment", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-    replies      Comment[]    @relation("CommentToComment")
+    childrens    Comment[]    @relation("CommentToComment")
     reactions    Reaction[]
 
     @@index([discussionId])
@@ -189,7 +190,6 @@ model User {
     reactions        Reaction[]
     achievementId    String?
     comments         Comment[]         @relation("Author")
-    comment_replies  Comment[]         @relation("ReplyingTo")
 }
 
 model VerificationToken {
