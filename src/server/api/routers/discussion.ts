@@ -119,7 +119,7 @@ export const discussionRouter = createTRPCRouter({
         },
       });
     }),
-  getCommentReplies: publicProcedure
+  getCommentChildrens: publicProcedure
     .input(
       z.object({
         commentId: z.string(),

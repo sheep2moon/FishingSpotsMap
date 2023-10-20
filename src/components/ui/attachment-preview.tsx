@@ -13,7 +13,7 @@ type AttachmentPreviewProps = {
 const AttachmentPreview = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & AttachmentPreviewProps
->(({ type, url, name, downloadable = true, className, ...props }, ref) => {
+>(({ type, url, name, downloadable = false, className, ...props }, ref) => {
   return (
     <div
       {...props}

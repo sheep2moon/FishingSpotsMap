@@ -22,6 +22,7 @@ import { Separator } from "../../components/ui/separator";
 import { InternalLink } from "../../components/ui/internal-link";
 import Comment from "../../components/discussion/comment";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import Indicator from "../../components/ui/indicator";
 
 export type NewCommentTarget = {
   replyTo?: RouterOutputs["discussion"]["getDiscussionById"]["comments"][number]["replyTo"];
@@ -86,8 +87,11 @@ const DiscussionPage = () => {
               ))}
             </div>
             <Separator className="my-8" />
-            <NewComment {...newCommentProps} discussionId={id} />
-            <div className="flex flex-col gap-2" ref={commentsContainer}>
+            <div className="mt-8 flex flex-col gap-2" ref={commentsContainer}>
+              <h2 className="flex items-center gap-2">
+                Komentarze{" "}
+                <Indicator>{discussionQuery.data.comments.length}</Indicator>
+              </h2>
               {discussionQuery.data.comments.map((comment) => (
                 <Comment
                   setNewCommentProps={setNewCommentProps}
@@ -98,6 +102,7 @@ const DiscussionPage = () => {
             </div>
           </CardContent>
         </Card>
+        <NewComment {...newCommentProps} discussionId={id} />
       </div>
     </>
   );

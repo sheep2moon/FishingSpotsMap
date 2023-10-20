@@ -56,7 +56,7 @@ type CommentProps = {
 };
 const Comment = (props: CommentProps) => {
   const [repliesContainer] = useAutoAnimate();
-  const repliesQuery = api.discussion.getCommentReplies.useQuery({
+  const childrensQuery = api.discussion.getCommentChildrens.useQuery({
     commentId: props.comment.id,
   });
 
@@ -67,9 +67,13 @@ const Comment = (props: CommentProps) => {
         ref={repliesContainer}
         className="ml-4 flex flex-col gap-2 border-l-2 border-primary-dark/20 pl-2 dark:border-primary"
       >
-        {repliesQuery.data &&
-          repliesQuery.data.map((replyComment) => (
-            <CommentCard key={replyComment.id} {...props} />
+        {childrensQuery.data &&
+          childrensQuery.data.map((childComment) => (
+            <CommentCard
+              key={childComment.id}
+              comment={childComment}
+              setNewCommentProps={props.setNewCommentProps}
+            />
           ))}
 
         {/* {replyTo && (
@@ -102,7 +106,7 @@ const CommentCard = (props: CommentCardProps) => {
     setIsLoading(true);
     await deleteComment({ commentId: props.comment.id });
     if (props.comment.parentId) {
-      void ctx.discussion.getCommentReplies.invalidate({
+      void ctx.discussion.getCommentChildrens.invalidate({
         commentId: props.comment.parentId,
       });
     } else {
@@ -203,7 +207,7 @@ const CommentCard = (props: CommentCardProps) => {
                 key={reaction.key}
               >
                 {reaction.icon}
-                <span>{reaction.name}</span>
+                <span className="hidden sm:inline">{reaction.name}</span>
               </button>
             ))}
           </div>

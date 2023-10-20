@@ -42,7 +42,7 @@ const Discussion = () => {
           </InternalLink>
         </ViewSubtitle>
       </ViewHeader>
-      <div className="grid gap-1 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-1 md:grid-cols-2">
         {discussionsQuery.data.map((discussion) => (
           <Link key={discussion.id} href={`/discussion/${discussion.id}`}>
             <Card>
