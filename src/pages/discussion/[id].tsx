@@ -46,7 +46,7 @@ const DiscussionPage = () => {
       <Head>
         <title>Łowiska - dyskusja</title>
       </Head>
-      <div className="mx-auto mt-16 w-full max-w-screen-xl">
+      <div className="mx-auto mb-80 mt-16 w-full max-w-screen-xl">
         <InternalLink variant="link" href="/discussion">
           <IconArrowLeft />
           Powrót do wszystkich dyskusji
@@ -102,7 +102,11 @@ const DiscussionPage = () => {
             </div>
           </CardContent>
         </Card>
-        <NewComment {...newCommentProps} discussionId={id} />
+        <NewComment
+          setNewCommentProps={setNewCommentProps}
+          {...newCommentProps}
+          discussionId={id}
+        />
       </div>
     </>
   );
