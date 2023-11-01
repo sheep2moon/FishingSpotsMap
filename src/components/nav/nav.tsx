@@ -65,7 +65,7 @@ const Nav = () => {
   return (
     <header
       className={cn(
-        "duration-400 fixed inset-x-0 top-0 z-[1000] mx-auto flex h-14 w-screen  items-center bg-primary-100 py-2 text-primary-dark shadow-md shadow-primary-700/50 transition-all dark:bg-primary-950 dark:text-primary"
+        "duration-400 fixed inset-x-0 top-0 z-[1000] mx-auto flex h-14 w-screen items-center bg-primary-100 py-2 text-primary-dark shadow-md shadow-primary-700/50 transition-all dark:bg-primary-950 dark:text-primary"
       )}
     >
       <nav className="mx-auto flex w-full max-w-screen-xl items-center px-2">

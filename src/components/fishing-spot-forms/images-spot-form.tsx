@@ -81,7 +81,7 @@ const NewSpotImagesForm = forwardRef<
             return (
               <div
                 className={cn(
-                  "group relative aspect-square w-full rounded-md border dark:border-primary-dark"
+                  "group relative aspect-square w-full rounded-md border border-primary-300 dark:border-primary-dark"
                 )}
                 key={`image-${index}`}
               >

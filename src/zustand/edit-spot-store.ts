@@ -1,13 +1,10 @@
 import { create } from "zustand";
-import { type FishingSpotData } from "../../schemas/fishing-spot.schema";
+import { type FSpotData } from "../../schemas/fishing-spot.schema";
 
-type EditFields = Omit<FishingSpotData, "images" | "contact">;
+type EditFields = Omit<FSpotData, "images" | "contact">;
 
 type EditSpotState = EditFields & {
-  setField: <K extends keyof FishingSpotData>(
-    key: K,
-    value: FishingSpotData[K]
-  ) => void;
+  setField: <K extends keyof FSpotData>(key: K, value: FSpotData[K]) => void;
   setEditableFields: (data: EditFields) => void;
 };
 
