@@ -1,16 +1,15 @@
-import type { FishingSpot } from "@prisma/client";
 import Image from "next/image";
 import React, { useEffect, useRef } from "react";
 import { getSpotImageSrc } from "../../lib/utils/getImageSrc";
 import { api } from "../../lib/utils/api";
-import Button from "../../components/common/Button";
 import Link from "next/link";
 import LoadingSpinner from "../../components/ui/loading-spinner";
 import autoAnimate from "@formkit/auto-animate";
+import { Button } from "~/components/ui/button";
 
 const SpotSearchList = () => {
   const parent = useRef(null);
-  const { data, hasNextPage, fetchNextPage, isFetchingNextPage } =
+  const { data, fetchNextPage, isFetchingNextPage } =
     api.fishery.getFilteredFishingSpots.useInfiniteQuery(
       { limit: 16, orderBy: "desc", orderByParam: "createdAt" },
       { getNextPageParam: (lastPage) => lastPage.nextCursor }
@@ -23,7 +22,7 @@ const SpotSearchList = () => {
   return (
     <div className="mx-auto mt-16 w-full max-w-[1300px]">
       <div className="flex flex-wrap justify-center gap-1" ref={parent}>
-        {data?.pages.map((page, pageIndex) => (
+        {data?.pages.map((page) => (
           <>
             {page.spots.map((spot) => (
               <Link

@@ -2,6 +2,7 @@ import React from "react";
 import { cn } from "../../lib/utils/cn";
 import {
   IconCrown,
+  IconFishHook,
   IconHome,
   IconListSearch,
   IconLogout,
@@ -57,6 +58,11 @@ const links: { text: string; href: string; icon: React.ReactNode }[] = [
     text: "Dyskusje",
     href: "/discussion",
     icon: <IconMessageCircle size="1.4rem" />,
+  },
+  {
+    text: "Zdobycze",
+    href: "/catch",
+    icon: <IconFishHook size="1.4rem" />,
   },
 ];
 

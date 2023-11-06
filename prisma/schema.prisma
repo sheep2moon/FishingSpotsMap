@@ -83,9 +83,11 @@ model Comment {
     author       User         @relation("Author", fields: [authorId], references: [id])
     createdAt    DateTime     @default(now())
     updatedAt    DateTime     @updatedAt
-    discussionId String
     attachment   Attachment[]
-    discussion   Discussion   @relation(fields: [discussionId], references: [id])
+    discussionId String?
+    catchId      String?
+    discussion   Discussion?  @relation(fields: [discussionId], references: [id])
+    Catch        Catch?       @relation(fields: [catchId], references: [id])
     replyToId    String?
     replyTo      Comment?     @relation("ReplyingTo", fields: [replyToId], references: [id], onDelete: NoAction, onUpdate: NoAction)
     replies      Comment[]    @relation("ReplyingTo")
@@ -94,6 +96,7 @@ model Comment {
     childrens    Comment[]    @relation("CommentToComment")
     reactions    Reaction[]
 
+    @@index([catchId])
     @@index([discussionId])
     @@index([parentId])
     @@index([authorId])
@@ -190,6 +193,7 @@ model User {
     reactions        Reaction[]
     achievementId    String?
     comments         Comment[]         @relation("Author")
+    Catch            Catch[]
 }
 
 model VerificationToken {
@@ -227,7 +231,10 @@ model Image {
     comment       String?
     FishingSpot   FishingSpot? @relation(fields: [fishingSpotId], references: [id])
     fishingSpotId String?
+    Catch         Catch?       @relation(fields: [catchId], references: [id])
+    catchId       String?
 
+    @@index([catchId])
     @@index([fishingSpotId])
     @@index([userId])
 }
@@ -272,4 +279,17 @@ model FishingSpot {
     spinning          Boolean
     followingUsers    User[]
     notifications     Notification[]
+}
+
+model Catch {
+    id        String    @id @default(cuid())
+    weight    Float
+    length    Float
+    fish_type String
+    userId    String
+    user      User      @relation(fields: [userId], references: [id])
+    images    Image[]
+    comments  Comment[]
+
+    @@index([userId])
 }

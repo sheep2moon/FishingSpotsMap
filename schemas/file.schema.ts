@@ -13,3 +13,9 @@ export const fileSchema = z.custom<File>(
   },
   { message: "Plik nieprawidłowy" }
 );
+
+export const customFile = z.object({
+  name: z.string(),
+  size: z.number(),
+  type: z.string(),
+});
