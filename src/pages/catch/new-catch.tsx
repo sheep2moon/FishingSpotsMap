@@ -1,24 +1,30 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+/* eslint-disable @typescript-eslint/no-misused-promises */
+import React, { useEffect, useState } from "react";
+import { useForm, Controller, Control } from "react-hook-form";
 import { customFile, fileSchema } from "schemas/file.schema";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { ViewHeader, ViewTitle } from "~/components/ui/view-header";
-import { fishTypeNames } from "~/const/fish-type-names";
-import { cn } from "~/lib/utils/cn";
-import type { FishType } from "~/types/global";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import ImageInput from "~/components/ui/image-input";
 import Image from "next/image";
+import { IconX } from "@tabler/icons-react";
+import { Textarea } from "../../components/ui/textarea";
+import { CalendarPopover } from "../../components/ui/calendar-popover";
+import { FishTypeSelector } from "../../components/fish-types-selector";
+import { fishTypeNames } from "../../const/fish-type-names";
+import { Toggle } from "../../components/ui/toggle";
+import { cn } from "../../lib/utils/cn";
 
 const catchSchema = z.object({
   images: z.array(fileSchema),
   weight: z.number(),
   length: z.number(),
-  fishType: z.string(),
+  date: z.date().optional(),
+  fishType: z.string().optional(),
+  description: z.string().optional(),
 });
 
 type FormData = z.infer<typeof catchSchema>;
@@ -29,66 +35,132 @@ const NewCatch = () => {
     control,
     setValue,
     getValues,
+    watch,
     formState: { errors },
   } = useForm<FormData>({
-    resolver: zodResolver(catchSchema), // Using Zod for form validation
+    resolver: zodResolver(catchSchema),
+    defaultValues: { images: [] },
   });
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = handleSubmit((data: FormData) => {
     console.log(data);
+  });
+
+  const handleAddImage = (file: File) => {
+    const currentImages = watch("images");
+    if (currentImages.length < 3) {
+      setValue("images", [...watch("images"), file]);
+    }
   };
+
+  const handleDeleteImage = (imageIndex: number) => {
+    const images = watch("images");
+    images.splice(imageIndex, 1);
+    setValue("images", images);
+  };
+
+  useEffect(() => {
+    console.log(errors);
+  }, [errors]);
+
   return (
-    <div className="mt-16 max-w-screen-xl">
-      <div>
+    <div className="mt-16 w-full max-w-screen-xl">
+      <div className="mx-auto max-w-4xl p-2">
         <ViewHeader>
           <ViewTitle>Dodaj zdobycz</ViewTitle>
         </ViewHeader>
         <div>
-          <form onSubmit={void handleSubmit(onSubmit)}>
+          <form onSubmit={onSubmit} className="flex flex-col gap-4">
             <div>
-              {getValues("images") &&
-                getValues("images").map((imageFile) => (
-                  <div key={imageFile.name}>
-                    <Image
-                      className="rounded-md object-cover"
-                      fill
-                      alt=""
-                      src={URL.createObjectURL(imageFile)}
-                    />
-                  </div>
-                ))}
+              <Label>Dodaj do 3 zdjęć</Label>
+              <div className="grid grid-cols-3 gap-2 xl:grid-cols-4">
+                {watch("images").length < 3 && (
+                  <>
+                    <ImageInput onFileAdd={handleAddImage} />
+                  </>
+                )}
+                {getValues("images") &&
+                  getValues("images").map((imageFile, index) => (
+                    <div
+                      key={imageFile.name}
+                      className="relative aspect-square w-full"
+                    >
+                      <div className="group absolute inset-0">
+                        <Image
+                          className="rounded-md object-cover"
+                          fill
+                          alt=""
+                          src={URL.createObjectURL(imageFile)}
+                        />
+                        <div className="absolute inset-0 flex h-full w-full items-start justify-end">
+                          <Button
+                            variant="destructive"
+                            className="m-2 hidden h-12 w-12 rounded-full group-hover:flex"
+                            onClick={() => handleDeleteImage(index)}
+                          >
+                            <IconX />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
             </div>
-            <ImageInput
-              onFileAdd={(file) =>
-                setValue("images", [...getValues("images"), file])
-              }
-            />
-            <Label htmlFor="weight">Waga ryby</Label>
-            <Input id="weight" {...register("weight")} />
-            <Label htmlFor="length">Długość ryby</Label>
-            <Input id="length" {...register("length")} />
+            <div>
+              <Label>Gatunek ryby</Label>
+              <div className="flex flex-wrap gap-0.5">
+                {fishTypeNames.map((fishType) => (
+                  <Button
+                    onClick={() => setValue("fishType", fishType)}
+                    className={cn(
+                      watch("fishType") === fishType &&
+                        "bg-primary-600 text-primary-50 dark:bg-primary-700"
+                    )}
+                    variant="outline"
+                    key={fishType}
+                  >
+                    {fishType}
+                  </Button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="weight">Waga ryby (g)</Label>
+              <Input
+                type="number"
+                id="weight"
+                className="w-fit"
+                {...register("weight", { valueAsNumber: true })}
+              />
+            </div>
+            <div>
+              <Label htmlFor="length">Długość ryby (cm)</Label>
+              <Input
+                type="number"
+                id="length"
+                className="w-fit"
+                {...register("length", { valueAsNumber: true })}
+              />
+            </div>
+            <div>
+              <Label htmlFor="description">Opis</Label>
+              <Textarea
+                className="max-w-lg"
+                id="description"
+                {...register("description")}
+              />
+            </div>
+            <div>
+              <Label>Wybierz date</Label>
+              <CalendarPopover
+                date={watch("date")}
+                onDateChange={(date) => setValue("date", date)}
+              />
+            </div>
+            <Button className="mt-2 w-full" type="submit">
+              Dodaj
+            </Button>
           </form>
-          {/* <Card>
-            <CardHeader>
-              <CardTitle>Gatunek ryby</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {fishTypeNames.map((fishName) => (
-                <Button
-                  variant="outline"
-                  onClick={() => setSelectedFish(fishName)}
-                  key={fishName}
-                  className={cn(
-                    "",
-                    selectedFish === fishName &&
-                      "bg-secondary dark:bg-secondary-900"
-                  )}
-                >
-                  {fishName}
-                </Button>
-              ))}
-            </CardContent>
-          </Card> */}
         </div>
       </div>
     </div>

@@ -279,17 +279,24 @@ model FishingSpot {
     spinning          Boolean
     followingUsers    User[]
     notifications     Notification[]
+    Catch             Catch[]
 }
 
 model Catch {
-    id        String    @id @default(cuid())
-    weight    Float
-    length    Float
-    fish_type String
-    userId    String
-    user      User      @relation(fields: [userId], references: [id])
-    images    Image[]
-    comments  Comment[]
+    id            String       @id @default(cuid())
+    weight        Float
+    length        Float
+    fish_type     String
+    userId        String
+    date          DateTime?
+    description   String?
+    user          User         @relation(fields: [userId], references: [id])
+    images        Image[]
+    comments      Comment[]
+    fishingSpotId String?
+    fishingSpot   FishingSpot? @relation(fields: [fishingSpotId], references: [id])
+    createdAt     DateTime     @default(now())
 
+    @@index([fishingSpotId])
     @@index([userId])
 }

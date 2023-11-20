@@ -33,7 +33,7 @@ import { useEditSpotStore } from "../../../zustand/edit-spot-store";
 import { DetailsSpotForm } from "../../../components/fishing-spot-forms/details-spot-form";
 import { DescriptionSpotForm } from "../../../components/fishing-spot-forms/description-spot-form";
 import dynamic from "next/dynamic";
-import { FishTypeSpotForm } from "../../../components/fishing-spot-forms/fish-types-spot-form";
+import { FishTypeSpotForm } from "../../../components/fish-types-selector";
 import PricingSpotForm from "../../../components/fishing-spot-forms/pricing-spot-form";
 import { IconTag } from "@tabler/icons-react";
 

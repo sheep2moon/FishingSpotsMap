@@ -20,7 +20,7 @@ const ViewTitle = React.forwardRef<
   <h3
     ref={ref}
     className={cn(
-      "flex items-center gap-2 font-dosis text-4xl font-light uppercase leading-none tracking-wider",
+      "flex items-center gap-2 font-dosis text-2xl font-light uppercase leading-none tracking-wider lg:text-4xl",
       className
     )}
     {...props}

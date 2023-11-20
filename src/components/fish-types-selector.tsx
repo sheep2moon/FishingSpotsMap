@@ -1,24 +1,24 @@
 import React, { forwardRef } from "react";
-import { Toggle } from "../ui/toggle";
+import { Toggle } from "./ui/toggle";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../ui/card";
+} from "./ui/card";
 import { IconFish } from "@tabler/icons-react";
-import { type FishType } from "../../types/global";
-import { fishTypeNames } from "../../const/fish-type-names";
+import { type FishType } from "../types/global";
+import { fishTypeNames } from "../const/fish-type-names";
 
-type FishTypeSpotFormProps = {
+type FishTypeSelectorProps = {
   fishTypes: FishType[];
   setFishTypes: (fishTypes: FishType[]) => void;
 };
 
-const FishTypeSpotForm = forwardRef<
+const FishTypeSelector = forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & FishTypeSpotFormProps
+  React.HTMLAttributes<HTMLDivElement> & FishTypeSelectorProps
 >(({ fishTypes, setFishTypes, ...props }, ref) => {
   const handleFishClick = (fish: FishType) => {
     if (fishTypes.includes(fish)) {
@@ -56,5 +56,5 @@ const FishTypeSpotForm = forwardRef<
   );
 });
 
-FishTypeSpotForm.displayName = "FishTypeSpotForm";
-export { FishTypeSpotForm };
+FishTypeSelector.displayName = "FishTypeSpotForm";
+export { FishTypeSelector };

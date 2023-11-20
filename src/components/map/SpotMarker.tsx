@@ -4,6 +4,7 @@ import { Marker, Popup } from "react-leaflet";
 import { type FishingSpot } from "@prisma/client";
 import Link from "next/link";
 import L from "leaflet";
+import { InternalLink } from "../ui/internal-link";
 
 const SpotMarker = ({
   fishingSpot,
@@ -23,14 +24,15 @@ const SpotMarker = ({
       position={{ lat: fishingSpot.lat, lng: fishingSpot.lng }}
     >
       <Popup>
-        <div className="relative flex h-[140px] w-[180px] flex-col overflow-hidden rounded-md">
+        <div className="relative flex w-[180px] flex-col overflow-hidden rounded-md dark:text-primary">
           <h4 className="p-1 text-center text-lg">{fishingSpot.name}</h4>
-          <Link
-            className="text-dark mt-auto block bg-accent py-2 text-center text-lg font-bold "
+          <InternalLink
+            className=""
+            variant="secondary"
             href={`/fishing-spot/${fishingSpot.id}`}
           >
             Szczegóły
-          </Link>
+          </InternalLink>
         </div>
       </Popup>
     </Marker>

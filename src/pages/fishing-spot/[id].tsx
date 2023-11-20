@@ -25,12 +25,14 @@ import AddReview from "../../components/fishing-spot/add-review";
 import AuthOnly from "../../components/auth-only";
 import Footer from "../../components/footer/footer";
 import FollowSpot from "../../components/fishing-spot/follow-spot";
+import NotAuthOnly from "../../components/not-auth-only";
+import { useDebugLog } from "../../hooks/useDebugLog";
 
 const FishingSpot = () => {
   const router = useRouter();
   const { id } = router.query as { id: string };
   const spotQuery = api.fishery.getFishingSpot.useQuery({ id });
-
+  useDebugLog(spotQuery.data);
   if (!spotQuery.data || spotQuery.isLoading) return <div>skeleton</div>;
   return (
     <div className="flex flex-col gap-8">
@@ -160,23 +162,24 @@ const FishingSpot = () => {
             <MarkdownContent text={spotQuery.data.description} />
           </CardContent>
         </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Cennik</CardTitle>
-          </CardHeader>
-          <CardContent className="max-w-lg">
-            {spotQuery.data.prices.map((price, index) => (
-              <div
-                className="m-1 grid grid-cols-2 rounded-sm border px-2 py-1 dark:border-primary/20 dark:bg-primary-dark/30"
-                key={`${price.title}-${index}`}
-              >
-                <span>{price.title}</span>
-                <span>{price.value}</span>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
+        {spotQuery.data.prices.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Cennik</CardTitle>
+            </CardHeader>
+            <CardContent className="max-w-lg">
+              {spotQuery.data.prices.map((price, index) => (
+                <div
+                  className="m-1 grid grid-cols-2 rounded-sm border px-2 py-1 dark:border-primary/20 dark:bg-primary-dark/30"
+                  key={`${price.title}-${index}`}
+                >
+                  <span>{price.title}</span>
+                  <span>{price.value}</span>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        )}
 
         <Card className="">
           <CardHeader>
@@ -187,6 +190,13 @@ const FishingSpot = () => {
             <AuthOnly>
               <AddReview className="mt-4" spotId={spotQuery.data.id} />
             </AuthOnly>
+            <NotAuthOnly>
+              <div className="flex w-full justify-center">
+                <InternalLink variant="outline" href="auth/signin">
+                  Zaloguj się aby móc dodać recenzje
+                </InternalLink>
+              </div>
+            </NotAuthOnly>
 
             <Reviews reviews={spotQuery.data.reviews} />
           </CardContent>

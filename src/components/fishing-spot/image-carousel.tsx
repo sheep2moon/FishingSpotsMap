@@ -28,6 +28,7 @@ const ImageCarousel = React.forwardRef<
     <div {...props} ref={ref}>
       <div className="relative aspect-[16/10] max-h-[500px] w-full bg-primary-200 object-cover dark:bg-primary-800/10">
         <Image
+          priority
           alt="widok"
           className="rounded-md object-contain"
           fill

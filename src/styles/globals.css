@@ -35,7 +35,7 @@
   }
   
   .leaflet-popup-content-wrapper {
-    @apply p-0
+    @apply p-0 m-0 dark:bg-primary-dark bg-primary
   }
   .leaflet-popup-content {
     @apply m-0

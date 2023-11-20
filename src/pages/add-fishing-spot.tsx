@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import { useNewSpotStore } from "../zustand/new-spot-store";
 import { api } from "../lib/utils/api";
-import { FishTypeSpotForm } from "../components/fishing-spot-forms/fish-types-spot-form";
+import { FishTypeSelector } from "../components/fish-types-selector";
 import { useState } from "react";
 import { Button } from "../components/ui/button";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
@@ -103,7 +103,7 @@ const AddFishingSpot = () => {
           setPrices={(prices) => setField("prices", prices)}
         />
 
-        <FishTypeSpotForm
+        <FishTypeSelector
           fishTypes={fish_types}
           setFishTypes={(fishTypes) => setField("fish_types", fishTypes)}
         />

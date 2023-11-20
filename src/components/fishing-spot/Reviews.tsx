@@ -3,6 +3,7 @@ import React from "react";
 import StarRating from "../ui/star-rating";
 import Image from "next/image";
 import { api } from "../../lib/utils/api";
+import { Separator } from "../ui/separator";
 
 type ReviewsProps = {
   reviews: Review[];
@@ -11,6 +12,10 @@ type ReviewsProps = {
 const Reviews = ({ reviews }: ReviewsProps) => {
   return (
     <div className="mt-4 flex flex-col gap-2">
+      <Separator />
+      {reviews.length === 0 && (
+        <div className="p-2">To miejsca nie ma jeszcze żadnych opini.</div>
+      )}
       {reviews.map((review) => (
         <Review key={review.id} review={review} />
       ))}
