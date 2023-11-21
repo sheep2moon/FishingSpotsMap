@@ -15,12 +15,6 @@ import {
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { InternalLink } from "../ui/internal-link";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/tooltip";
 
 const SearchSpots = () => {
   const [searchQuery, setSearchQuery] = useState("");

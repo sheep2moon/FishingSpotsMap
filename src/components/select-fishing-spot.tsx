@@ -13,7 +13,11 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import type { FishingSpot } from "@prisma/client";
 
-const SelectFishingSpot = () => {
+type SelectFishingSpotProps = {
+  onSpotSelect: (fishingSpot: FishingSpot) => void;
+};
+
+const SelectFishingSpot = ({ onSpotSelect }: SelectFishingSpotProps) => {
   const [selectedFishingSpot, setSelectedFishingSpot] = useState<
     undefined | FishingSpot
   >(undefined);
@@ -33,6 +37,7 @@ const SelectFishingSpot = () => {
 
   const handleSelectValue = (fishingSpot: FishingSpot) => {
     setSelectedFishingSpot(fishingSpot);
+    onSpotSelect(fishingSpot);
     setOpen(false);
   };
 
@@ -41,10 +46,16 @@ const SelectFishingSpot = () => {
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button type="button" className="w-fit" variant="outline">
-            {selectedFishingSpot ? selectedFishingSpot.name : "Ustaw łowisko"}
+            {selectedFishingSpot
+              ? `${selectedFishingSpot.name} - ${selectedFishingSpot.city}`
+              : "Wyszukaj łowisko"}
           </Button>
         </PopoverTrigger>
-        <PopoverContent side="bottom" align="start">
+        <PopoverContent
+          side="bottom"
+          align="start"
+          className="w-screen sm:max-w-md xl:max-w-lg"
+        >
           <Command>
             <CommandInput
               onValueChange={setSearchQuery}
@@ -54,14 +65,14 @@ const SelectFishingSpot = () => {
             <CommandList>
               <CommandEmpty>Brak wyników.</CommandEmpty>
               {searchResults && (
-                <CommandGroup heading="Wyniki">
+                <CommandGroup>
                   {searchResults.map((fishingSpot) => (
                     <CommandItem
                       onSelect={() => handleSelectValue(fishingSpot)}
-                      className="flex px-2 py-1"
+                      className="flex w-full p-2 text-base"
                       key={fishingSpot.id}
                     >
-                      {fishingSpot.name}
+                      {`${fishingSpot.name} - ${fishingSpot.city}`}
                     </CommandItem>
                   ))}
                 </CommandGroup>

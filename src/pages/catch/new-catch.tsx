@@ -16,17 +16,31 @@ import { CalendarPopover } from "../../components/ui/calendar-popover";
 import { fishTypeNames } from "../../const/fish-type-names";
 import { cn } from "../../lib/utils/cn";
 import SelectFishingSpot from "../../components/select-fishing-spot";
+import ErrorMessages from "../../components/ui/error-messages";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 const catchSchema = z.object({
-  images: z.array(fileSchema),
-  weight: z.number(),
-  length: z.number(),
+  images: z.array(fileSchema).min(1, "Dodaj przynajmniej jedno zdjęcie"),
+  weight: z.number({
+    invalid_type_error: "Waga musi być liczbą",
+    required_error: "Waga ryby jest wymagana",
+  }),
+  length: z.number({
+    invalid_type_error: "Długość musi być liczbą",
+    required_error: "Długość ryby jest wymagana",
+  }),
   date: z.date().optional(),
-  fishType: z.string().optional(),
+  fishType: z
+    .string({ required_error: "Wybierz gatunek ryby" })
+    .min(1, "Wybierz gatunek ryby"),
   description: z.string().optional(),
+  fishingSpotId: z
+    .string({ required_error: "Wybierz łowisko na którym złowiono rybe." })
+    .min(1, "Wybierz łowisko na którym złowiono rybe."),
 });
 
 type FormData = z.infer<typeof catchSchema>;
+
 const NewCatch = () => {
   const {
     register,
@@ -39,6 +53,7 @@ const NewCatch = () => {
     resolver: zodResolver(catchSchema),
     defaultValues: { images: [] },
   });
+  const [errorMessagesContainer] = useAutoAnimate();
 
   const onSubmit = handleSubmit((data: FormData) => {
     console.log(data);
@@ -106,7 +121,7 @@ const NewCatch = () => {
             </div>
             <div>
               <Label>Gatunek ryby</Label>
-              <div className="flex flex-wrap gap-0.5">
+              <div className="flex max-w-lg flex-wrap gap-0.5">
                 {fishTypeNames.map((fishType) => (
                   <Button
                     type="button"
@@ -125,7 +140,11 @@ const NewCatch = () => {
             </div>
             <div>
               <Label>Łowisko</Label>
-              <SelectFishingSpot />
+              <SelectFishingSpot
+                onSpotSelect={(fishingSpot) =>
+                  setValue("fishingSpotId", fishingSpot.id)
+                }
+              />
             </div>
             <div>
               <Label htmlFor="weight">Waga ryby (g)</Label>
@@ -160,7 +179,15 @@ const NewCatch = () => {
                 onDateChange={(date) => setValue("date", date)}
               />
             </div>
-
+            <div ref={errorMessagesContainer}>
+              {errors && (
+                <ErrorMessages
+                  errorMessages={Object.values(errors).map(
+                    (error) => error.message as string
+                  )}
+                />
+              )}
+            </div>
             <Button className="mt-2 w-full" type="submit">
               Dodaj
             </Button>

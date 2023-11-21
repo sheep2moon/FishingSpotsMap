@@ -3,8 +3,8 @@ import { fishTypeNames } from "../src/const/fish-type-names";
 
 export const fishingSpotSchema = z.object({
   name: z.string().min(5, "Nazwa musi być dłuższa niż 5 znaków"),
-  province: z.string().nonempty("Wprowadź nazwę województwa"),
-  city: z.string().nonempty("Wprowadź nazwę miasta"),
+  province: z.string().min(1, "Wprowadź nazwę województwa"),
+  city: z.string().min(1, "Wprowadź nazwę miasta"),
   area: z.string(),
   night_fishing: z.boolean(),
   tent: z.boolean(),
