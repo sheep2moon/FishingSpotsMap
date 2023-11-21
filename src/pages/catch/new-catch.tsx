@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import React, { useEffect, useState } from "react";
-import { useForm, Controller, Control } from "react-hook-form";
-import { customFile, fileSchema } from "schemas/file.schema";
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { fileSchema } from "schemas/file.schema";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import { ViewHeader, ViewTitle } from "~/components/ui/view-header";
@@ -13,10 +13,9 @@ import Image from "next/image";
 import { IconX } from "@tabler/icons-react";
 import { Textarea } from "../../components/ui/textarea";
 import { CalendarPopover } from "../../components/ui/calendar-popover";
-import { FishTypeSelector } from "../../components/fish-types-selector";
 import { fishTypeNames } from "../../const/fish-type-names";
-import { Toggle } from "../../components/ui/toggle";
 import { cn } from "../../lib/utils/cn";
+import SelectFishingSpot from "../../components/select-fishing-spot";
 
 const catchSchema = z.object({
   images: z.array(fileSchema),
@@ -32,7 +31,6 @@ const NewCatch = () => {
   const {
     register,
     handleSubmit,
-    control,
     setValue,
     getValues,
     watch,
@@ -111,6 +109,7 @@ const NewCatch = () => {
               <div className="flex flex-wrap gap-0.5">
                 {fishTypeNames.map((fishType) => (
                   <Button
+                    type="button"
                     onClick={() => setValue("fishType", fishType)}
                     className={cn(
                       watch("fishType") === fishType &&
@@ -123,6 +122,10 @@ const NewCatch = () => {
                   </Button>
                 ))}
               </div>
+            </div>
+            <div>
+              <Label>Łowisko</Label>
+              <SelectFishingSpot />
             </div>
             <div>
               <Label htmlFor="weight">Waga ryby (g)</Label>
@@ -157,6 +160,7 @@ const NewCatch = () => {
                 onDateChange={(date) => setValue("date", date)}
               />
             </div>
+
             <Button className="mt-2 w-full" type="submit">
               Dodaj
             </Button>
