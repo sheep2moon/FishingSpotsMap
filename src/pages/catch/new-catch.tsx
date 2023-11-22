@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { fileSchema } from "schemas/file.schema";
 import { z } from "zod";
@@ -18,26 +18,11 @@ import { cn } from "../../lib/utils/cn";
 import SelectFishingSpot from "../../components/select-fishing-spot";
 import ErrorMessages from "../../components/ui/error-messages";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-
-const catchSchema = z.object({
-  images: z.array(fileSchema).min(1, "Dodaj przynajmniej jedno zdjęcie"),
-  weight: z.number({
-    invalid_type_error: "Waga musi być liczbą",
-    required_error: "Waga ryby jest wymagana",
-  }),
-  length: z.number({
-    invalid_type_error: "Długość musi być liczbą",
-    required_error: "Długość ryby jest wymagana",
-  }),
-  date: z.date().optional(),
-  fishType: z
-    .string({ required_error: "Wybierz gatunek ryby" })
-    .min(1, "Wybierz gatunek ryby"),
-  description: z.string().optional(),
-  fishingSpotId: z
-    .string({ required_error: "Wybierz łowisko na którym złowiono rybe." })
-    .min(1, "Wybierz łowisko na którym złowiono rybe."),
-});
+import { catchSchema } from "../../../schemas/catch.schema";
+import { v4 as uuidv4 } from "uuid";
+import { api } from "../../lib/utils/api";
+import { uploadFile } from "../../server/uploadFile";
+import LoadingSpinner from "../../components/ui/loading-spinner";
 
 type FormData = z.infer<typeof catchSchema>;
 
@@ -54,9 +39,37 @@ const NewCatch = () => {
     defaultValues: { images: [] },
   });
   const [errorMessagesContainer] = useAutoAnimate();
+  const { mutateAsync: createNewCatch } = api.catch.newCatch.useMutation();
+  const { mutateAsync: createPresignedUrl } =
+    api.files.createPresignedImageUrl.useMutation();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmit = handleSubmit((data: FormData) => {
-    console.log(data);
+  const onSubmit = handleSubmit(async (data: FormData) => {
+    setIsLoading(true);
+    const imagesId: Array<string> = [];
+    for (let i = 0; i < data.images.length; i++) {
+      const currentImage = data.images[i];
+      if (currentImage) {
+        const imageId = uuidv4();
+        const { fields, url } = await createPresignedUrl({
+          folderName: "catch-images",
+          id: imageId,
+        });
+        await uploadFile({ url, fields, file: currentImage });
+        imagesId.push(imageId);
+      }
+    }
+
+    await createNewCatch({
+      fishingSpotId: data.fishingSpotId,
+      fishType: data.fishType,
+      length: data.length,
+      weight: data.weight,
+      description: data.description,
+      date: data.date,
+      images: imagesId,
+    });
+    setIsLoading(false);
   });
 
   const handleAddImage = (file: File) => {
@@ -188,7 +201,7 @@ const NewCatch = () => {
                 />
               )}
             </div>
-            <Button className="mt-2 w-full" type="submit">
+            <Button className="mt-2 w-full" type="submit" disabled={isLoading}>
               Dodaj
             </Button>
           </form>

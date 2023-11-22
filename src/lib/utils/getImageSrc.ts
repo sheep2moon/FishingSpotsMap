@@ -8,6 +8,12 @@ export const getSpotImageSrc = (id: string | null | undefined) => {
   }
   return "";
 };
+export const getCatchImageSrc = (id: string | null | undefined) => {
+  if (typeof id === "string") {
+    return `${baseUrl}/catch-images/${id}`;
+  }
+  return "";
+};
 
 export const getAttachmentSrc = (id: string) => {
   return `${baseUrl}/discussion-attachments/${id}`;

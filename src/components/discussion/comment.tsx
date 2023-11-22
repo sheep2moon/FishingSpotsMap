@@ -11,9 +11,7 @@ import {
 } from "@tabler/icons-react";
 import Avatar from "../ui/avatar";
 import { api, type RouterOutputs } from "../../lib/utils/api";
-import { useDebugLog } from "../../hooks/useDebugLog";
 import { Button } from "../ui/button";
-import NewComment, { NewCommentProps } from "./new-comment";
 import Image from "next/image";
 import AttachmentPreview from "../ui/attachment-preview";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
@@ -25,7 +23,7 @@ import {
 } from "../ui/dropdown-menu";
 import CurrentUserOnly from "../current-user-only";
 import { cn } from "../../lib/utils/cn";
-import { NewCommentTarget } from "../../pages/discussion/[id]";
+import type { NewCommentTarget } from "../../pages/discussion/[id]";
 
 type Reaction = (typeof ReactionType)[keyof typeof ReactionType];
 
@@ -111,7 +109,7 @@ const CommentCard = (props: CommentCardProps) => {
       });
     } else {
       void ctx.discussion.getDiscussionById.invalidate({
-        id: props.comment.discussionId,
+        id: props.comment.discussionId ? props.comment.discussionId : undefined,
       });
     }
     setIsLoading(false);

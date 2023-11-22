@@ -7,6 +7,7 @@ import { achievementsRouter } from "./routers/achievements";
 import { tagsRouter } from "./routers/tags";
 import { filesRouter } from "./routers/files";
 import { discussionRouter } from "./routers/discussion";
+import { catchRouter } from "./routers/catch";
 
 /**
  * This is the primary router for your server.
@@ -22,6 +23,7 @@ export const appRouter = createTRPCRouter({
   achievements: achievementsRouter,
   discussion: discussionRouter,
   tags: tagsRouter,
+  catch: catchRouter,
 });
 
 // export type definition of API
