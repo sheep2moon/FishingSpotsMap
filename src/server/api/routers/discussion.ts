@@ -26,6 +26,33 @@ export const discussionRouter = createTRPCRouter({
               discussionId: true,
               attachment: true,
               parentId: true,
+              childrens: {
+                select: {
+                  id: true,
+                  content: true,
+                  createdAt: true,
+                  discussionId: true,
+                  attachment: true,
+                  parentId: true,
+                  author: {
+                    select: {
+                      image: true,
+                      name: true,
+                      id: true,
+                    },
+                  },
+                  replyTo: {
+                    select: {
+                      id: true,
+                      author: {
+                        select: {
+                          name: true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
               author: {
                 select: {
                   image: true,
@@ -156,50 +183,5 @@ export const discussionRouter = createTRPCRouter({
           },
         },
       });
-    }),
-  commentDiscussion: protectedProcedure
-    .input(
-      z.object({
-        content: z.string(),
-        discussionId: z.string(),
-        parendId: z.string().optional(),
-        replyToId: z.string().optional(),
-        attachmentData: z
-          .object({
-            id: z.string(),
-            name: z.string(),
-            type: z.string(),
-            url: z.string(),
-          })
-          .optional(),
-      })
-    )
-    .mutation(async ({ input, ctx }) => {
-      if (input.attachmentData) {
-        await ctx.prisma.comment.create({
-          data: {
-            content: input.content,
-            authorId: ctx.session.user.id,
-            discussionId: input.discussionId,
-            parentId: input.parendId,
-            replyToId: input.replyToId,
-            attachment: {
-              create: {
-                ...input.attachmentData,
-              },
-            },
-          },
-        });
-      } else {
-        await ctx.prisma.comment.create({
-          data: {
-            content: input.content,
-            authorId: ctx.session.user.id,
-            discussionId: input.discussionId,
-            parentId: input.parendId,
-            replyToId: input.replyToId,
-          },
-        });
-      }
     }),
 });

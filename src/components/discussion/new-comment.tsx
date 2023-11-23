@@ -2,27 +2,15 @@ import type { Attachment } from "@prisma/client";
 import React, { useEffect, useRef, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
-import { Card, CardContent } from "../ui/card";
 import { useSession } from "next-auth/react";
 import { api } from "../../lib/utils/api";
-import { motion } from "framer-motion";
-import {
-  IconPaperclip,
-  IconPhoto,
-  IconSend,
-  IconSquareRoundedX,
-  IconX,
-} from "@tabler/icons-react";
+import { IconPaperclip, IconPhoto, IconX } from "@tabler/icons-react";
 import { uploadFile } from "../../server/uploadFile";
 import { getAttachmentSrc } from "../../lib/utils/getImageSrc";
 import LoadingSpinner from "../ui/loading-spinner";
 import { type NewCommentTarget } from "../../pages/discussion/[id]";
-import useIsInViewport from "../../hooks/useIsInViewport";
 import { cn } from "../../lib/utils/cn";
-import { IconMessageForward } from "@tabler/icons-react";
 import { IconSquareRoundedArrowRight } from "@tabler/icons-react";
-import AttachmentPreview from "../ui/attachment-preview";
-import useClickOutside from "../../hooks/useClickOutside";
 
 export type NewCommentProps = NewCommentTarget & {
   discussionId: string;
@@ -31,16 +19,14 @@ export type NewCommentProps = NewCommentTarget & {
 
 const NewComment = (props: NewCommentProps) => {
   const [commentValue, setCommentValue] = useState("");
-  const commentMutation = api.discussion.commentDiscussion.useMutation();
+  const commentMutation = api.comment.commentDiscussion.useMutation();
   const { mutateAsync: createPresignedAttachmentUrl } =
     api.files.createPresignedAttachmentUrl.useMutation();
   const [attachedFile, setAttachedFile] = useState<File | null>(null);
   const session = useSession();
   const ctx = api.useContext();
-  // const ref = useRef<HTMLDivElement | null>(null);
   const newCommentRef = useRef<HTMLDivElement | null>(null);
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
-  const [textRows, setTextRows] = useState(1);
 
   useEffect(() => {
     textAreaRef.current?.focus();
@@ -52,8 +38,6 @@ const NewComment = (props: NewCommentProps) => {
       textArea.style.height = "38px";
       const newHeight = Math.min(textArea.scrollHeight, 300);
       textArea.style.height = newHeight.toString() + "px";
-      // const calculatedRows = Math.floor(textArea.scrollHeight / 20);
-      // setTextRows(calculatedRows);
     }
   }, [commentValue]);
 
@@ -96,15 +80,9 @@ const NewComment = (props: NewCommentProps) => {
       attachmentData: attachmentData || undefined,
     });
     setCommentValue("");
-    if (props.parentId) {
-      void ctx.discussion.getCommentChildrens.invalidate({
-        commentId: props.parentId,
-      });
-    } else {
-      void ctx.discussion.getDiscussionById.invalidate({
-        id: props.discussionId,
-      });
-    }
+    void ctx.discussion.getDiscussionById.invalidate({
+      id: props.discussionId,
+    });
   };
 
   return (

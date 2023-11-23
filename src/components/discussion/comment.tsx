@@ -14,7 +14,6 @@ import { api, type RouterOutputs } from "../../lib/utils/api";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import AttachmentPreview from "../ui/attachment-preview";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -49,51 +48,10 @@ export type ReplyTo =
   RouterOutputs["discussion"]["getDiscussionById"]["comments"][number]["author"];
 
 type CommentProps = {
-  comment: RouterOutputs["discussion"]["getDiscussionById"]["comments"][number];
+  comment: RouterOutputs["discussion"]["getDiscussionById"]["comments"][number]["childrens"][number];
   setNewCommentProps: (props: NewCommentTarget) => void;
 };
 const Comment = (props: CommentProps) => {
-  const [repliesContainer] = useAutoAnimate();
-  const childrensQuery = api.discussion.getCommentChildrens.useQuery({
-    commentId: props.comment.id,
-  });
-
-  return (
-    <>
-      <CommentCard {...props} />
-      <div
-        ref={repliesContainer}
-        className="ml-4 flex flex-col gap-2 border-l-2 border-primary-dark/20 pl-2 dark:border-primary"
-      >
-        {childrensQuery.data &&
-          childrensQuery.data.map((childComment) => (
-            <CommentCard
-              key={childComment.id}
-              comment={childComment}
-              setNewCommentProps={props.setNewCommentProps}
-            />
-          ))}
-
-        {/* {replyTo && (
-          <NewComment
-            parentId={props.comment.id}
-            replyTo={{
-              id: props.comment.id,
-              author: { name: props.comment.author.name },
-            }}
-            discussionId={props.comment.discussionId}
-          />
-        )} */}
-      </div>
-    </>
-  );
-};
-
-export default Comment;
-
-type CommentCardProps = CommentProps;
-
-const CommentCard = (props: CommentCardProps) => {
   const attachment = props.comment.attachment[0];
   const [isLoading, setIsLoading] = useState(false);
   const { mutateAsync: deleteComment } =
@@ -185,7 +143,7 @@ const CommentCard = (props: CommentCardProps) => {
             variant="ghost"
             onClick={() =>
               props.setNewCommentProps({
-                parentId: props.comment.parentId || undefined,
+                parentId: props.comment.parentId || props.comment.id,
                 replyTo: {
                   author: {
                     name: props.comment.author.name,
@@ -214,3 +172,5 @@ const CommentCard = (props: CommentCardProps) => {
     </Card>
   );
 };
+
+export default Comment;
