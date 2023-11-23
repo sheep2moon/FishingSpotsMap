@@ -1,6 +1,7 @@
 import { type Image } from "@prisma/client";
 import { mutationCatchSchema } from "../../../../schemas/catch.schema";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { z } from "zod";
 
 export const catchRouter = createTRPCRouter({
   getCatches: publicProcedure.query(async ({ ctx }) => {
@@ -20,6 +21,25 @@ export const catchRouter = createTRPCRouter({
       },
     });
   }),
+  getCatch: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      return await ctx.prisma.catch.findFirst({
+        where: {
+          id: input.id,
+        },
+        include: {
+          images: true,
+          fishingSpot: true,
+          comments: true,
+          user: true,
+        },
+      });
+    }),
   newCatch: protectedProcedure
     .input(mutationCatchSchema)
     .mutation(async ({ input, ctx }) => {
