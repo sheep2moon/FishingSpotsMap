@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { Comment } from "@prisma/client";
 
 export const commentRouter = createTRPCRouter({
   commentCatch: protectedProcedure
@@ -18,11 +19,12 @@ export const commentRouter = createTRPCRouter({
         },
       });
     }),
-  commentDiscussion: protectedProcedure
+  createComment: protectedProcedure
     .input(
       z.object({
         content: z.string(),
-        discussionId: z.string(),
+        targetId: z.string(),
+        targetType: z.enum(["DISCUSSION", "CATCH"]),
         parendId: z.string().optional(),
         replyToId: z.string().optional(),
         attachmentData: z
@@ -36,14 +38,21 @@ export const commentRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
+      const newCommentData = {
+        content: input.content,
+        authorId: ctx.session.user.id,
+        parentId: input.parendId,
+        replyToId: input.replyToId,
+      };
+      if (input.targetType === "DISCUSSION")
+        Object.assign(newCommentData, { discussionId: input.targetId });
+      if (input.targetType === "CATCH")
+        Object.assign(newCommentData, { catchId: input.targetId });
+
       if (input.attachmentData) {
         await ctx.prisma.comment.create({
           data: {
-            content: input.content,
-            authorId: ctx.session.user.id,
-            discussionId: input.discussionId,
-            parentId: input.parendId,
-            replyToId: input.replyToId,
+            ...newCommentData,
             attachment: {
               create: {
                 ...input.attachmentData,
@@ -54,11 +63,7 @@ export const commentRouter = createTRPCRouter({
       } else {
         await ctx.prisma.comment.create({
           data: {
-            content: input.content,
-            authorId: ctx.session.user.id,
-            discussionId: input.discussionId,
-            parentId: input.parendId,
-            replyToId: input.replyToId,
+            ...newCommentData,
           },
         });
       }

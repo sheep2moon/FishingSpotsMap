@@ -36,7 +36,12 @@ const DiscussionPage = () => {
     parentId: undefined,
     replyTo: undefined,
   });
-
+  const onCommentAdd = () => {
+    const refetchQuery = async () => {
+      void (await discussionQuery.refetch());
+    };
+    void refetchQuery();
+  };
   if (!discussionQuery.data) return <LoadingSpinner />;
 
   return (
@@ -116,6 +121,7 @@ const DiscussionPage = () => {
           </CardContent>
         </Card>
         <NewComment
+          onCommentAdd={onCommentAdd}
           setNewCommentProps={setNewCommentProps}
           {...newCommentProps}
           discussionId={id}

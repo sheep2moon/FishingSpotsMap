@@ -14,17 +14,17 @@ import { IconSquareRoundedArrowRight } from "@tabler/icons-react";
 
 export type NewCommentProps = NewCommentTarget & {
   discussionId: string;
+  onCommentAdd: () => void;
   setNewCommentProps: (props: NewCommentTarget) => void;
 };
 
 const NewComment = (props: NewCommentProps) => {
   const [commentValue, setCommentValue] = useState("");
-  const commentMutation = api.comment.commentDiscussion.useMutation();
+  const commentMutation = api.comment.createComment.useMutation();
   const { mutateAsync: createPresignedAttachmentUrl } =
     api.files.createPresignedAttachmentUrl.useMutation();
   const [attachedFile, setAttachedFile] = useState<File | null>(null);
   const session = useSession();
-  const ctx = api.useContext();
   const newCommentRef = useRef<HTMLDivElement | null>(null);
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -42,7 +42,11 @@ const NewComment = (props: NewCommentProps) => {
   }, [commentValue]);
 
   if (!session.data?.user)
-    return <div className="p-2 font-bold">nie zalogowany</div>;
+    return (
+      <div className="p-4 font-bold">
+        Aby dodawać komentarze musisz być zalogowany.
+      </div>
+    );
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -74,15 +78,14 @@ const NewComment = (props: NewCommentProps) => {
     }
     await commentMutation.mutateAsync({
       content: commentValue,
-      discussionId: props.discussionId,
+      targetType: "DISCUSSION",
+      targetId: props.discussionId,
       parendId: props.parentId,
       replyToId: props.replyTo?.id,
       attachmentData: attachmentData || undefined,
     });
     setCommentValue("");
-    void ctx.discussion.getDiscussionById.invalidate({
-      id: props.discussionId,
-    });
+    props.onCommentAdd();
   };
 
   return (
@@ -116,7 +119,7 @@ const NewComment = (props: NewCommentProps) => {
                 </span>
               </div>
             ) : (
-              <span className="whitespace-nowrap">Odpowiadasz w dyskusji</span>
+              <span className="whitespace-nowrap">Dodaj komentarz</span>
             )}
           </div>
           {attachedFile && (
@@ -151,7 +154,7 @@ const NewComment = (props: NewCommentProps) => {
           <div className="aspect-square cursor-pointer rounded-md p-1    ring-primary peer-focus:ring-2 hover:bg-primary-dark">
             <IconPaperclip className="" />
           </div>
-          <span className="sr-only">Attach file</span>
+          <span className="sr-only">Dołącz plik</span>
         </label>
         <label htmlFor="image-upload" className="flex items-center">
           <input
@@ -163,7 +166,7 @@ const NewComment = (props: NewCommentProps) => {
           <div className="aspect-square cursor-pointer rounded-md p-1    ring-primary peer-focus:ring-2 hover:bg-primary-dark">
             <IconPhoto className="" />
           </div>
-          <span className="sr-only">Attach file</span>
+          <span className="sr-only">Dołącz plik</span>
         </label>
         <Button
           className="ml-2 p-2"
