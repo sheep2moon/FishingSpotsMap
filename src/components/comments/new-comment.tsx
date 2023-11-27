@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { useSession } from "next-auth/react";
-import { api } from "../../lib/utils/api";
+import { type RouterInputs, api } from "../../lib/utils/api";
 import { IconPaperclip, IconPhoto, IconX } from "@tabler/icons-react";
 import { uploadFile } from "../../server/uploadFile";
 import { getAttachmentSrc } from "../../lib/utils/getImageSrc";
@@ -13,8 +13,8 @@ import { cn } from "../../lib/utils/cn";
 import { IconSquareRoundedArrowRight } from "@tabler/icons-react";
 
 export type NewCommentProps = NewCommentTarget & {
-  discussionId: string;
-  onCommentAdd: () => void;
+  targetType: RouterInputs["comment"]["createComment"]["targetType"];
+  targetId: string;
   setNewCommentProps: (props: NewCommentTarget) => void;
 };
 
@@ -27,7 +27,7 @@ const NewComment = (props: NewCommentProps) => {
   const session = useSession();
   const newCommentRef = useRef<HTMLDivElement | null>(null);
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
-
+  const ctx = api.useContext();
   useEffect(() => {
     textAreaRef.current?.focus();
   }, []);
@@ -78,14 +78,19 @@ const NewComment = (props: NewCommentProps) => {
     }
     await commentMutation.mutateAsync({
       content: commentValue,
-      targetType: "DISCUSSION",
-      targetId: props.discussionId,
+      targetType: props.targetType,
+      targetId: props.targetId,
       parendId: props.parentId,
       replyToId: props.replyTo?.id,
       attachmentData: attachmentData || undefined,
     });
     setCommentValue("");
-    props.onCommentAdd();
+    props.setNewCommentProps({ parentId: undefined, replyTo: undefined });
+    void (await ctx.comment.getComments.invalidate({
+      discussionId:
+        props.targetType === "DISCUSSION" ? props.targetId : undefined,
+      catchId: props.targetType === "CATCH" ? props.targetId : undefined,
+    }));
   };
 
   return (

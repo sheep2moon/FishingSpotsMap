@@ -45,31 +45,26 @@ const reactions: { name: string; key: Reaction; icon: React.ReactNode }[] = [
 ];
 
 export type ReplyTo =
-  RouterOutputs["discussion"]["getDiscussionById"]["comments"][number]["author"];
+  RouterOutputs["comment"]["getComments"][number]["replyTo"];
 
 type CommentProps = {
-  comment: RouterOutputs["discussion"]["getDiscussionById"]["comments"][number]["childrens"][number];
+  comment: RouterOutputs["comment"]["getComments"][number]["childrens"][number];
   setNewCommentProps: (props: NewCommentTarget) => void;
 };
 const Comment = (props: CommentProps) => {
   const attachment = props.comment.attachment[0];
   const [isLoading, setIsLoading] = useState(false);
   const { mutateAsync: deleteComment } =
-    api.discussion.deleteComment.useMutation();
+    api.comment.deleteComment.useMutation();
   const ctx = api.useContext();
 
   const handleDeleteComment = async () => {
     setIsLoading(true);
     await deleteComment({ commentId: props.comment.id });
-    if (props.comment.parentId) {
-      void ctx.discussion.getCommentChildrens.invalidate({
-        commentId: props.comment.parentId,
-      });
-    } else {
-      void ctx.discussion.getDiscussionById.invalidate({
-        id: props.comment.discussionId ? props.comment.discussionId : undefined,
-      });
-    }
+    void (await ctx.comment.getComments.invalidate({
+      catchId: props.comment.catchId || undefined,
+      discussionId: props.comment.discussionId || undefined,
+    }));
     setIsLoading(false);
   };
 
