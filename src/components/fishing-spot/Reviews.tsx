@@ -4,6 +4,9 @@ import StarRating from "../ui/star-rating";
 import Image from "next/image";
 import { api } from "../../lib/utils/api";
 import { Separator } from "../ui/separator";
+import { format } from "date-fns";
+import { Button } from "../ui/button";
+import { IconDots } from "@tabler/icons-react";
 
 type ReviewsProps = {
   reviews: Review[];
@@ -31,9 +34,9 @@ const Review = ({ review }: { review: Review }) => {
   });
 
   return (
-    <div className="rounded-md border border-primary-200 bg-primary p-2 py-4 dark:border-primary-800 dark:bg-primary-950">
+    <div className="rounded-md border border-primary-200 bg-primary p-2 dark:border-primary-800 dark:bg-primary-950 sm:p-4">
       <div className="flex items-center gap-4">
-        <div className="relative aspect-square w-12 ">
+        <div className="relative aspect-square w-10 ">
           <Image
             src={userQuery.data?.image || ""}
             fill
@@ -41,16 +44,21 @@ const Review = ({ review }: { review: Review }) => {
             alt="awatar"
           />
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1">
           <span className="font-bold">{userQuery.data?.name || "anonim"}</span>
-          <span>{review.createdAt.toUTCString()}</span>
+          <StarRating disabled={true} rate={review.rate} />
         </div>
-        <div className="mb-auto ml-auto flex items-center">
-          <p>opcje</p>
+        <div className="mb-auto ml-auto flex items-center gap-4">
+          <span className="text-sm">
+            {format(review.createdAt, "dd-MM-yyyy")}
+          </span>
+          <Button variant="ghost">
+            <IconDots />
+          </Button>
         </div>
       </div>
-      <StarRating disabled={true} rate={review.rate} />
-      <p className="mt-4 bg-gray-100 px-2 py-1 dark:bg-primary-800">
+
+      <p className="mt-2 bg-primary-200 px-2 py-1 dark:bg-primary-900/20">
         {review.comment}
       </p>
     </div>

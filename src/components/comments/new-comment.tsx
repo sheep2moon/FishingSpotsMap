@@ -8,9 +8,9 @@ import { IconPaperclip, IconPhoto, IconX } from "@tabler/icons-react";
 import { uploadFile } from "../../server/uploadFile";
 import { getAttachmentSrc } from "../../lib/utils/getImageSrc";
 import LoadingSpinner from "../ui/loading-spinner";
-import { type NewCommentTarget } from "../../pages/discussion/[id]";
 import { cn } from "../../lib/utils/cn";
 import { IconSquareRoundedArrowRight } from "@tabler/icons-react";
+import { type NewCommentTarget } from "./comment-section";
 
 export type NewCommentProps = NewCommentTarget & {
   targetType: RouterInputs["comment"]["createComment"]["targetType"];

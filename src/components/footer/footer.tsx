@@ -5,7 +5,7 @@ import { IconBrandGithubFilled } from "@tabler/icons-react";
 const Footer = () => {
   return (
     <footer className="mt-auto w-screen p-2 dark:bg-primary-950 dark:text-primary xl:rounded-md">
-      <div className="mx-auto flex w-full max-w-screen-xl items-center">
+      <div className="mx-auto flex w-full max-w-screen-xl items-center text-xs">
         <span className="flex items-center">
           aplikacja stworzona przez
           <a

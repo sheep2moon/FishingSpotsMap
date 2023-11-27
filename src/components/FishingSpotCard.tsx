@@ -17,25 +17,24 @@ const FishingSpotCard = ({ fishingSpot }: FishingSpotCardProps) => {
       <Link
         href={`/fishing-spot/${fishingSpot.id}`}
         className={clsx(
-          "hover:shadow-dark/20 text-secondary-foreground mb-4 flex cursor-pointer flex-col justify-start rounded-md shadow-md shadow-primary-700 ring-1 ring-primary/30 transition-all hover:ring-2 hover:transition-all dark:bg-primary-dark dark:text-primary-300"
+          "hover:shadow-dark/20 relative mb-4 flex h-60 cursor-pointer flex-col justify-start rounded-md ring-secondary transition-all hover:ring-2 hover:transition-all dark:bg-primary-dark dark:text-primary-300"
         )}
       >
-        <div className="relative aspect-video w-full">
-          <Image
-            className="rounded-md"
-            src={getSpotImageSrc(fishingSpot.images[0]?.id)}
-            alt="podgląd łowiska"
-            fill
-          />
-        </div>
+        <Image
+          className="rounded-sm"
+          src={getSpotImageSrc(fishingSpot.images[0]?.id)}
+          alt="podgląd łowiska"
+          fill
+        />
+        {/* <div className="relative aspect-video w-full"></div> */}
 
-        <div className="px-2 py-2">
+        <div className="absolute bottom-2 left-0 right-2 z-10 rounded-r-sm bg-secondary-800 px-2 py-2 text-primary">
           <h4 className="overflow-ellipsis whitespace-nowrap text-base font-bold">
             {fishingSpot.name || "brak nazwy"}
           </h4>
           <div className="flex items-center gap-1">
             <IconMapPinFilled className="w-4 sm:w-8" />
-            <p className="truncate text-sm dark:text-primary-500">{`${fishingSpot.city}, ${fishingSpot.province}`}</p>
+            <p className="truncate text-sm dark:text-primary-300">{`${fishingSpot.city}, ${fishingSpot.province}`}</p>
           </div>
         </div>
       </Link>

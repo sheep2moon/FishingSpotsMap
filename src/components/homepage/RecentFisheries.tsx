@@ -28,7 +28,10 @@ const RecentFisheries = () => {
           <IconClock className="text-secondary" />
           Ostatnio dodane łowiska
         </h2>
-        <Link href="/" className="flex items-center gap-1 dark:text-primary">
+        <Link
+          href="/fishing-spot/spot-search"
+          className="flex items-center gap-1 dark:text-primary"
+        >
           zobacz więcej <IconChevronsRight />
         </Link>
       </div>

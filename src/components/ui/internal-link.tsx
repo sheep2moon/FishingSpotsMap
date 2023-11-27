@@ -19,6 +19,7 @@ const linkVariants = cva(
         ghost:
           "hover:bg-primary-100 hover:text-primary-900 dark:hover:bg-primary-800 dark:hover:text-primary-50",
         link: "text-primary-900 underline-offset-4 hover:underline dark:text-primary-50",
+        accent: "",
       },
       size: {
         default: "h-10 px-4 py-2",

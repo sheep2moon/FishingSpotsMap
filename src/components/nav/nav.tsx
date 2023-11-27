@@ -34,11 +34,11 @@ import NotificationsPopover from "./notifications-popover";
 import { IconMessageCircle } from "@tabler/icons-react";
 
 const links: { text: string; href: string; icon: React.ReactNode }[] = [
-  {
-    text: "Strona Główna",
-    href: "/",
-    icon: <IconHome size="1.4rem" />,
-  },
+  // {
+  //   text: "Strona Główna",
+  //   href: "/",
+  //   icon: <IconHome size="1.4rem" />,
+  // },
   {
     text: "Dodaj miejsce",
     href: "/add-fishing-spot",
@@ -74,7 +74,7 @@ const Nav = () => {
         "duration-400 fixed inset-x-0 top-0 z-[1000] mx-auto flex h-14 w-screen items-center bg-primary-100 py-2 text-primary-dark shadow-md shadow-primary-700/50 transition-all dark:bg-primary-950 dark:text-primary"
       )}
     >
-      <nav className="mx-auto flex w-full max-w-screen-xl items-center px-2">
+      <nav className="mx-auto flex w-full max-w-screen-xl items-center justify-between px-2">
         <div className="lg:hidden">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -100,18 +100,26 @@ const Nav = () => {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className="hidden lg:flex">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="p-2 dark:text-primary/80 dark:hover:text-primary"
-            >
-              {link.text}
-            </Link>
-          ))}
+        <div className="hidden w-full lg:flex lg:items-center">
+          <Link href="/" className="flex items-center gap-1">
+            <div className="relative h-12 w-12">
+              <Image src="/images/logo-icon.svg" fill alt="" />
+            </div>
+            <span className="">Mapa Rybaka</span>
+          </Link>
+          <div className="mx-auto flex items-center">
+            {links.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="p-2 dark:text-primary/80 dark:hover:text-primary"
+              >
+                {link.text}
+              </Link>
+            ))}
+          </div>
         </div>
-        <div className="ml-auto flex items-center gap-2 p-2 pr-4">
+        <div className="flex items-center gap-2 self-end p-2 pr-4">
           <ThemeToggle />
           <SearchSpots />
           <AuthOnly>
@@ -120,7 +128,7 @@ const Nav = () => {
           {session.data?.user && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button>
+                <button className="h-10 w-10">
                   <Image
                     alt=""
                     src={session.data.user.image || ""}

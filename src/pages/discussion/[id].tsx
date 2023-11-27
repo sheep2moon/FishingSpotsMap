@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../../components/ui/card";
-import { type RouterOutputs, api } from "../../lib/utils/api";
+import { api } from "../../lib/utils/api";
 import LoadingSpinner from "../../components/ui/loading-spinner";
 import Avatar from "../../components/ui/avatar";
 import { timePassedFromNow } from "../../lib/helpers/timePassedFromNow";
@@ -16,11 +16,6 @@ import { IconArrowLeft, IconPaperclip } from "@tabler/icons-react";
 import { Separator } from "../../components/ui/separator";
 import { InternalLink } from "../../components/ui/internal-link";
 import CommentSection from "../../components/comments/comment-section";
-
-export type NewCommentTarget = {
-  replyTo?: RouterOutputs["discussion"]["getDiscussionById"]["comments"][number]["replyTo"];
-  parentId?: string;
-};
 
 const DiscussionPage = () => {
   const router = useRouter();

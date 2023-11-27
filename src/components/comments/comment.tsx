@@ -22,7 +22,7 @@ import {
 } from "../ui/dropdown-menu";
 import CurrentUserOnly from "../current-user-only";
 import { cn } from "../../lib/utils/cn";
-import type { NewCommentTarget } from "../../pages/discussion/[id]";
+import { type NewCommentTarget } from "./comment-section";
 
 type Reaction = (typeof ReactionType)[keyof typeof ReactionType];
 
