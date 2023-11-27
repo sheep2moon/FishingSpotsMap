@@ -7,7 +7,6 @@ const Footer = () => {
     <footer className="mt-auto w-full p-2 dark:bg-primary-dark dark:text-primary xl:rounded-md">
       <div className="mx-auto flex w-full max-w-screen-xl items-center text-xs sm:text-sm">
         <span className="flex items-center">
-          aplikacja stworzona przez
           <a
             className="ml-2 flex items-center underline"
             href="https://github.com/sheep2moon"

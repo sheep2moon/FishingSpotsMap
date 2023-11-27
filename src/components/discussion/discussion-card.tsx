@@ -15,7 +15,7 @@ const DiscussionCard = ({ discussion }: DiscussionCardProps) => {
     <Link key={discussion.id} href={`/discussion/${discussion.id}`}>
       <Card>
         <CardHeader>
-          <h3 className="text-2xlxl truncate font-bold capitalize">
+          <h3 className="truncate text-lg font-bold capitalize sm:text-xl lg:text-2xl">
             {discussion.title}
           </h3>
           <div className="flex justify-between">

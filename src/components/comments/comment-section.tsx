@@ -27,12 +27,14 @@ const CommentSection = (props: CommentSectionProps) => {
     parentId: undefined,
     replyTo: undefined,
   });
+
   const commentsCount = useMemo(() => {
     const totalCount = commentsQuery.data?.reduce((acc, comment) => {
       return acc + 1 + comment.childrens.length;
     }, 0);
     return totalCount;
   }, [commentsQuery.data]);
+
   if (!commentsQuery.data) return <>loading...</>;
 
   return (

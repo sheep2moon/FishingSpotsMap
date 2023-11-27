@@ -97,7 +97,7 @@ const NewComment = (props: NewCommentProps) => {
     <div
       ref={newCommentRef}
       className={cn(
-        "fixed bottom-0 z-10 flex w-full max-w-screen-xl gap-2 rounded-t-md border border-b-0 border-primary/20 border-secondary-900 bg-primary px-2 py-2 transition-all dark:bg-secondary-950"
+        "fixed bottom-0 left-1/2 z-10 flex w-full max-w-screen-xl -translate-x-1/2 gap-2 rounded-t-md border border-b-0 border-primary/20 border-secondary-900 bg-primary px-2 py-2 transition-all dark:bg-secondary-950"
       )}
     >
       <div className="flex w-full flex-col text-sm">

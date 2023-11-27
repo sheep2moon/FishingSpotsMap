@@ -23,7 +23,7 @@ const AttachmentInput = React.forwardRef<
   return (
     <div
       className={cn(
-        "relative h-10 w-full max-w-xs rounded-md border border-primary/20 transition-all hover:border-primary/30",
+        "relative h-10 w-full max-w-[240px] rounded-md border border-primary-400/40 transition-all hover:border-primary/30 dark:border-primary/20 lg:max-w-xs",
         className
       )}
       {...props}
@@ -31,7 +31,7 @@ const AttachmentInput = React.forwardRef<
     >
       <label
         htmlFor="attachmentInput"
-        className="absolute inset-0 flex cursor-pointer items-center justify-center gap-2"
+        className="w- absolute inset-0 flex cursor-pointer items-center justify-center gap-2"
       >
         <input
           multiple

@@ -10,7 +10,7 @@ const RecentDiscussions = () => {
   return (
     <div className="mt-8 flex flex-col gap-2 px-2 dark:text-primary">
       <div className="flex items-center justify-between">
-        <h2 className="flex gap-2 text-xl font-semibold">
+        <h2 className="flex gap-2 text-base font-semibold sm:text-xl">
           <IconMessageCircle className="text-secondary" />
           Najnowsze dyskusje
         </h2>
@@ -18,10 +18,10 @@ const RecentDiscussions = () => {
           href="/fishing-spot/spot-search"
           className="flex items-center gap-1 dark:text-primary"
         >
-          zobacz więcej <IconChevronsRight />
+          Więcej <IconChevronsRight />
         </Link>
       </div>
-      <div className="grid w-full grid-cols-2 gap-2">
+      <div className="grid w-full grid-cols-1 gap-2 lg:grid-cols-2">
         {data.map((discussion) => (
           <DiscussionCard key={discussion.id} discussion={discussion} />
         ))}

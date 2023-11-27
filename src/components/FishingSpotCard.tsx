@@ -21,14 +21,14 @@ const FishingSpotCard = ({ fishingSpot }: FishingSpotCardProps) => {
         )}
       >
         <Image
-          className="rounded-sm"
+          className="rounded-sm object-cover"
           src={getSpotImageSrc(fishingSpot.images[0]?.id)}
           alt="podgląd łowiska"
           fill
         />
         {/* <div className="relative aspect-video w-full"></div> */}
 
-        <div className="absolute bottom-2 left-0 right-2 z-10 rounded-r-sm bg-secondary-800 px-2 py-2 text-primary">
+        <div className="absolute bottom-4 left-0 right-4 z-10 rounded-r-sm border-l-2 border-secondary bg-primary px-2 py-2 text-primary-dark dark:bg-primary-950 dark:text-primary">
           <h4 className="overflow-ellipsis whitespace-nowrap text-base font-bold">
             {fishingSpot.name || "brak nazwy"}
           </h4>

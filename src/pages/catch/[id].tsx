@@ -11,6 +11,7 @@ import {
 import TimeBadge from "../../components/ui/time-badge";
 import Image from "next/image";
 import { getCatchImageSrc } from "../../lib/utils/getImageSrc";
+import CommentSection from "../../components/comments/comment-section";
 
 const CatchPage = () => {
   const router = useRouter();
@@ -48,6 +49,7 @@ const CatchPage = () => {
           <p>{data.description}</p>
         </CardContent>
       </Card>
+      <CommentSection targetId={data.id} targetType="CATCH" />
     </div>
   );
 };

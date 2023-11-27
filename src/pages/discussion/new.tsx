@@ -129,13 +129,13 @@ const NewDiscussion = () => {
     console.log("submit");
   };
   return (
-    <div className="mx-auto mt-16 flex w-full max-w-screen-xl flex-col gap-6 p-2 pb-16 text-xl">
+    <div className="mx-auto mt-16 flex w-full max-w-screen-xl flex-col gap-6 p-1 pb-16 text-xl lg:p-2">
       <Card>
-        <CardHeader>
+        <CardHeader className="px-2 lg:px-4">
           <CardTitle>Stwórz nową dyskusje</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="flex flex-col gap-4">
+        <CardContent className="px-2 lg:px-4">
+          <div className="flex flex-col gap-2 lg:gap-4">
             <FormSectionTitle
               title="Tytuł"
               description=""
@@ -226,11 +226,11 @@ const NewDiscussion = () => {
             </div>
             <Button
               onClick={() => void handleSubmit()}
-              className="w-fit px-8 text-xl"
+              className="mt-8 w-full px-8 py-4 text-xl"
               type="submit"
               disabled={isSubmitting}
             >
-              Stwórz
+              Potwierdź
             </Button>
           </div>
         </CardContent>
@@ -251,9 +251,11 @@ const FormSectionTitle = ({
   icon: React.ReactNode;
 }) => {
   return (
-    <div className="mt-6 flex items-center gap-2">
-      {icon}
-      <span className="text-xl">{title}</span>
+    <div className="mt-6 flex flex-col gap-2">
+      <div className="flex items-center gap-2">
+        {icon}
+        <span className="text-xl">{title}</span>
+      </div>
       <p className="text-sm dark:text-primary/60">{description}</p>
     </div>
   );
