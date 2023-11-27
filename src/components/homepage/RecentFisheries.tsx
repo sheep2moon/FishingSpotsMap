@@ -22,9 +22,9 @@ const RecentFisheries = () => {
     count: 4,
   });
   return (
-    <div className="mt-8 w-full max-w-screen-xl px-2 dark:text-primary-dark">
+    <div className="mt-8 w-full px-2 dark:text-primary-dark">
       <div className="flex items-center justify-between p-2">
-        <h2 className="flex gap-2 text-xl font-semibold dark:text-primary ">
+        <h2 className="flex gap-2 text-xl font-semibold dark:text-primary">
           <IconClock className="text-secondary" />
           Ostatnio dodane łowiska
         </h2>

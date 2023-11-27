@@ -3,6 +3,7 @@ import HeroBanner from "../components/homepage/HeroBanner";
 import RecentFisheries from "../components/homepage/RecentFisheries";
 import Footer from "../components/footer/footer";
 import Image from "next/image";
+import RecentDiscussions from "../components/homepage/recent-discussions";
 
 const Home = () => {
   return (
@@ -16,8 +17,11 @@ const Home = () => {
         style={{ width: "100%" }}
         className="relative -top-12 h-20 rotate-180 object-cover object-top sm:-top-8 lg:h-32 xl:h-40"
       />
-      <HeroBanner />
-      <RecentFisheries />
+      <div className="mb-12 max-w-screen-xl">
+        <HeroBanner />
+        <RecentFisheries />
+        <RecentDiscussions />
+      </div>
       <Footer />
     </div>
   );

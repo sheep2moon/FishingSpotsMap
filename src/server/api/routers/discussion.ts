@@ -75,4 +75,23 @@ export const discussionRouter = createTRPCRouter({
         },
       });
     }),
+  getRecentDiscussions: publicProcedure
+    .input(
+      z.object({
+        count: z.number().default(4),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      return await ctx.prisma.discussion.findMany({
+        include: {
+          tags: { include: { tag: { select: { name: true } } } },
+          comments: { select: { _count: true } },
+          author: { select: { name: true, image: true } },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        take: input.count,
+      });
+    }),
 });

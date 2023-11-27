@@ -1,5 +1,5 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import Indicator from "../ui/indicator";
 import Comment, { type ReplyTo } from "./comment";
 import NewComment from "./new-comment";
@@ -27,14 +27,19 @@ const CommentSection = (props: CommentSectionProps) => {
     parentId: undefined,
     replyTo: undefined,
   });
-
+  const commentsCount = useMemo(() => {
+    const totalCount = commentsQuery.data?.reduce((acc, comment) => {
+      return acc + 1 + comment.childrens.length;
+    }, 0);
+    return totalCount;
+  }, [commentsQuery.data]);
   if (!commentsQuery.data) return <>loading...</>;
 
   return (
     <>
       <div className="mt-8 flex flex-col gap-2" ref={commentsContainer}>
         <h2 className="flex items-center gap-2">
-          Komentarze <Indicator>{commentsQuery.data.length}</Indicator>
+          Komentarze <Indicator>{commentsCount}</Indicator>
         </h2>
         {commentsQuery.data.map((comment) => (
           <div key={comment.id}>
