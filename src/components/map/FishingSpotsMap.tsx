@@ -30,7 +30,7 @@ const FishingSpotsMap = () => {
           <div className="relative">
             <LoadingSpinner />
           </div>
-          <p className="text-dark mt-8 rounded-md  bg-white/40 text-xl font-bold">
+          <p className="text-dark mt-8 rounded-md  bg-white/40 p-2 text-xl font-bold text-primary-dark dark:bg-primary-dark dark:text-primary">
             Wczytuje punkty...
           </p>
         </div>

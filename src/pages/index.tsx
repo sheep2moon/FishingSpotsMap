@@ -17,7 +17,7 @@ const Home = () => {
         style={{ width: "100%" }}
         className="relative -top-12 h-20 rotate-180 object-cover object-top sm:-top-8 lg:h-32 xl:h-40"
       />
-      <div className="mb-12 max-w-screen-xl">
+      <div className="mb-12 w-screen max-w-screen-xl">
         <HeroBanner />
         <RecentFisheries />
         <RecentDiscussions />

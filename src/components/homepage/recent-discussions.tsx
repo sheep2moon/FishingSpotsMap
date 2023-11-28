@@ -3,10 +3,10 @@ import { api } from "../../lib/utils/api";
 import DiscussionCard from "../discussion/discussion-card";
 import { IconChevronsRight, IconMessageCircle } from "@tabler/icons-react";
 import Link from "next/link";
+import RecentDiscussionsSkeleton from "../skeletons/recent-discussions-skeleton";
 
 const RecentDiscussions = () => {
   const { data, isLoading } = api.discussion.getRecentDiscussions.useQuery({});
-  if (isLoading || !data) return <div>discussion skeleton...</div>;
   return (
     <div className="mt-8 flex flex-col gap-2 px-2 dark:text-primary">
       <div className="flex items-center justify-between">
@@ -22,9 +22,13 @@ const RecentDiscussions = () => {
         </Link>
       </div>
       <div className="grid w-full grid-cols-1 gap-2 lg:grid-cols-2">
-        {data.map((discussion) => (
-          <DiscussionCard key={discussion.id} discussion={discussion} />
-        ))}
+        {data ? (
+          data.map((discussion) => (
+            <DiscussionCard key={discussion.id} discussion={discussion} />
+          ))
+        ) : (
+          <RecentDiscussionsSkeleton />
+        )}
       </div>
     </div>
   );

@@ -36,7 +36,7 @@ const FishingSpot = () => {
   if (!spotQuery.data || spotQuery.isLoading) return <div>skeleton</div>;
   return (
     <div className="flex flex-col gap-8">
-      <div className="shadow-dark/40 mx-auto mt-16 flex min-h-screen w-full max-w-7xl flex-col gap-2 shadow-lg">
+      <div className="shadow-dark/40 mx-auto mt-16 flex min-h-screen w-screen max-w-screen-xl flex-col gap-2 shadow-lg">
         <div className="flex w-full items-center">
           <InternalLink
             variant="link"
@@ -159,7 +159,9 @@ const FishingSpot = () => {
 
         <Card>
           <CardContent className="mt-8">
-            <MarkdownContent text={spotQuery.data.description} />
+            <MarkdownContent
+              text={spotQuery.data.description || "Brak opisu"}
+            />
           </CardContent>
         </Card>
         {spotQuery.data.prices.length > 0 && (
