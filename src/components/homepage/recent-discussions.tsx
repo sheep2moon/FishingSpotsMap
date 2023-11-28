@@ -6,7 +6,7 @@ import Link from "next/link";
 import RecentDiscussionsSkeleton from "../skeletons/recent-discussions-skeleton";
 
 const RecentDiscussions = () => {
-  const { data, isLoading } = api.discussion.getRecentDiscussions.useQuery({});
+  const { data } = api.discussion.getRecentDiscussions.useQuery({});
   return (
     <div className="mt-8 flex flex-col gap-2 px-2 dark:text-primary">
       <div className="flex items-center justify-between">

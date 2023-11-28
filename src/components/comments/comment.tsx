@@ -1,5 +1,5 @@
-import { type ReactionType } from "@prisma/client";
-import React, { useState } from "react";
+import { ReactionType } from "@prisma/client";
+import React, { useState, useMemo } from "react";
 import { timePassedFromNow } from "../../lib/helpers/timePassedFromNow";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import {
@@ -23,32 +23,39 @@ import {
 import CurrentUserOnly from "../current-user-only";
 import { cn } from "../../lib/utils/cn";
 import { type NewCommentTarget } from "./comment-section";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
+import { useSession } from "next-auth/react";
 
 type Reaction = (typeof ReactionType)[keyof typeof ReactionType];
 
-const reactions: { name: string; key: Reaction; icon: React.ReactNode }[] = [
-  {
-    key: "LIKE",
-    name: "Podoba mi się",
+const reactionsData = {
+  [ReactionType.LIKE]: {
     icon: <IconThumbUp />,
+    tooltip: "Podoba mi się",
   },
-  {
-    key: "DISLIKE",
-    name: "Nie podoba mi się",
+  [ReactionType.DISLIKE]: {
     icon: <IconThumbDown />,
+    tooltip: "Nie podoba mi się",
   },
-  {
-    key: "HELPFUL",
-    name: "Pomocne",
+  [ReactionType.HELPFUL]: {
     icon: <IconBulb />,
+    tooltip: "Pomocne",
   },
-];
+};
 
 export type ReplyTo =
   RouterOutputs["comment"]["getComments"][number]["replyTo"];
 
+type Comment =
+  RouterOutputs["comment"]["getComments"][number]["childrens"][number];
+
 type CommentProps = {
-  comment: RouterOutputs["comment"]["getComments"][number]["childrens"][number];
+  comment: Comment;
   setNewCommentProps: (props: NewCommentTarget) => void;
 };
 const Comment = (props: CommentProps) => {
@@ -56,6 +63,8 @@ const Comment = (props: CommentProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const { mutateAsync: deleteComment } =
     api.comment.deleteComment.useMutation();
+  const session = useSession();
+  const reactToCommentMutation = api.comment.reactToComment.useMutation();
   const ctx = api.useContext();
 
   const handleDeleteComment = async () => {
@@ -67,6 +76,34 @@ const Comment = (props: CommentProps) => {
     }));
     setIsLoading(false);
   };
+  const handleReactToComment = async (reactionType: Reaction) => {
+    if (session.status === "unauthenticated") return;
+    void (await reactToCommentMutation.mutateAsync({
+      commentId: props.comment.id,
+      reactionType,
+    }));
+    void ctx.comment.getComments.invalidate({
+      catchId: props.comment.catchId || undefined,
+      discussionId: props.comment.discussionId || undefined,
+    });
+  };
+  const reactions = useMemo(() => {
+    const reactionsTemplate: Record<
+      ReactionType,
+      typeof props.comment.reactions
+    > = {
+      LIKE: [],
+      DISLIKE: [],
+      HELPFUL: [],
+    };
+    const reactions = props.comment.reactions.reduce((acc, reaction) => {
+      acc[reaction.type].push(reaction);
+      return acc;
+    }, reactionsTemplate);
+    console.log(reactions);
+
+    return reactions;
+  }, [props]);
 
   return (
     <Card
@@ -151,16 +188,42 @@ const Comment = (props: CommentProps) => {
             <IconCornerDownRight />
             Odpowiedz
           </Button>
-          <div className="flex gap-2 text-sm">
-            {reactions.map((reaction) => (
-              <button
-                className="flex items-center gap-1 bg-transparent p-2"
-                key={reaction.key}
-              >
-                {reaction.icon}
-                <span className="hidden sm:inline">{reaction.name}</span>
-              </button>
-            ))}
+          <div
+            className={cn(
+              "flex gap-2 rounded-md px-2 text-sm",
+              reactToCommentMutation.isLoading && "pointer-events-none"
+            )}
+          >
+            {Object.entries(reactions).map(([key, reactions]) => {
+              const isActive = reactions.some(
+                (reaction) => reaction.authorId === session.data?.user.id
+              );
+              return (
+                <TooltipProvider delayDuration={100} key={key}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="flex items-center gap-1">
+                        <span>{reactions.length}</span>
+                        <button
+                          onClick={() =>
+                            void handleReactToComment(key as ReactionType)
+                          }
+                          className={cn(
+                            "flex items-center gap-1 rounded-full bg-transparent p-2 transition-all dark:hover:bg-primary-dark",
+                            isActive && "bg-primary-300 dark:bg-primary-800"
+                          )}
+                        >
+                          {reactionsData[key as ReactionType].icon}
+                        </button>
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {reactionsData[key as ReactionType].tooltip}
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              );
+            })}
           </div>
         </div>
       </CardContent>

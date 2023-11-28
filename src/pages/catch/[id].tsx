@@ -28,7 +28,7 @@ const CatchPage = () => {
   const { data, isLoading } = api.catch.getCatch.useQuery({ id });
   if (!data || isLoading) return <LoadingSpinner />;
   return (
-    <div className="mt-16 flex w-screen max-w-screen-xl flex-col p-4">
+    <div className="mt-16 flex w-screen max-w-screen-xl flex-col p-4 pb-24">
       <InternalLink variant="link" href="/catch" className="self-start">
         <IconArrowLeft />
         Powrót do wszystkich połowów

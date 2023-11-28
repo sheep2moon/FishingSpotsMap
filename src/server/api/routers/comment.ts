@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { ReactionType } from "@prisma/client";
 
 export const commentRouter = createTRPCRouter({
   getComments: publicProcedure
@@ -45,6 +46,12 @@ export const commentRouter = createTRPCRouter({
                   },
                 },
               },
+              reactions: {
+                select: {
+                  authorId: true,
+                  type: true,
+                },
+              },
             },
           },
           author: {
@@ -62,6 +69,12 @@ export const commentRouter = createTRPCRouter({
                   name: true,
                 },
               },
+            },
+          },
+          reactions: {
+            select: {
+              authorId: true,
+              type: true,
             },
           },
         },
@@ -139,5 +152,56 @@ export const commentRouter = createTRPCRouter({
       if (commentToDelete?.authorId === ctx.session.user.id) {
         await ctx.prisma.comment.delete({ where: { id: input.commentId } });
       }
+    }),
+  reactToComment: protectedProcedure
+    .input(
+      z.object({
+        commentId: z.string(),
+        reactionType: z.enum([
+          ReactionType.LIKE,
+          ReactionType.DISLIKE,
+          ReactionType.HELPFUL,
+        ]),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const userId = ctx.session.user.id;
+      const userReaction = await ctx.prisma.reaction.findFirst({
+        where: {
+          commentId: input.commentId,
+          authorId: userId,
+        },
+      });
+      // NEW REACTION
+      if (!userReaction) {
+        await ctx.prisma.reaction.create({
+          data: {
+            type: input.reactionType,
+            authorId: ctx.session.user.id,
+            commentId: input.commentId,
+          },
+        });
+
+        return;
+      }
+      // CANCEL REACTION
+      if (userReaction.type === input.reactionType) {
+        await ctx.prisma.reaction.delete({
+          where: {
+            id: userReaction.id,
+          },
+        });
+        return;
+      }
+      // UPDATE REACTION TYPE
+      await ctx.prisma.reaction.update({
+        where: {
+          id: userReaction.id,
+        },
+        data: {
+          type: input.reactionType,
+        },
+      });
+      return;
     }),
 });

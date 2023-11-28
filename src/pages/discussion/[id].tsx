@@ -20,7 +20,10 @@ import CommentSection from "../../components/comments/comment-section";
 const DiscussionPage = () => {
   const router = useRouter();
   const { id } = router.query as { id: string };
-  const discussionQuery = api.discussion.getDiscussionById.useQuery({ id });
+  const discussionQuery = api.discussion.getDiscussionById.useQuery(
+    { id },
+    { enabled: !!id }
+  );
 
   if (!discussionQuery.data) return <LoadingSpinner />;
 

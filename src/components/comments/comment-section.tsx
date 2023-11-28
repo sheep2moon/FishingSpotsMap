@@ -4,6 +4,8 @@ import Indicator from "../ui/indicator";
 import Comment, { type ReplyTo } from "./comment";
 import NewComment from "./new-comment";
 import { type RouterInputs, api } from "../../lib/utils/api";
+import { Button } from "../ui/button";
+import { IconArrowsMoveVertical } from "@tabler/icons-react";
 
 type CommentSectionProps = {
   targetId: string;
@@ -40,31 +42,40 @@ const CommentSection = (props: CommentSectionProps) => {
   return (
     <>
       <div className="mt-8 flex flex-col gap-2" ref={commentsContainer}>
-        <h2 className="flex items-center gap-2">
-          Komentarze <Indicator>{commentsCount}</Indicator>
-        </h2>
-        {commentsQuery.data.map((comment) => (
-          <div key={comment.id}>
-            <Comment
-              setNewCommentProps={setNewCommentProps}
-              comment={comment}
-            />
-            {comment.childrens && (
-              <div
-                ref={childCommentsContainer}
-                className="ml-4 flex flex-col gap-2 border-l-2 border-primary-dark/20 pl-2 dark:border-primary"
-              >
-                {comment.childrens.map((childComment) => (
-                  <Comment
-                    key={childComment.id}
-                    comment={childComment}
-                    setNewCommentProps={setNewCommentProps}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
+        <div className="flex justify-between">
+          <h2 className="flex items-center gap-2">
+            Komentarze <Indicator>{commentsCount}</Indicator>
+          </h2>
+
+          <Button variant="outline">
+            Sortuj
+            <IconArrowsMoveVertical />
+          </Button>
+        </div>
+        <div className="flex flex-col">
+          {commentsQuery.data.map((comment) => (
+            <div key={comment.id}>
+              <Comment
+                setNewCommentProps={setNewCommentProps}
+                comment={comment}
+              />
+              {comment.childrens && (
+                <div
+                  ref={childCommentsContainer}
+                  className="ml-4 flex flex-col gap-2 border-l-2 border-primary-dark/20 pl-2 dark:border-primary"
+                >
+                  {comment.childrens.map((childComment) => (
+                    <Comment
+                      key={childComment.id}
+                      comment={childComment}
+                      setNewCommentProps={setNewCommentProps}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
       <NewComment
         setNewCommentProps={setNewCommentProps}
