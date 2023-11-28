@@ -152,6 +152,17 @@ export const commentRouter = createTRPCRouter({
       if (input.targetType === "CATCH")
         Object.assign(newCommentData, { catchId: input.targetId });
 
+      if (input.parendId) {
+        await ctx.prisma.comment.update({
+          where: {
+            id: input.parendId,
+          },
+          data: {
+            updatedAt: new Date(Date.now()),
+          },
+        });
+      }
+
       if (input.attachmentData) {
         await ctx.prisma.comment.create({
           data: {

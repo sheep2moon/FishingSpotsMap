@@ -37,10 +37,10 @@ const CommentSection = (props: CommentSectionProps) => {
   return (
     <>
       <div className="mt-8 flex flex-col gap-2" ref={commentsContainer}>
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-2">
           {commentsQuery.data ? (
             commentsQuery.data.map((comment) => (
-              <div key={comment.id}>
+              <div key={comment.id} className="flex flex-col gap-2">
                 <Comment
                   setNewCommentProps={setNewCommentProps}
                   comment={comment}
