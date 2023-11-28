@@ -1,10 +1,11 @@
 import React from "react";
+import { cn } from "../../lib/utils/cn";
 
-type TimeBadgeProps = {
+type TimeBadgeProps = React.HTMLAttributes<HTMLDivElement> & {
   date: Date;
 };
 
-const TimeBadge = ({ date }: TimeBadgeProps) => {
+const TimeBadge = ({ date, ...props }: TimeBadgeProps) => {
   const formatDate = (date: Date): string => {
     const day = date.getDate().toString().padStart(2, "0");
     const month = (date.getMonth() + 1).toString().padStart(2, "0"); // +1 because months are 0-indexed
@@ -13,7 +14,13 @@ const TimeBadge = ({ date }: TimeBadgeProps) => {
   };
 
   return (
-    <div className="w-fit rounded-md px-2 py-1 text-xs dark:bg-primary-500/20">
+    <div
+      className={cn(
+        "w-fit rounded-md px-2 py-1 text-xs dark:bg-primary-500/20",
+        props.className
+      )}
+      {...props}
+    >
       {formatDate(date)}
     </div>
   );

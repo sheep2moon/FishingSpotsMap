@@ -11,6 +11,7 @@ import LoadingSpinner from "../ui/loading-spinner";
 import { cn } from "../../lib/utils/cn";
 import { IconSquareRoundedArrowRight } from "@tabler/icons-react";
 import { type NewCommentTarget } from "./comment-section";
+import LoginButton from "../ui/login-button";
 
 export type NewCommentProps = NewCommentTarget & {
   targetType: RouterInputs["comment"]["createComment"]["targetType"];
@@ -43,8 +44,9 @@ const NewComment = (props: NewCommentProps) => {
 
   if (!session.data?.user)
     return (
-      <div className="p-4 font-bold">
-        Aby dodawać komentarze musisz być zalogowany.
+      <div className="mt-8 flex w-full flex-col items-center justify-center gap-2 p-4 font-bold">
+        <span>Aby dodawać komentarze musisz być zalogowany.</span>
+        <LoginButton />
       </div>
     );
 
