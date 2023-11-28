@@ -15,7 +15,7 @@ import AttachmentPreview from "../../components/ui/attachment-preview";
 import { IconArrowLeft, IconPaperclip } from "@tabler/icons-react";
 import { Separator } from "../../components/ui/separator";
 import { InternalLink } from "../../components/ui/internal-link";
-import CommentSection from "../../components/comments/comment-section";
+import Comments from "../../components/comments/comments";
 
 const DiscussionPage = () => {
   const router = useRouter();
@@ -73,7 +73,7 @@ const DiscussionPage = () => {
               ))}
             </div>
             <Separator className="my-8" />
-            <CommentSection targetId={id} targetType="DISCUSSION" />
+            <Comments targetId={id} targetType="DISCUSSION" />
           </CardContent>
         </Card>
       </div>

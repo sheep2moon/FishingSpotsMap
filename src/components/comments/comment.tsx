@@ -100,7 +100,6 @@ const Comment = (props: CommentProps) => {
       acc[reaction.type].push(reaction);
       return acc;
     }, reactionsTemplate);
-    console.log(reactions);
 
     return reactions;
   }, [props]);

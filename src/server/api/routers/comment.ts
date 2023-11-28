@@ -3,7 +3,7 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { ReactionType } from "@prisma/client";
 
 export const commentRouter = createTRPCRouter({
-  getComments: publicProcedure
+  getCommentsCount: publicProcedure
     .input(
       z.object({
         discussionId: z.string().optional(),
@@ -12,6 +12,41 @@ export const commentRouter = createTRPCRouter({
     )
     .query(async ({ input, ctx }) => {
       return await ctx.prisma.comment.findMany({
+        where: {
+          OR: [
+            { discussionId: input.discussionId },
+            { catchId: input.catchId },
+          ],
+        },
+        select: {
+          _count: true,
+        },
+      });
+    }),
+  getComments: publicProcedure
+    .input(
+      z.object({
+        discussionId: z.string().optional(),
+        catchId: z.string().optional(),
+        orderBy: z.enum(["latest", "oldest", "active"]),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      // const sort = input.orderBy === "latest" ? "createdAt"
+      // const orderBy = (): { [key: string]: string } => {
+      //   if (input.orderBy === "latest") return { createdAt: "desc" };
+      //   if (input.orderBy === "active") return { updatedAt: "desc" };
+      //   return { createdAt: "asc" };
+      // };
+      console.log(input.orderBy);
+
+      let orderBy: { [key: string]: string } = { createdAt: "asc" };
+      if (input.orderBy === "latest") orderBy = { createdAt: "desc" };
+      if (input.orderBy === "active") orderBy = { updatedAt: "desc" };
+      console.log(orderBy);
+
+      return await ctx.prisma.comment.findMany({
+        orderBy,
         select: {
           id: true,
           content: true,

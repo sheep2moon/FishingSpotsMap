@@ -1,15 +1,17 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import React, { useMemo, useState } from "react";
-import Indicator from "../ui/indicator";
+import React, { useState } from "react";
 import Comment, { type ReplyTo } from "./comment";
 import NewComment from "./new-comment";
 import { type RouterInputs, api } from "../../lib/utils/api";
-import { Button } from "../ui/button";
-import { IconArrowsMoveVertical } from "@tabler/icons-react";
+import { loadingArray } from "../../lib/utils/helpers";
+import { count } from "console";
+import { Skeleton } from "../ui/skeleton";
 
 type CommentSectionProps = {
   targetId: string;
+  count: number;
   targetType: RouterInputs["comment"]["createComment"]["targetType"];
+  sortingKey: RouterInputs["comment"]["getComments"]["orderBy"];
 };
 
 export type NewCommentTarget = {
@@ -20,61 +22,62 @@ export type NewCommentTarget = {
 const CommentSection = (props: CommentSectionProps) => {
   const [commentsContainer] = useAutoAnimate();
   const [childCommentsContainer] = useAutoAnimate();
+
   const commentsQuery = api.comment.getComments.useQuery({
     discussionId:
       props.targetType === "DISCUSSION" ? props.targetId : undefined,
     catchId: props.targetType === "CATCH" ? props.targetId : undefined,
+    orderBy: props.sortingKey,
   });
   const [newCommentProps, setNewCommentProps] = useState<NewCommentTarget>({
     parentId: undefined,
     replyTo: undefined,
   });
 
-  const commentsCount = useMemo(() => {
-    const totalCount = commentsQuery.data?.reduce((acc, comment) => {
-      return acc + 1 + comment.childrens.length;
-    }, 0);
-    return totalCount;
-  }, [commentsQuery.data]);
-
-  if (!commentsQuery.data) return <>loading...</>;
-
   return (
     <>
       <div className="mt-8 flex flex-col gap-2" ref={commentsContainer}>
-        <div className="flex justify-between">
-          <h2 className="flex items-center gap-2">
-            Komentarze <Indicator>{commentsCount}</Indicator>
-          </h2>
-
-          <Button variant="outline">
-            Sortuj
-            <IconArrowsMoveVertical />
-          </Button>
-        </div>
         <div className="flex flex-col">
-          {commentsQuery.data.map((comment) => (
-            <div key={comment.id}>
-              <Comment
-                setNewCommentProps={setNewCommentProps}
-                comment={comment}
-              />
-              {comment.childrens && (
+          {commentsQuery.data ? (
+            commentsQuery.data.map((comment) => (
+              <div key={comment.id}>
+                <Comment
+                  setNewCommentProps={setNewCommentProps}
+                  comment={comment}
+                />
+                {comment.childrens && (
+                  <div
+                    ref={childCommentsContainer}
+                    className="ml-4 flex flex-col gap-2 border-l-2 border-primary-dark/20 pl-2 dark:border-primary"
+                  >
+                    {comment.childrens.map((childComment) => (
+                      <Comment
+                        key={childComment.id}
+                        comment={childComment}
+                        setNewCommentProps={setNewCommentProps}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))
+          ) : (
+            <>
+              {loadingArray(props.count).map((_, index) => (
                 <div
-                  ref={childCommentsContainer}
-                  className="ml-4 flex flex-col gap-2 border-l-2 border-primary-dark/20 pl-2 dark:border-primary"
+                  key={`skeleton-${index}`}
+                  className="mt-4 flex flex-col rounded-md bg-primary-dark/40 p-2"
                 >
-                  {comment.childrens.map((childComment) => (
-                    <Comment
-                      key={childComment.id}
-                      comment={childComment}
-                      setNewCommentProps={setNewCommentProps}
-                    />
-                  ))}
+                  <div className="flex items-center gap-4">
+                    <Skeleton className="aspect-square w-12 rounded-full " />
+                    <Skeleton className="h-10 w-44" />
+                    <Skeleton className="ml-auto h-8 w-28" />
+                  </div>
+                  <Skeleton className="mt-2 h-40 w-full" />
                 </div>
-              )}
-            </div>
-          ))}
+              ))}
+            </>
+          )}
         </div>
       </div>
       <NewComment

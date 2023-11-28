@@ -11,7 +11,6 @@ import {
 import TimeBadge from "../../components/ui/time-badge";
 import Image from "next/image";
 import { getCatchImageSrc } from "../../lib/utils/getImageSrc";
-import CommentSection from "../../components/comments/comment-section";
 import { InternalLink } from "../../components/ui/internal-link";
 import {
   IconArrowLeft,
@@ -21,6 +20,7 @@ import {
   IconWeight,
 } from "@tabler/icons-react";
 import Link from "next/link";
+import Comments from "../../components/comments/comments";
 
 const CatchPage = () => {
   const router = useRouter();
@@ -93,7 +93,7 @@ const CatchPage = () => {
           </div>
         </CardContent>
       </Card>
-      <CommentSection targetId={data.id} targetType="CATCH" />
+      <Comments targetId={data.id} targetType="CATCH" />
     </div>
   );
 };
