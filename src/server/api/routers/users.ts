@@ -20,6 +20,24 @@ export const usersRouter = createTRPCRouter({
       where: { id: ctx.session.user.id },
     });
   }),
+  updateUserData: protectedProcedure
+    .input(
+      z.object({
+        name: z.string().optional(),
+        image: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      await ctx.prisma.user.update({
+        where: {
+          id: ctx.session.user.id,
+        },
+        data: {
+          name: input.name,
+          image: input.image,
+        },
+      });
+    }),
   getFollowedSpots: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.user.findFirst({
       where: {
