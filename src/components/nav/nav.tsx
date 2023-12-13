@@ -3,7 +3,6 @@ import { cn } from "../../lib/utils/cn";
 import {
   IconCrown,
   IconFishHook,
-  IconHome,
   IconListSearch,
   IconLogout,
   IconMapPinPlus,
@@ -51,7 +50,7 @@ const links: { text: string; href: string; icon: React.ReactNode }[] = [
   },
   {
     text: "Lista miejsc",
-    href: "/fishing-spot/spot-search",
+    href: "/fishing-spot/list",
     icon: <IconListSearch size="1.4rem" />,
   },
   {

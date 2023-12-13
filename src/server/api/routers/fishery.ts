@@ -63,11 +63,12 @@ export const fisheryRouter = createTRPCRouter({
         limit: z.number(),
         cursor: z.string().nullish(),
         orderBy: z.enum(["latest", "oldest"]),
+        query: z.string(),
       })
     )
     .query(async ({ input, ctx }) => {
-      let orderBy: {[key: string]: string} = {createdAt: "desc"}
-      if (input.orderBy === "oldest") orderBy = {createdAt: "asc"}
+      let orderBy: { [key: string]: string } = { createdAt: "desc" };
+      if (input.orderBy === "oldest") orderBy = { createdAt: "asc" };
       const limit = input.limit ?? 25;
       const spots = await ctx.prisma.fishingSpot.findMany({
         orderBy,
@@ -75,6 +76,11 @@ export const fisheryRouter = createTRPCRouter({
         cursor: input.cursor ? { id: input.cursor } : undefined,
         include: {
           images: true,
+        },
+        where: {
+          name: {
+            contains: input.query,
+          },
         },
       });
       let nextCursor: typeof input.cursor | undefined = undefined;

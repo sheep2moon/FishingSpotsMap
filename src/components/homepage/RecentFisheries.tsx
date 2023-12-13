@@ -23,7 +23,7 @@ const RecentFisheries = () => {
           Ostatnio dodane łowiska
         </h2>
         <Link
-          href="/fishing-spot/spot-search"
+          href="/fishing-spot/list"
           className="flex items-center gap-1 dark:text-primary"
         >
           Więcej <IconChevronsRight />

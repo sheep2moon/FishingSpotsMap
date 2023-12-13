@@ -25,7 +25,7 @@ const SortingMenu = <T extends SortingOption>(props: SortingMenuProps<T>) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">
+        <Button variant="outline" className="whitespace-nowrap">
           {props.activeOption.name}
           <IconArrowsMoveVertical />
         </Button>
@@ -37,7 +37,7 @@ const SortingMenu = <T extends SortingOption>(props: SortingMenuProps<T>) => {
               onClick={() => props.setActiveOption(option)}
               key={option.key}
               className={cn(
-                "",
+                "whitespace-nowrap",
                 props.activeOption.key === option.key && "bg-primary-800"
               )}
             >
