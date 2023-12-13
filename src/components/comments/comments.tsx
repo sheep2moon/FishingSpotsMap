@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { type RouterInputs, api } from "../../lib/utils/api";
 import Indicator from "../ui/indicator";
-import SortingMenu from "../sorting-menu";
+import SortingMenu, { type SortingOption } from "../sorting-menu";
 import CommentSection from "./comment-section";
 
 type CommentsProps = {
@@ -9,9 +9,8 @@ type CommentsProps = {
   targetType: RouterInputs["comment"]["createComment"]["targetType"];
 };
 
-type CommentSortingOption = {
+type CommentSortingOption = SortingOption & {
   key: RouterInputs["comment"]["getComments"]["orderBy"];
-  name: string;
 };
 
 const sortingOptions: CommentSortingOption[] = [

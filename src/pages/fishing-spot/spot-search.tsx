@@ -1,18 +1,36 @@
-import Image from "next/image";
-import React, { useEffect, useRef } from "react";
-import { getSpotImageSrc } from "../../lib/utils/getImageSrc";
-import { api } from "../../lib/utils/api";
-import Link from "next/link";
+import React, { useEffect, useRef, useState } from "react";
+import { type RouterInputs, api } from "../../lib/utils/api";
 import LoadingSpinner from "../../components/ui/loading-spinner";
 import autoAnimate from "@formkit/auto-animate";
 import { Button } from "~/components/ui/button";
 import FishingSpotCard from "../../components/FishingSpotCard";
+import SortingMenu, { type SortingOption } from "../../components/sorting-menu";
+
+type FisherySortingOption = SortingOption & {
+  key: RouterInputs["fishery"]["getFilteredFishingSpots"]["orderBy"];
+};
+
+const sortingOptions: FisherySortingOption[] = [
+  {
+    key: "latest",
+    name: "Od najnowszych",
+  },
+  {
+    key: "oldest",
+    name: "Od najstarszych",
+  },
+];
 
 const SpotSearchList = () => {
   const parent = useRef(null);
+  const [orderBy, setOrderBy] = useState<FisherySortingOption>(
+    sortingOptions.find(
+      (option) => option.key === "latest"
+    ) as FisherySortingOption
+  );
   const { data, fetchNextPage, isFetchingNextPage } =
     api.fishery.getFilteredFishingSpots.useInfiniteQuery(
-      { limit: 16, orderBy: "desc", orderByParam: "createdAt" },
+      { limit: 16, orderBy: orderBy.key },
       { getNextPageParam: (lastPage) => lastPage.nextCursor }
     );
 
@@ -22,34 +40,16 @@ const SpotSearchList = () => {
 
   return (
     <div className="mx-auto mt-16 w-full max-w-[1300px]">
+      <SortingMenu
+        options={sortingOptions}
+        activeOption={orderBy}
+        setActiveOption={setOrderBy}
+      />
       <div className="flex flex-wrap justify-center gap-1 p-2" ref={parent}>
         {data?.pages.map((page) => (
           <>
             {page.spots.map((spot) => (
               <FishingSpotCard fishingSpot={spot} key={spot.id} />
-              // <Link
-              //   href={`/fishing-spot/${spot.id}`}
-              //   className="hover:shadow-dark/60 w-full max-w-md rounded-md p-2 hover:shadow-sm sm:max-w-xs"
-              //   key={spot.id}
-              // >
-              //   <div className="w-full rounded-md ring ring-primary-950/40  transition-all hover:bg-primary-dark hover:ring-2 dark:bg-primary-950/20 ">
-              //     <div className="relative aspect-video w-full ">
-              //       <Image
-              //         alt="widok"
-              //         className="rounded-md object-cover"
-              //         fill
-              //         src={getSpotImageSrc(spot.images[0]?.id)}
-              //         sizes="(max-width: 640px) 448px, 320px"
-              //       />
-              //     </div>
-              //     <div className="flex flex-col px-1 py-2">
-              //       <span className="truncate">{spot.name || "bez nazwy"}</span>
-              //       <span className="text-xs font-semibold text-primary-300">
-              //         {spot.city}, {spot.province}
-              //       </span>
-              //     </div>
-              //   </div>
-              // </Link>
             ))}
           </>
         ))}

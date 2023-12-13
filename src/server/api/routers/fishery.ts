@@ -62,14 +62,15 @@ export const fisheryRouter = createTRPCRouter({
       z.object({
         limit: z.number(),
         cursor: z.string().nullish(),
-        orderByParam: z.enum(["createdAt", "rating", "ratingCount"]),
-        orderBy: z.enum(["asc", "desc"]),
+        orderBy: z.enum(["latest", "oldest"]),
       })
     )
     .query(async ({ input, ctx }) => {
+      let orderBy: {[key: string]: string} = {createdAt: "desc"}
+      if (input.orderBy === "oldest") orderBy = {createdAt: "asc"}
       const limit = input.limit ?? 25;
       const spots = await ctx.prisma.fishingSpot.findMany({
-        orderBy: { [input.orderByParam]: input.orderBy },
+        orderBy,
         take: limit + 1,
         cursor: input.cursor ? { id: input.cursor } : undefined,
         include: {
