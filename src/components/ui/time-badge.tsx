@@ -5,7 +5,7 @@ type TimeBadgeProps = React.HTMLAttributes<HTMLDivElement> & {
   date: Date;
 };
 
-const TimeBadge = ({ date, ...props }: TimeBadgeProps) => {
+const TimeBadge = ({ date, className, ...props }: TimeBadgeProps) => {
   const formatDate = (date: Date): string => {
     const day = date.getDate().toString().padStart(2, "0");
     const month = (date.getMonth() + 1).toString().padStart(2, "0"); // +1 because months are 0-indexed
@@ -16,8 +16,8 @@ const TimeBadge = ({ date, ...props }: TimeBadgeProps) => {
   return (
     <div
       className={cn(
-        "w-fit rounded-md px-2 py-1 text-xs dark:bg-primary-500/20",
-        props.className
+        "flex w-fit items-center justify-center rounded-md px-1.5 py-0.5 text-xs dark:bg-primary-950 dark:text-primary-400",
+        className
       )}
       {...props}
     >

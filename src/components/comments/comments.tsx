@@ -41,7 +41,7 @@ const Comments = (props: CommentsProps) => {
   });
 
   return (
-    <div>
+    <div className="">
       <div className="flex justify-between">
         <h2 className="flex items-center gap-2">
           Komentarze <Indicator>{commentsCountQuery.data?.length}</Indicator>

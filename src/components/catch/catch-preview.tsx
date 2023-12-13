@@ -14,17 +14,17 @@ type CatchPreviewProps = {
 const CatchPreview = ({ fishCatch }: CatchPreviewProps) => {
   return (
     <Link href={`/catch/${fishCatch.id}`}>
-      <Card className="rounded-sm dark:bg-primary-dark">
+      <Card>
         <CardHeader className="p-1 px-2">
           <CardTitle className="m-0 flex flex-col items-start gap-0 text-base">
-            <div className="mt-2 flex justify-between">
-              <span>{fishCatch.fishingSpot?.name}</span>
+            <div className="mt-2 flex w-full justify-between">
+              <span className="text-lg">{fishCatch.fishingSpot?.name}</span>
               {fishCatch.date && <TimeBadge date={fishCatch.date} />}
             </div>
 
-            <span className="text-xs">
+            <span className="text-xs text-primary-400">
               Dodane przez:
-              <span className="text-sky-300/60">{fishCatch.user.name}</span>
+              <span className="text-sky-300">{fishCatch.user.name}</span>
             </span>
           </CardTitle>
         </CardHeader>

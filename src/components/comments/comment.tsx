@@ -30,6 +30,7 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import { useSession } from "next-auth/react";
+import { useReportFormStore } from "../../zustand/report-form-store";
 
 type Reaction = (typeof ReactionType)[keyof typeof ReactionType];
 
@@ -66,7 +67,7 @@ const Comment = (props: CommentProps) => {
   const session = useSession();
   const reactToCommentMutation = api.comment.reactToComment.useMutation();
   const ctx = api.useContext();
-
+  const { newReport } = useReportFormStore((store) => store);
   const handleDeleteComment = async () => {
     setIsLoading(true);
     await deleteComment({ commentId: props.comment.id });
@@ -132,7 +133,11 @@ const Comment = (props: CommentProps) => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>Zgłoś</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => newReport("COMMENT", props.comment.id)}
+              >
+                Zgłoś
+              </DropdownMenuItem>
               <CurrentUserOnly userId={props.comment.author.id}>
                 <DropdownMenuItem onClick={() => void handleDeleteComment()}>
                   Usuń

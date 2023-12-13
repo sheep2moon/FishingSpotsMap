@@ -19,8 +19,16 @@ export default {
         info: {
           DEFAULT: colors.sky[500],
           dark: colors.sky[800],
+          ...colors.sky,
         },
-        accent: colors.amber[400],
+        danger: {
+          DEFAULT: colors.rose[500],
+          ...colors.rose,
+        },
+        accent: {
+          DEFAULT: colors.amber[400],
+          ...colors.amber,
+        },
       },
       keyframes: {
         "accordion-down": {

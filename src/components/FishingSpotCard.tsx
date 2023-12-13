@@ -21,7 +21,7 @@ const FishingSpotCard = ({ fishingSpot }: FishingSpotCardProps) => {
         )}
       >
         <Image
-          className="rounded-sm object-cover"
+          className="rounded-md object-cover"
           src={getSpotImageSrc(fishingSpot.images[0]?.id)}
           alt="podgląd łowiska"
           fill
@@ -33,7 +33,7 @@ const FishingSpotCard = ({ fishingSpot }: FishingSpotCardProps) => {
             {fishingSpot.name || "brak nazwy"}
           </h4>
           <div className="flex items-center gap-1">
-            <IconMapPinFilled className="w-4 sm:w-8" />
+            <IconMapPinFilled className="w-4 text-primary-400 sm:w-6" />
             <p className="truncate text-sm dark:text-primary-300">{`${fishingSpot.city}, ${fishingSpot.province}`}</p>
           </div>
         </div>

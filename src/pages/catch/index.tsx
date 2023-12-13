@@ -14,25 +14,23 @@ const CatchPage = () => {
   const session = useSession();
   const { data, isLoading } = api.catch.getCatches.useQuery();
   return (
-    <div className="mt-16 w-screen max-w-screen-xl">
-      <div className="flex flex-col gap-2 p-4">
-        <ViewHeader>
-          <ViewTitle>Połów</ViewTitle>
-          <ViewSubtitle>
-            {session.data?.user ? (
-              <InternalLink href="/catch/new-catch">
-                <IconPlus />
-                Dodaj zdobycz
-              </InternalLink>
-            ) : (
-              <InternalLink href="/auth/signin">
-                Zaloguj się aby dodać połów
-              </InternalLink>
-            )}
-          </ViewSubtitle>
-        </ViewHeader>
-      </div>
-      <div className="mt-8 grid grid-cols-2 gap-1 p-1 lg:grid-cols-4">
+    <div className="mx-auto mt-16 flex w-full max-w-screen-xl flex-col gap-6 p-2 pb-16 text-xl">
+      <ViewHeader>
+        <ViewTitle>Połów</ViewTitle>
+        <ViewSubtitle>
+          {session.data?.user ? (
+            <InternalLink href="/catch/new-catch">
+              <IconPlus />
+              Dodaj zdobycz
+            </InternalLink>
+          ) : (
+            <InternalLink className="text-xl" href="/auth/signin">
+              Zaloguj się aby dodać połów
+            </InternalLink>
+          )}
+        </ViewSubtitle>
+      </ViewHeader>
+      <div className="grid grid-cols-2 gap-2 p-1 lg:grid-cols-4">
         {data &&
           data.map((fishCatch) => (
             <CatchPreview key={fishCatch.id} fishCatch={fishCatch} />

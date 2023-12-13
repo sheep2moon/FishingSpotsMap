@@ -38,20 +38,26 @@ const DiscussionPage = () => {
           Powrót do wszystkich dyskusji
         </InternalLink>
         <Card className="bg-primary-100">
-          <CardHeader>
-            <CardTitle className="border-l-4 border-accent pl-2">
-              {discussionQuery.data.title}
-            </CardTitle>
+          <CardHeader className="pb-4">
+            <div className="flex justify-between">
+              <CardTitle className="border-l-4 border-accent pl-2">
+                {discussionQuery.data.title}
+              </CardTitle>
+              <span className="text-sm">
+                {timePassedFromNow(discussionQuery.data.createdAt)}
+              </span>
+            </div>
             <div className="flex items-center gap-2">
               <Avatar
-                className="w-8"
+                className="w-6"
                 imageSrc={discussionQuery.data.author.image || ""}
               />
-              <span>{discussionQuery.data.author.name}</span>
-              <span>{timePassedFromNow(discussionQuery.data.createdAt)}</span>
+              <span className="text-info-300">
+                {discussionQuery.data.author.name}
+              </span>
             </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="">
             <p>{discussionQuery.data.content}</p>
             <div className="mt-4 flex gap-1">
               {discussionQuery.data.tags.map((tagR) => (

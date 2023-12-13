@@ -30,6 +30,14 @@ enum ReactionType {
     HELPFUL
 }
 
+enum ReportTargetType {
+    GLOBAL
+    COMMENT
+    DISCUSSION
+    CATCH
+    FISHING_SPOT
+}
+
 // Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())
@@ -48,6 +56,14 @@ model Account {
 
     @@unique([provider, providerAccountId])
     @@index([userId])
+}
+
+model Report {
+    id          String           @id @default(cuid())
+    target_type ReportTargetType
+    target_id   String?
+    content     String           @db.Text
+    user_id     String?
 }
 
 model Achievement {

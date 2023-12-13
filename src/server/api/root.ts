@@ -9,6 +9,7 @@ import { filesRouter } from "./routers/files";
 import { discussionRouter } from "./routers/discussion";
 import { catchRouter } from "./routers/catch";
 import { commentRouter } from "./routers/comment";
+import { reportRouter } from "./routers/report";
 
 /**
  * This is the primary router for your server.
@@ -26,6 +27,7 @@ export const appRouter = createTRPCRouter({
   tags: tagsRouter,
   catch: catchRouter,
   comment: commentRouter,
+  report: reportRouter,
 });
 
 // export type definition of API

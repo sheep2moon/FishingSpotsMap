@@ -6,6 +6,7 @@ import "~/styles/globals.css";
 import "~/styles/markdown.css";
 import Layout from "../layout/Layout";
 import { ThemeProvider } from "next-themes";
+import ReportForm from "../components/report-form/report-form";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -16,6 +17,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <ThemeProvider attribute="class">
         <Layout>
           <Component {...pageProps} />
+          <ReportForm />
         </Layout>
       </ThemeProvider>
     </SessionProvider>

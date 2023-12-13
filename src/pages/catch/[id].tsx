@@ -28,7 +28,7 @@ const CatchPage = () => {
   const { data, isLoading } = api.catch.getCatch.useQuery({ id });
   if (!data || isLoading) return <LoadingSpinner />;
   return (
-    <div className="mt-16 flex w-screen max-w-screen-xl flex-col p-4 pb-24">
+    <div className="mt-16 flex w-screen max-w-screen-xl flex-col gap-4 p-4 pb-24">
       <InternalLink variant="link" href="/catch" className="self-start">
         <IconArrowLeft />
         Powrót do wszystkich połowów
@@ -37,7 +37,10 @@ const CatchPage = () => {
         <CardHeader className="p-1 px-2">
           <CardTitle className="m-0 flex items-center justify-between px-2 text-lg">
             <div className="mt-2 flex items-center gap-2">
-              <Link href="/" className="flex items-center gap-1">
+              <Link
+                href={`/fishing-spot/${data.fishingSpot?.id || ""}`}
+                className="flex items-center gap-1"
+              >
                 <IconMapPin /> {data.fishingSpot?.name}
               </Link>
               {data.date && <TimeBadge className="text-sm" date={data.date} />}
@@ -71,18 +74,18 @@ const CatchPage = () => {
             <div className="flex flex-col items-center gap-2 rounded-sm bg-primary-950/50 px-4 pb-2 pt-1">
               <div className="flex w-full items-center justify-center gap-2 border-b border-primary/0 font-thin text-primary/80">
                 <IconWeight />
-                <span>
-                  {(data.weight / 1000).toFixed(2).replace(".", ",")} kg
-                </span>
+                <span>Waga</span>
               </div>
-              <span>{data.fish_type}</span>
+              <span>
+                {(data.weight / 1000).toFixed(2).replace(".", ",")} kg
+              </span>
             </div>
             <div className="flex flex-col items-center gap-2 rounded-sm bg-primary-950/50 px-4 pb-2 pt-1">
               <div className="flex w-full items-center justify-center gap-2 border-b border-primary/0 font-thin text-primary/80">
                 <IconRuler3 />
-                <span>{data.length} cm</span>
+                <span>Długość</span>
               </div>
-              <span>{data.fish_type}</span>
+              <span>{data.length} cm</span>
             </div>
           </div>
           <div>
