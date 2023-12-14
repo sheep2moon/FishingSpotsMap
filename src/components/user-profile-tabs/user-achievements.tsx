@@ -1,7 +1,7 @@
 import React from "react";
 import BadgeTemplate from "../achievements/badge-template";
 import { api } from "../../lib/utils/api";
-import LoadingSpinner from "../ui/loading-spinner";
+import LoadingSpinner from "../ui/loading-view";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { useDebugLog } from "../../hooks/useDebugLog";
 

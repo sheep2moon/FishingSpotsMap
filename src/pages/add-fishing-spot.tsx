@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import { useNewSpotStore } from "../zustand/new-spot-store";
 import { api } from "../lib/utils/api";
-import { FishTypeSelector } from "../components/fish-types-selector";
+import { FishTypeSelector } from "../components/fishing-spot-forms/fish-types-selector";
 import { useState } from "react";
 import { Button } from "../components/ui/button";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
@@ -152,8 +152,7 @@ const FormSubmit = () => {
     }
 
     setErrorMessages([]);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { setField, images, ...newSpotData } = spotData;
+    const { images, ...newSpotData } = spotData;
     const dbImages: FSpotData["images"] = [];
 
     for (let i = 0; i < images.length; i++) {

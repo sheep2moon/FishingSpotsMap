@@ -17,7 +17,6 @@ import MarkdownContent from "../markdown-editor/MarkdownContent";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,

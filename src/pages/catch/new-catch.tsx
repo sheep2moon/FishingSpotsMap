@@ -22,7 +22,7 @@ import { catchSchema } from "../../../schemas/catch.schema";
 import { v4 as uuidv4 } from "uuid";
 import { api } from "../../lib/utils/api";
 import { uploadFile } from "../../server/uploadFile";
-import LoadingSpinner from "../../components/ui/loading-spinner";
+import LoadingSpinner from "../../components/ui/loading-view";
 
 type FormData = z.infer<typeof catchSchema>;
 

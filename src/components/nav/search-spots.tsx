@@ -3,7 +3,7 @@ import useDebounce from "../../hooks/useDebounce";
 import { api } from "../../lib/utils/api";
 import { type FishingSpot } from "@prisma/client";
 import { IconSearch } from "@tabler/icons-react";
-import LoadingSpinner from "../ui/loading-spinner";
+import LoadingSpinner from "../ui/loading-view";
 import {
   Dialog,
   DialogContent,

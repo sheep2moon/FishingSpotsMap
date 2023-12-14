@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import LoadingSpinner from "../../components/ui/loading-spinner";
+import LoadingSpinner from "../../components/ui/loading-view";
 import { Button } from "~/components/ui/button";
 import SortingMenu from "../../components/sorting-menu";
 import SpotsGrid, {
@@ -31,12 +31,13 @@ const SpotList = () => {
 
   return (
     <div className="mx-auto mt-16 w-full max-w-[1300px]">
-      <div className="flex items-center gap-2 py-2">
+      <div className="flex items-center justify-between gap-2 py-2">
         <Input
           icon={<IconSearch className="aspect-square w-6 text-primary-600" />}
           type="search"
           placeholder="Szukaj łowiska..."
           value={searchQuery}
+          className="sm:min-w-[300px]"
           onChange={(e) => setSearchQuery(e.target.value)}
         />
         <SortingMenu

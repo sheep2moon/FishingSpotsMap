@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import L, { type MarkerCluster } from "leaflet";
-import LoadingSpinner from "../ui/loading-spinner";
+import LoadingSpinner from "../ui/loading-view";
 import { api } from "../../lib/utils/api";
 import SpotMarker from "./SpotMarker";
 import { useRouter } from "next/router";
@@ -27,12 +27,7 @@ const FishingSpotsMap = () => {
       />
       {fisheries.isLoading && (
         <div className="fixed inset-0 z-[999] flex flex-col items-center justify-center ">
-          <div className="relative">
-            <LoadingSpinner />
-          </div>
-          <p className="text-dark mt-8 rounded-md  bg-white/40 p-2 text-xl font-bold text-primary-dark dark:bg-primary-dark dark:text-primary">
-            Wczytuje punkty...
-          </p>
+          <LoadingSpinner />
         </div>
       )}
       <FlyToHandler />

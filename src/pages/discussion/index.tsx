@@ -1,7 +1,7 @@
 import React from "react";
 import { InternalLink } from "../../components/ui/internal-link";
 import { api } from "../../lib/utils/api";
-import LoadingSpinner from "../../components/ui/loading-spinner";
+import LoadingSpinner from "../../components/ui/loading-view";
 
 import { IconPlus } from "@tabler/icons-react";
 import {

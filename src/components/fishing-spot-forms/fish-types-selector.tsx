@@ -1,15 +1,15 @@
 import React, { forwardRef } from "react";
-import { Toggle } from "./ui/toggle";
+import { Toggle } from "../ui/toggle";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "./ui/card";
+} from "../ui/card";
 import { IconFish } from "@tabler/icons-react";
-import { type FishType } from "../types/global";
-import { fishTypeNames } from "../const/fish-type-names";
+import { type FishType } from "../../types/global";
+import { fishTypeNames } from "../../const/fish-type-names";
 
 type FishTypeSelectorProps = {
   fishTypes: FishType[];

@@ -4,10 +4,15 @@ import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { useSession } from "next-auth/react";
 import { type RouterInputs, api } from "../../lib/utils/api";
-import { IconPaperclip, IconPhoto, IconX } from "@tabler/icons-react";
+import {
+  IconLoader,
+  IconPaperclip,
+  IconPhoto,
+  IconX,
+} from "@tabler/icons-react";
 import { uploadFile } from "../../server/uploadFile";
 import { getAttachmentSrc } from "../../lib/utils/getImageSrc";
-import LoadingSpinner from "../ui/loading-spinner";
+import LoadingSpinner from "../ui/loading-view";
 import { cn } from "../../lib/utils/cn";
 import { IconSquareRoundedArrowRight } from "@tabler/icons-react";
 import { type NewCommentTarget } from "./comment-section";
@@ -176,15 +181,14 @@ const NewComment = (props: NewCommentProps) => {
           <span className="sr-only">Dołącz plik</span>
         </label>
         <Button
-          className="ml-2 p-2"
+          className="ml-2 px-2 sm:px-4"
           variant="default"
           onClick={() => void handleAddComment()}
           disabled={commentMutation.isLoading}
         >
+          <span className="text-base">Dodaj</span>
           {commentMutation.isLoading ? (
-            <div className="relative h-12 w-12">
-              <LoadingSpinner />
-            </div>
+            <IconLoader className="animate-spin" />
           ) : (
             <IconSquareRoundedArrowRight />
           )}

@@ -3,7 +3,7 @@ import { type RouterInputs, api } from "../../lib/utils/api";
 import autoAnimate from "@formkit/auto-animate";
 import { type SortingOption } from "../sorting-menu";
 import { Button } from "../ui/button";
-import LoadingSpinner from "../ui/loading-spinner";
+import LoadingSpinner from "../ui/loading-view";
 import FishingSpotCard from "../FishingSpotCard";
 
 export type FisherySortingOption = SortingOption & {

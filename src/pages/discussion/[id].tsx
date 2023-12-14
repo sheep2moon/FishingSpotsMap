@@ -7,7 +7,6 @@ import {
   CardTitle,
 } from "../../components/ui/card";
 import { api } from "../../lib/utils/api";
-import LoadingSpinner from "../../components/ui/loading-spinner";
 import Avatar from "../../components/ui/avatar";
 import { timePassedFromNow } from "../../lib/helpers/timePassedFromNow";
 import Tag from "../../components/ui/tag";
@@ -16,6 +15,7 @@ import { IconArrowLeft, IconPaperclip } from "@tabler/icons-react";
 import { Separator } from "../../components/ui/separator";
 import { InternalLink } from "../../components/ui/internal-link";
 import Comments from "../../components/comments/comments";
+import LoadingView from "../../components/ui/loading-view";
 
 const DiscussionPage = () => {
   const router = useRouter();
@@ -25,7 +25,7 @@ const DiscussionPage = () => {
     { enabled: !!id }
   );
 
-  if (!discussionQuery.data) return <LoadingSpinner />;
+  if (!discussionQuery.data) return <LoadingView />;
 
   return (
     <>

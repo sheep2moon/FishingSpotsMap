@@ -4,12 +4,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { authOptions } from "../../../server/auth";
 import { useRouter } from "next/router";
 import { api } from "../../../lib/utils/api";
-import LoadingSpinner from "../../../components/ui/loading-spinner";
+import LoadingSpinner from "../../../components/ui/loading-view";
 import {
   IconAdjustmentsHorizontal,
   IconFileDescription,
   IconFish,
   IconMessagePin,
+  IconPhone,
   IconPhotoEdit,
 } from "@tabler/icons-react";
 import clsx from "clsx";
@@ -33,9 +34,11 @@ import { useEditSpotStore } from "../../../zustand/edit-spot-store";
 import { DetailsSpotForm } from "../../../components/fishing-spot-forms/details-spot-form";
 import { DescriptionSpotForm } from "../../../components/fishing-spot-forms/description-spot-form";
 import dynamic from "next/dynamic";
-import { FishTypeSpotForm } from "../../../components/fish-types-selector";
 import PricingSpotForm from "../../../components/fishing-spot-forms/pricing-spot-form";
 import { IconTag } from "@tabler/icons-react";
+import { FishTypeSelector } from "../../../components/fishing-spot-forms/fish-types-selector";
+import EditImagesForm from "../../../components/edit-spot/edit-images-form";
+import { ContactSpotForm } from "../../../components/fishing-spot-forms/contact-spot-form";
 
 const SelectPositionMap = dynamic(
   () => import("../../../components/map/SelectPositionMap"),
@@ -59,6 +62,11 @@ const editableTabs = [
     name: "Lokalizacja",
     id: "position",
     icon: <IconGps />,
+  },
+  {
+    name: "Kontakt",
+    id: "contact",
+    icon: <IconPhone />,
   },
   {
     name: "Opis",
@@ -107,6 +115,10 @@ const EditFishingSpot = () => {
     province,
     setField,
     setEditableFields,
+    contact_email,
+    contact_instagram,
+    contact_page,
+    contact_phone,
   } = useEditSpotStore((store) => store);
 
   useEffect(() => {
@@ -150,12 +162,12 @@ const EditFishingSpot = () => {
         <ViewTitle>{spotQuery.data.name}</ViewTitle>
         <ViewSubtitle>tryb edycji</ViewSubtitle>
       </ViewHeader>
-      <div className="flex h-full flex-col lg:flex-row">
-        <Card className="min-h-full w-full lg:max-w-[250px]">
+      <div className="flex h-full flex-col gap-1 lg:flex-row">
+        <Card className="min-h-full w-full dark:bg-transparent lg:max-w-[250px]">
           <CardHeader>
-            <CardTitle>Sekcja</CardTitle>
+            <CardTitle>Edycja</CardTitle>
           </CardHeader>
-          <CardContent className="flex flex-col gap-2">
+          <CardContent className="flex flex-col gap-2 ">
             {editableTabs.map((editableTab) => (
               <Button
                 variant="ghost"
@@ -232,9 +244,22 @@ const EditFishingSpot = () => {
               setProvince={(city) => setField("city", city)}
             />
           )}
+          {selectedTab.id === "contact" && (
+            <ContactSpotForm
+              contact_email={contact_email}
+              contact_instagram={contact_instagram}
+              contact_page={contact_page}
+              contact_phone={contact_phone}
+              setPhone={(phone) => setField("contact_phone", phone)}
+              setEmail={(email) => setField("contact_email", email)}
+              setInstagram={(instagram) =>
+                setField("contact_instagram", instagram)
+              }
+              setPage={(page) => setField("contact_page", page)}
+            />
+          )}
           {selectedTab.id === "fish_types" && (
-            <FishTypeSpotForm
-              className="w-full"
+            <FishTypeSelector
               fishTypes={fish_types}
               setFishTypes={(fishTypes) => setField("fish_types", fishTypes)}
             />
@@ -246,14 +271,7 @@ const EditFishingSpot = () => {
               setPrices={(prices) => setField("prices", prices)}
             />
           )}
-          {/* {selectedTab.id === "images" && (
-            <ImagesSpotForm
-            images={images}
-            onUpload={(imageId) => setField("images", [...images, imageId])}
-          />
-          )
-
-          } */}
+          {selectedTab.id === "images" && <EditImagesForm />}
         </div>
       </div>
     </div>

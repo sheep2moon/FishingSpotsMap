@@ -1,21 +1,44 @@
 import React from "react";
-import { IconMap2 } from "@tabler/icons-react";
+import { IconMap2, IconSearch } from "@tabler/icons-react";
 import { InternalLink } from "../ui/internal-link";
+import { Input } from "../ui/input";
+import Image from "next/image";
 const HeroBanner = () => {
   return (
-    <div className=" flex w-full flex-col items-center justify-center gap-4 px-4 pt-12 text-primary-dark dark:text-primary">
-      <h1 className="text-4xl font-black">Odkryj łowiska w twojej okolicy</h1>
-      <h3 className="text-xl">
-        oraz dziel się swoimi wędkarskimi przygodami z innymi pasjonatami
-      </h3>
-      <InternalLink
-        variant="accent"
-        className="mt-8 gap-2 rounded-sm border border-secondary bg-gradient-to-b from-primary-dark to-primary-950 p-6 text-xl text-primary-200 shadow-md shadow-secondary-200/20 transition-all hover:text-primary-50 hover:shadow-secondary-200/40"
-        href="/fishing-spots-map"
-      >
-        <IconMap2 />
-        Przejdź do mapy
-      </InternalLink>
+    <div className="grid w-full grid-cols-1 gap-4 px-4 pt-4 text-primary-dark dark:text-primary md:grid-cols-2">
+      <div className="flex flex-col justify-center">
+        <h1 className="text-5xl font-black">
+          Przeglądaj <span className="text-secondary">łowiska</span> w całej
+          Polsce
+        </h1>
+        <h3 className="text-xl">
+          Dziel się swoimi wędkarskimi przygodami z innymi pasjonatami
+        </h3>
+        <div className="mt-4 flex max-w-md items-center gap-2">
+          <Input
+            type="search"
+            icon={<IconSearch />}
+            className="w-full"
+            placeholder="Wyszukaj łowisko"
+          />
+          <InternalLink variant="default" href="/">
+            Szukaj
+          </InternalLink>
+        </div>
+      </div>
+      <div>
+        <div className="relative aspect-video w-full">
+          <Image src="images/decorations/map-sheet.svg" alt="" fill />
+          <InternalLink
+            variant="accent"
+            className="absolute left-1/2 top-1/2 z-10 mt-8 -translate-x-1/2 -translate-y-1/2 gap-2 rounded-md border-accent bg-gradient-to-b from-primary-dark to-primary-950 p-6 text-xl text-primary-200 shadow-md shadow-secondary-200/20 transition-all duration-75 hover:border-2 hover:text-primary-50"
+            href="/fishing-spots-map"
+          >
+            <IconMap2 />
+            Przejdź do mapy
+          </InternalLink>
+        </div>
+      </div>
     </div>
   );
 };

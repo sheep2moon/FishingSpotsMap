@@ -8,7 +8,7 @@ import {
 } from "../../components/ui/view-header";
 import { IconAward, IconBell, IconUserEdit } from "@tabler/icons-react";
 import UserSettings from "../../components/user-profile-tabs/user-settings";
-import LoadingSpinner from "../../components/ui/loading-spinner";
+import LoadingSpinner from "../../components/ui/loading-view";
 import UserAchievements from "../../components/user-profile-tabs/user-achievements";
 import Tabs from "../../components/ui/tabs";
 

@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import React from "react";
 import { api } from "../../lib/utils/api";
-import LoadingSpinner from "../../components/ui/loading-spinner";
+import LoadingSpinner from "../../components/ui/loading-view";
 import {
   Card,
   CardContent,
