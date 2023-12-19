@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { type FSpotData } from "../../schemas/fishing-spot.schema";
 
-type EditFields = Omit<FSpotData, "images">;
+type EditFields = FSpotData;
 
 type EditSpotState = EditFields & {
   setField: <K extends keyof FSpotData>(key: K, value: FSpotData[K]) => void;
@@ -13,7 +13,7 @@ export const useEditSpotStore = create<EditSpotState>((set) => ({
   prices: [],
   city: "",
   province: "",
-  isPaid: false,
+  images: [],
   accommodation: false,
   tent: false,
   night_fishing: false,

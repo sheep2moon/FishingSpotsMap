@@ -46,7 +46,7 @@ const DescriptionSpotForm = React.forwardRef<
     <Card ref={ref} {...props}>
       <CardHeader>
         <CardTitle>
-          <IconMarkdown size="2rem" />
+          <IconMarkdown />
           Opis
         </CardTitle>
         <CardDescription>

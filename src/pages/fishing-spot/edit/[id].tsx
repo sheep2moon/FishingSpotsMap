@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import React, { useEffect, useRef, useState } from "react";
 import { authOptions } from "../../../server/auth";
 import { useRouter } from "next/router";
-import { api } from "../../../lib/utils/api";
+import { RouterOutputs, api } from "../../../lib/utils/api";
 import LoadingSpinner from "../../../components/ui/loading-view";
 import {
   IconAdjustmentsHorizontal,
@@ -99,30 +99,20 @@ const EditFishingSpot = () => {
   const spotQuery = api.fishery.getFishingSpot.useQuery({ id }, {});
   const editableArea = useRef<HTMLDivElement>(null);
   const [selectedTab, setSelectedTab] = useState<EditableTab>(editableTabs[0]);
-  const {
-    lat,
-    lng,
-    prices,
-    fish_types,
-    area,
-    tent,
-    description,
-    spinning,
-    accommodation,
-    night_fishing,
-    city,
-    name,
-    province,
-    setField,
-    setEditableFields,
-    contact_email,
-    contact_instagram,
-    contact_page,
-    contact_phone,
-  } = useEditSpotStore((store) => store);
+  const { setField, setEditableFields, ...spotFields } = useEditSpotStore(
+    (store) => store
+  );
+  const [isEdited, setIsEdited] = useState(false);
 
   useEffect(() => {
-    if (spotQuery.isSuccess && spotQuery.data)
+    console.log(spotQuery.data);
+
+    if (spotQuery.isSuccess && spotQuery.data) resetFields();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [spotQuery.isSuccess]);
+
+  const resetFields = () => {
+    if (spotQuery.data)
       setEditableFields({
         accommodation: spotQuery.data.accommodation,
         area: spotQuery.data.area,
@@ -141,9 +131,37 @@ const EditFishingSpot = () => {
         contact_email: spotQuery.data.contact_email,
         contact_page: spotQuery.data.contact_page,
         contact_instagram: spotQuery.data.contact_instagram,
+        images: spotQuery.data.images.map((image) => ({
+          id: image.id,
+          comment: image.comment,
+          source: image.source,
+        })),
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [spotQuery.isSuccess]);
+  };
+
+  useEffect(() => {
+    Object.entries(spotFields).map(([key, value]) => {
+      if (
+        value !==
+        spotQuery.data?.[
+          key as keyof RouterOutputs["fishery"]["getFishingSpot"]
+        ]
+      ) {
+        console.log("change!", key, value);
+        setIsEdited(true);
+      }
+    });
+  }, [spotFields, spotQuery.data]);
+
+  const handleCancelEdit = () => {
+    setIsEdited(false);
+    resetFields();
+  };
+
+  const handleSaveChanges = () => {
+    console.log("save changes TODO");
+  };
+
   const handleSelectTab = (tab: EditableTab) => {
     setSelectedTab(tab);
     editableArea.current?.scrollIntoView({ behavior: "smooth" });
@@ -162,6 +180,22 @@ const EditFishingSpot = () => {
         <ViewTitle>{spotQuery.data.name}</ViewTitle>
         <ViewSubtitle>tryb edycji</ViewSubtitle>
       </ViewHeader>
+      <div className="flex items-center justify-end p-2">
+        {isEdited ? <p>Wykryto zmiany</p> : <p>Brak zmian</p>}
+        {isEdited && (
+          <div className="flex items-center gap-2 px-2">
+            <Button onClick={handleCancelEdit} variant="destructive">
+              Odrzuć
+            </Button>
+            <Button
+              onClick={handleSaveChanges}
+              className="bg-info text-primary dark:bg-info dark:text-primary"
+            >
+              Zapisz
+            </Button>
+          </div>
+        )}
+      </div>
       <div className="flex h-full flex-col gap-1 lg:flex-row">
         <Card className="min-h-full w-full dark:bg-transparent lg:max-w-[250px]">
           <CardHeader>
@@ -195,9 +229,9 @@ const EditFishingSpot = () => {
         <div ref={editableArea} className="min-h-full w-full">
           {selectedTab.id === "basics" && (
             <BasicsSpotForm
-              city={city}
-              name={name}
-              province={province}
+              city={spotFields.city}
+              name={spotFields.name}
+              province={spotFields.province}
               setName={(name) => setField("name", name)}
               setCity={(city) => setField("city", city)}
               setProvince={(province) => setField("province", province)}
@@ -207,11 +241,11 @@ const EditFishingSpot = () => {
           {selectedTab.id === "details" && (
             <DetailsSpotForm
               className="w-full"
-              area={area}
-              spinning={spinning}
-              accommodation={accommodation}
-              tent={tent}
-              night_fishing={night_fishing}
+              area={spotFields.area}
+              spinning={spotFields.spinning}
+              accommodation={spotFields.accommodation}
+              tent={spotFields.tent}
+              night_fishing={spotFields.night_fishing}
               setArea={(area) => setField("area", area)}
               setTent={(tent) => setField("tent", tent)}
               setAccommodation={(accommodation) =>
@@ -226,7 +260,7 @@ const EditFishingSpot = () => {
           {selectedTab.id === "description" && (
             <DescriptionSpotForm
               className="w-full"
-              description={description}
+              description={spotFields.description}
               setDescription={(description) =>
                 setField("description", description)
               }
@@ -235,7 +269,7 @@ const EditFishingSpot = () => {
           {selectedTab.id === "position" && (
             <SelectPositionMap
               className="w-full"
-              position={{ lat, lng }}
+              position={{ lat: spotFields.lat, lng: spotFields.lng }}
               setPosition={(position) => {
                 setField("lat", position.lat);
                 setField("lng", position.lng);
@@ -246,10 +280,10 @@ const EditFishingSpot = () => {
           )}
           {selectedTab.id === "contact" && (
             <ContactSpotForm
-              contact_email={contact_email}
-              contact_instagram={contact_instagram}
-              contact_page={contact_page}
-              contact_phone={contact_phone}
+              contact_email={spotFields.contact_email}
+              contact_instagram={spotFields.contact_instagram}
+              contact_page={spotFields.contact_page}
+              contact_phone={spotFields.contact_phone}
               setPhone={(phone) => setField("contact_phone", phone)}
               setEmail={(email) => setField("contact_email", email)}
               setInstagram={(instagram) =>
@@ -260,14 +294,14 @@ const EditFishingSpot = () => {
           )}
           {selectedTab.id === "fish_types" && (
             <FishTypeSelector
-              fishTypes={fish_types}
+              fishTypes={spotFields.fish_types}
               setFishTypes={(fishTypes) => setField("fish_types", fishTypes)}
             />
           )}
           {selectedTab.id === "prices" && (
             <PricingSpotForm
               className="w-full"
-              prices={prices}
+              prices={spotFields.prices}
               setPrices={(prices) => setField("prices", prices)}
             />
           )}

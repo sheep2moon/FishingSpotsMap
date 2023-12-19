@@ -24,7 +24,7 @@ const PricingSpotForm = forwardRef<
   React.HTMLAttributes<HTMLDivElement> & PricingSpotFormProps
 >(({ prices, setPrices, ...props }, ref) => {
   const [parent] = useAutoAnimate();
-  const [pricesCount, setPricesCount] = useState(0);
+  const [pricesCount, setPricesCount] = useState(prices.length);
 
   const handlePriceTitleChange = (index: number, title: string) => {
     const newPricing = prices.map((price, i) => {
