@@ -13,7 +13,7 @@ type AttachmentPreviewProps = {
 const AttachmentPreview = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & AttachmentPreviewProps
->(({ type, url, name, downloadable = false, className, ...props }, ref) => {
+>(({ type, url, name, downloadable = true, className, ...props }, ref) => {
   return (
     <div
       {...props}
@@ -35,9 +35,10 @@ const AttachmentPreview = React.forwardRef<
           <a
             download
             href={url}
+            target="_blank"
             className="cursor-pointer font-normal group-hover:text-accent"
           >
-            Pobierz
+            Podgląd pliku
           </a>
         )}
       </div>

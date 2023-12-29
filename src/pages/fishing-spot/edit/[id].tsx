@@ -305,7 +305,9 @@ const EditFishingSpot = () => {
               setPrices={(prices) => setField("prices", prices)}
             />
           )}
-          {selectedTab.id === "images" && <EditImagesForm />}
+          {selectedTab.id === "images" && (
+            <EditImagesForm images={spotFields.images} />
+          )}
         </div>
       </div>
     </div>

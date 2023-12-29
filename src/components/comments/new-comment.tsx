@@ -92,6 +92,7 @@ const NewComment = (props: NewCommentProps) => {
       attachmentData: attachmentData || undefined,
     });
     setCommentValue("");
+    setAttachedFile(null);
     props.setNewCommentProps({ parentId: undefined, replyTo: undefined });
     void (await ctx.comment.getComments.invalidate({
       discussionId:

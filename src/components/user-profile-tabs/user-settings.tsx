@@ -10,6 +10,9 @@ import {
 import Avatar from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { api } from "../../lib/utils/api";
+import { uploadFile } from "../../server/uploadFile";
+import { getAvatarImageSrc } from "../../lib/utils/getImageSrc";
 
 type UserSettingsProps = {
   userData: User;
@@ -17,18 +20,43 @@ type UserSettingsProps = {
 
 const UserSettings = ({ userData }: UserSettingsProps) => {
   const [currentName, setCurrentName] = useState<string | null>(userData.name);
-  const [currentAvatar, setCurrentAvatar] = useState<string | null>(
-    userData.image
-  );
+  const [currentAvatar, setCurrentAvatar] = useState<{
+    url: string | null;
+    file: File | null;
+  }>({ url: userData.image, file: null });
+  const presignedImageUrlMutation =
+    api.files.createPresignedImageUrl.useMutation();
+  const { mutateAsync: updateUserData } =
+    api.users.updateUserData.useMutation();
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const inputFile = e.currentTarget.files?.[0];
-    if (inputFile) setCurrentAvatar(URL.createObjectURL(inputFile));
+    const imageFile = e.currentTarget.files?.[0];
+    console.log(e.currentTarget.files);
+
+    if (imageFile)
+      setCurrentAvatar({
+        url: URL.createObjectURL(imageFile),
+        file: imageFile,
+      });
   };
 
+  const handleSubmit = async () => {
+    if (currentName && currentName !== userData.name) {
+      await updateUserData({ name: currentName });
+    }
+    if (currentAvatar.file) {
+      const { url, fields } = await presignedImageUrlMutation.mutateAsync({
+        folderName: "avatars",
+        id: `avatar-${userData.id}`,
+      });
+      await uploadFile({ url, fields, file: currentAvatar.file });
+      const newImageUrl = getAvatarImageSrc(userData.id);
+      await updateUserData({ image: newImageUrl });
+    }
+  };
   const handleCancel = () => {
-    setCurrentAvatar(userData.image);
+    setCurrentAvatar({ url: userData.image, file: null });
     setCurrentName(userData.name);
   };
 
@@ -51,23 +79,26 @@ const UserSettings = ({ userData }: UserSettingsProps) => {
             />
             <Avatar
               className="w-20 ring-primary-50 peer-focus:ring-2"
-              imageSrc={currentAvatar || ""}
+              imageSrc={currentAvatar.url || ""}
             />
           </label>
         </div>
         <Input
-          className="w-fit"
+          className="mx-auto w-fit"
           value={currentName || ""}
           onChange={(e) => setCurrentName(e.target.value)}
         />
         <div className="flex h-8 gap-4">
-          {(currentName !== userData.name ||
-            currentAvatar !== userData.image) && (
+          {(currentName !== userData.name || currentAvatar.file) && (
             <>
-              <Button onClick={handleCancel} variant="secondary">
+              <Button
+                onClick={handleCancel}
+                className="whitespace-nowrap"
+                variant="secondary"
+              >
                 Odrzuć zmiany
               </Button>
-              <Button disabled>Zapisz</Button>
+              <Button onClick={() => void handleSubmit()}>Zapisz</Button>
             </>
           )}
         </div>

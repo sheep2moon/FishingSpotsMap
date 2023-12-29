@@ -31,7 +31,7 @@ const SpotList = () => {
 
   return (
     <div className="mx-auto mt-16 w-full max-w-[1300px]">
-      <div className="flex items-center justify-between gap-2 py-2">
+      <div className="flex items-center justify-between gap-2 p-2">
         <Input
           icon={<IconSearch className="aspect-square w-6 text-primary-600" />}
           type="search"

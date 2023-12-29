@@ -29,7 +29,7 @@ const FishingSpotCard = ({ fishingSpot }: FishingSpotCardProps) => {
         {/* <div className="relative aspect-video w-full"></div> */}
 
         <div className="absolute bottom-4 left-0 right-4 z-10 rounded-r-sm border-l-2 border-secondary bg-primary px-2 py-2 text-primary-dark dark:bg-primary-950 dark:text-primary">
-          <h4 className="overflow-ellipsis whitespace-nowrap text-base font-bold">
+          <h4 className="line-clamp-1 text-base font-bold">
             {fishingSpot.name || "brak nazwy"}
           </h4>
           <div className="flex items-center gap-1">

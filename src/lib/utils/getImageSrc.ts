@@ -15,6 +15,13 @@ export const getCatchImageSrc = (id: string | null | undefined) => {
   return "";
 };
 
+export const getAvatarImageSrc = (id: string | null | undefined) => {
+  if (typeof id === "string") {
+    return `${baseUrl}/avatars/avatar-${id}`;
+  }
+  return "";
+};
+
 export const getAttachmentSrc = (id: string) => {
   return `${baseUrl}/discussion-attachments/${id}`;
 };
