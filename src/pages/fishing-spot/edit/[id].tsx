@@ -40,6 +40,7 @@ import { FishTypeSelector } from "../../../components/fishing-spot-forms/fish-ty
 import EditImagesForm from "../../../components/edit-spot/edit-images-form";
 import { ContactSpotForm } from "../../../components/fishing-spot-forms/contact-spot-form";
 import Link from "next/link";
+import { ImagesSpotForm } from "../../../components/fishing-spot-forms/images-spot-form";
 
 const SelectPositionMap = dynamic(
   () => import("../../../components/map/SelectPositionMap"),
@@ -136,6 +137,7 @@ const EditFishingSpot = () => {
           id: image.id,
           comment: image.comment,
           source: image.source,
+          file: null,
         })),
       });
   };
@@ -148,14 +150,6 @@ const EditFishingSpot = () => {
           key as keyof RouterOutputs["fishery"]["getFishingSpot"]
         ]
       ) {
-        console.log(
-          "change!",
-          key,
-          value,
-          spotQuery.data?.[
-            key as keyof RouterOutputs["fishery"]["getFishingSpot"]
-          ]
-        );
         setIsEdited(true);
       }
     });
@@ -321,7 +315,10 @@ const EditFishingSpot = () => {
             />
           )}
           {selectedTab.id === "images" && (
-            <EditImagesForm images={spotFields.images} />
+            <ImagesSpotForm
+              images={spotFields.images}
+              setImages={(images) => setField("images", images)}
+            />
           )}
         </div>
       </div>

@@ -8,7 +8,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { Button } from "../ui/button";
-import { useNewSpotStore } from "../../zustand/new-spot-store";
 import { type FSpotImageWithFile } from "../../../schemas/fishing-spot.schema";
 import { cn } from "../../lib/utils/cn";
 import { IconPhotoStar } from "@tabler/icons-react";
@@ -19,33 +18,42 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 import ImageInput from "../ui/image-input";
+import { getSpotImageSrc } from "../../lib/utils/getImageSrc";
 
-const NewSpotImagesForm = forwardRef<
+type NewSpotImagesFormProps = {
+  images: FSpotImageWithFile[];
+  setImages: (images: FSpotImageWithFile[]) => void;
+};
+
+const ImagesSpotForm = forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ ...props }, ref) => {
+  React.HTMLAttributes<HTMLDivElement> & NewSpotImagesFormProps
+>(({ images, setImages, ...props }, ref) => {
   const [imageContainerRef] = useAutoAnimate();
-  const { images, setField } = useNewSpotStore((state) => state);
+  // const { images, setField } = useNewSpotStore((state) => state);
   const [selectedImage, setSelectedImage] = useState<FSpotImageWithFile>();
 
   const onFileAdd = (file: File) => {
-    setField("images", [
-      ...images,
-      { comment: "", source: "", file, id: uuidv4() },
-    ]);
+    setImages([...images, { comment: "", source: "", file, id: uuidv4() }]);
+    // setField("images", [
+    //   ...images,
+    //   { comment: "", source: "", file, id: uuidv4() },
+    // ]);
   };
 
   const handleDeleteImage = (imageIndex: number) => {
     const newImages = [...images];
     newImages.splice(imageIndex, 1);
-    setField("images", newImages);
+    setImages(newImages);
+    // setField("images", newImages);
   };
 
   const onImageDetailsSubmit = (image: FSpotImageWithFile) => {
     const newImages = [...images];
     const changedImageIndex = newImages.findIndex((i) => i.id === image.id);
     newImages.splice(changedImageIndex, 1, image);
-    setField("images", newImages);
+    setImages(newImages);
+    // setField("images", newImages);
   };
 
   const setMainImage = (imageIndex: number) => {
@@ -55,7 +63,8 @@ const NewSpotImagesForm = forwardRef<
     if (temp) {
       newImages[imageIndex] = newImages[0];
       newImages[0] = temp;
-      setField("images", newImages);
+      setImages(newImages);
+      // setField("images", newImages);
     }
   };
 
@@ -69,7 +78,7 @@ const NewSpotImagesForm = forwardRef<
       </CardHeader>
       <CardContent
         ref={imageContainerRef}
-        className="grid grid-cols-2 gap-1 sm:grid-cols-4 lg:grid-cols-6"
+        className="grid grid-cols-2 gap-1 sm:grid-cols-4"
       >
         {images.length !== 6 && (
           <ImageInput className="" onFileAdd={onFileAdd} />
@@ -91,7 +100,11 @@ const NewSpotImagesForm = forwardRef<
                       className="rounded-md object-cover"
                       fill
                       alt=""
-                      src={URL.createObjectURL(currentImage.file)}
+                      src={
+                        currentImage.file
+                          ? URL.createObjectURL(currentImage.file)
+                          : getSpotImageSrc(currentImage.id)
+                      }
                     />
                     {index === 0 && (
                       <span className="absolute bottom-0 left-0 rounded-bl-md rounded-tr-md bg-secondary px-2 py-1 text-base text-primary">
@@ -138,7 +151,7 @@ const NewSpotImagesForm = forwardRef<
   );
 });
 
-NewSpotImagesForm.displayName = "NewSpotImagesForm";
+ImagesSpotForm.displayName = "NewSpotImagesForm";
 
 type ImageOptionButtonProps = {
   icon: React.ReactNode;
@@ -203,7 +216,11 @@ const ImageDetailsDialogContent = ({
 
         <div className="relative aspect-video w-full">
           <Image
-            src={URL.createObjectURL(image.file)}
+            src={
+              image.file
+                ? URL.createObjectURL(image.file)
+                : getSpotImageSrc(image.id)
+            }
             fill
             className="object-contain"
             alt=""
@@ -233,4 +250,4 @@ const ImageDetailsDialogContent = ({
   );
 };
 
-export { NewSpotImagesForm };
+export { ImagesSpotForm };

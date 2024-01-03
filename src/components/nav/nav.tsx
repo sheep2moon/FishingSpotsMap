@@ -102,7 +102,12 @@ const Nav = () => {
         <div className="hidden w-full lg:flex lg:items-center">
           <Link href="/" className="flex items-center gap-2">
             <div className="relative h-12 w-12">
-              <Image src="/images/rybook-logo.png" fill alt="" />
+              <Image
+                src="/images/rybook-logo.png"
+                className="rounded-full"
+                fill
+                alt=""
+              />
             </div>
             <span className="font-dosis text-xl font-bold tracking-widest">
               RYBOOK

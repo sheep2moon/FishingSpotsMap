@@ -1,7 +1,12 @@
 import { create } from "zustand";
-import { type FSpotData } from "../../schemas/fishing-spot.schema";
+import type {
+  FSpotImageWithFile,
+  FSpotData,
+} from "../../schemas/fishing-spot.schema";
 
-type EditFields = FSpotData;
+type EditFields = Omit<FSpotData, "images"> & {
+  images: FSpotImageWithFile[];
+};
 
 type EditSpotState = EditFields & {
   setField: <K extends keyof FSpotData>(key: K, value: FSpotData[K]) => void;

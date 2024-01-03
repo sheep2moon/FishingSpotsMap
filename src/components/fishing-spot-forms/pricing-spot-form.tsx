@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { IconTag } from "@tabler/icons-react";
+import { IconPlus, IconTag } from "@tabler/icons-react";
 import { type SpotPricing } from "../../types/global";
 import { cn } from "../../lib/utils/cn";
 import { useDebugLog } from "../../hooks/useDebugLog";
@@ -100,6 +100,7 @@ const PricingSpotForm = forwardRef<
           className="w-full"
           onClick={handleAddNewPrice}
         >
+          <IconPlus className="w-4" />
           {prices.length === 0 ? "Stwórz cennik" : "Dodaj pole"}
         </Button>
       </CardContent>

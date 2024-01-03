@@ -18,7 +18,7 @@ import {
   fishingSpotSchema,
 } from "../../schemas/fishing-spot.schema";
 import { DescriptionSpotForm } from "../components/fishing-spot-forms/description-spot-form";
-import { NewSpotImagesForm } from "../components/fishing-spot-forms/images-spot-form";
+import { ImagesSpotForm } from "../components/fishing-spot-forms/images-spot-form";
 import { ContactSpotForm } from "../components/fishing-spot-forms/contact-spot-form";
 import { cn } from "../lib/utils/cn";
 import { uploadFile } from "../server/uploadFile";
@@ -49,6 +49,7 @@ const AddFishingSpot = () => {
     contact_phone,
     fish_types,
     province,
+    images,
     setField,
   } = useNewSpotStore((store) => store);
 
@@ -118,7 +119,10 @@ const AddFishingSpot = () => {
         setInstagram={(instagram) => setField("contact_instagram", instagram)}
         setPage={(page) => setField("contact_page", page)}
       />
-      <NewSpotImagesForm />
+      <ImagesSpotForm
+        images={images}
+        setImages={(images) => setField("images", images)}
+      />
       <DescriptionSpotForm
         description={description}
         setDescription={(description) => setField("description", description)}
@@ -157,7 +161,7 @@ const FormSubmit = () => {
 
     for (let i = 0; i < images.length; i++) {
       const currentImage = images[i];
-      if (currentImage) {
+      if (currentImage && currentImage.file) {
         const { url, fields } = await createPresignedUrl({
           folderName: "spot-images",
           id: currentImage.id,

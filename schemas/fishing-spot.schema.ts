@@ -44,4 +44,6 @@ export const fishingSpotSchema = z.object({
 });
 
 export type FSpotData = z.infer<typeof fishingSpotSchema>;
-export type FSpotImageWithFile = FSpotData["images"][number] & { file: File };
+export type FSpotImageWithFile = FSpotData["images"][number] & {
+  file: File | null;
+};
