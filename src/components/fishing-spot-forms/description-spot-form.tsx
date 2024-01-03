@@ -1,4 +1,4 @@
-import React, { type ChangeEvent } from "react";
+import React, { useRef, type ChangeEvent } from "react";
 import {
   IconFilePencil,
   IconInfoSquareRounded,
@@ -24,11 +24,6 @@ import {
 } from "../ui/dialog";
 import { Textarea } from "../ui/textarea";
 import { Close } from "@radix-ui/react-dialog";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "../ui/hover-card";
 import { type FSpotData } from "../../../schemas/fishing-spot.schema";
 
 type DescriptionSpotFormProps = Pick<FSpotData, "description"> & {
@@ -40,8 +35,20 @@ const DescriptionSpotForm = React.forwardRef<
   React.HTMLAttributes<HTMLDivElement> & DescriptionSpotFormProps
 >(({ description, setDescription, ...props }, ref) => {
   const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setDescription(e.target.value);
+    const input = e.target.value;
+    setDescription(input);
   };
+  const descriptionTextAreaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const handleOnOpen = (open: boolean) => {
+    if (open && descriptionTextAreaRef.current) {
+      descriptionTextAreaRef.current.focus();
+    }
+    if (open === false && description.trim().length === 0) {
+      setDescription("");
+    }
+  };
+
   return (
     <Card ref={ref} {...props}>
       <CardHeader>
@@ -54,7 +61,7 @@ const DescriptionSpotForm = React.forwardRef<
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Dialog>
+        <Dialog onOpenChange={handleOnOpen}>
           {description.length > 0 ? (
             <DialogTrigger asChild className="w-full text-start">
               <div className="cursor-pointer rounded-md border border-primary-200 p-2 transition-all hover:bg-primary-100 dark:border-primary-dark hover:dark:bg-primary-800">
@@ -73,8 +80,16 @@ const DescriptionSpotForm = React.forwardRef<
                 Opis
               </DialogTitle>
               <div className="ml-auto mr-8">
-                <HoverCard defaultOpen={false}>
-                  <HoverCardTrigger>
+                <a
+                  href="https://typografia.info/artykuly/markdown"
+                  target="_blank"
+                  className="mt-2 flex w-fit rounded-md px-2 py-1 text-base font-semibold text-info-50 underline-offset-4 hover:underline"
+                >
+                  <IconInfoSquareRounded className="mr-1 text-info dark:text-info-400" />
+                  Poradnik Markdown
+                </a>
+                {/* <HoverCard defaultOpen={false} open={isHoverCardOpen}>
+                  <HoverCardTrigger asChild>
                     <Button className="m-0 h-fit p-0" variant="link">
                       <IconInfoSquareRounded className="mr-1 text-info dark:text-info-dark" />
                       Pomoc
@@ -97,7 +112,7 @@ const DescriptionSpotForm = React.forwardRef<
                       Możesz również napisać opis standardowo.
                     </p>
                   </HoverCardContent>
-                </HoverCard>
+                </HoverCard> */}
               </div>
             </DialogHeader>
             <div className="grid h-full min-h-0 grid-cols-1 gap-2 overflow-y-auto p-1 sm:grid-cols-2">
@@ -108,6 +123,7 @@ const DescriptionSpotForm = React.forwardRef<
                 </h4>
                 <Textarea
                   className="grow resize-none overflow-y-auto scrollbar-thin scrollbar-track-primary-dark hover:scrollbar-thumb-primary-600 dark:scrollbar-thumb-primary-700"
+                  ref={descriptionTextAreaRef}
                   value={description}
                   onChange={handleInputChange}
                 />
@@ -115,7 +131,7 @@ const DescriptionSpotForm = React.forwardRef<
               <div className="flex h-[300px] min-h-0 flex-col rounded-sm bg-primary-200 p-1 dark:bg-primary-dark sm:h-auto">
                 <h4 className="flex items-center gap-2 p-2">
                   <IconReportSearch size="1.5rem" />
-                  Rezultat
+                  Podgląd
                 </h4>
                 <MarkdownContent
                   className="h-full overflow-y-auto rounded-md bg-white p-2 scrollbar-thin scrollbar-track-primary-dark hover:scrollbar-thumb-primary-600 dark:bg-primary-950 dark:scrollbar-thumb-primary-700"

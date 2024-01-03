@@ -39,17 +39,12 @@ const links: { text: string; href: string; icon: React.ReactNode }[] = [
   //   icon: <IconHome size="1.4rem" />,
   // },
   {
-    text: "Dodaj miejsce",
-    href: "/add-fishing-spot",
-    icon: <IconMapPinPlus size="1.4rem" />,
-  },
-  {
-    text: "Mapa miejsc",
+    text: "Mapa łowisk",
     href: "/fishing-spots-map",
     icon: <IconMap2 size="1.4rem" />,
   },
   {
-    text: "Lista miejsc",
+    text: "Lista łowisk",
     href: "/fishing-spot/list",
     icon: <IconListSearch size="1.4rem" />,
   },
@@ -62,6 +57,11 @@ const links: { text: string; href: string; icon: React.ReactNode }[] = [
     text: "Zdobycze",
     href: "/catch",
     icon: <IconFishHook size="1.4rem" />,
+  },
+  {
+    text: "Dodaj łowisko",
+    href: "/add-fishing-spot",
+    icon: <IconMapPinPlus size="1.4rem" />,
   },
 ];
 

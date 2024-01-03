@@ -16,12 +16,12 @@ const CatchPage = () => {
   return (
     <div className="mx-auto mt-16 flex w-full max-w-screen-xl flex-col gap-6 p-2 pb-16 text-xl">
       <ViewHeader>
-        <ViewTitle>Połów</ViewTitle>
+        <ViewTitle>Zdobycze</ViewTitle>
         <ViewSubtitle>
           {session.data?.user ? (
             <InternalLink href="/catch/new-catch">
               <IconPlus />
-              Dodaj zdobycz
+              Dodaj własną zdobycz
             </InternalLink>
           ) : (
             <InternalLink className="text-xl" href="/auth/signin">
