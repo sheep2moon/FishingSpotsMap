@@ -8,6 +8,7 @@ import SpotsGrid, {
 import { Input } from "../../components/ui/input";
 import useDebounce from "../../hooks/useDebounce";
 import { IconSearch } from "@tabler/icons-react";
+import { useRouter } from "next/router";
 
 const sortingOptions: FisherySortingOption[] = [
   {
@@ -27,7 +28,34 @@ const SpotList = () => {
     ) as FisherySortingOption
   );
   const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
   const deboncedSearchQuery = useDebounce<string>(searchQuery, 600);
+
+  // Initial search query value from url params getting debounced,
+  // Optional idea - edit useDebounce hook to return setInstantValue method.
+  useEffect(() => {
+    const query = router.query.search as string;
+    if (query && query !== searchQuery) {
+      setSearchQuery(query);
+    }
+  }, [router.query]);
+
+  useEffect(() => {
+    console.log("Search query changed: ", searchQuery);
+  }, [searchQuery]);
+
+  const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const search = e.target.value;
+    setSearchQuery(search);
+    void router.push(
+      {
+        pathname: router.pathname,
+        query: { ...router.query, search },
+      },
+      undefined,
+      { shallow: true }
+    );
+  };
 
   return (
     <div className="mx-auto mt-16 w-full max-w-[1300px]">
@@ -38,7 +66,7 @@ const SpotList = () => {
           placeholder="Szukaj łowiska..."
           value={searchQuery}
           className="sm:min-w-[300px]"
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={handleQueryChange}
         />
         <SortingMenu
           options={sortingOptions}

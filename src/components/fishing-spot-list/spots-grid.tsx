@@ -24,10 +24,6 @@ const SpotsGrid = (props: SpotsGridProps) => {
     );
 
   useEffect(() => {
-    console.log(data);
-  }, [data]);
-
-  useEffect(() => {
     parent.current && autoAnimate(parent.current);
   }, [parent]);
 

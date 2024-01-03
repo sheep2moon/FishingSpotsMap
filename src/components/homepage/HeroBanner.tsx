@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { IconMap2, IconSearch } from "@tabler/icons-react";
 import { InternalLink } from "../ui/internal-link";
 import { Input } from "../ui/input";
 import Image from "next/image";
 const HeroBanner = () => {
+  const [searchQuery, setSearchQuery] = useState("");
   return (
     <div className="grid w-full grid-cols-1 gap-4 px-4 pt-4 text-primary-dark dark:text-primary md:grid-cols-2">
       <div className="flex flex-col justify-center">
@@ -20,8 +21,13 @@ const HeroBanner = () => {
             icon={<IconSearch />}
             className="w-full"
             placeholder="Wyszukaj łowisko"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <InternalLink variant="default" href="/">
+          <InternalLink
+            variant="default"
+            href={`/fishing-spot/list?search=${searchQuery}`}
+          >
             Szukaj
           </InternalLink>
         </div>

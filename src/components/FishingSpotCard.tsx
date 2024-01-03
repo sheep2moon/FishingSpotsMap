@@ -25,6 +25,7 @@ const FishingSpotCard = ({ fishingSpot }: FishingSpotCardProps) => {
           src={getSpotImageSrc(fishingSpot.images[0]?.id)}
           alt="podgląd łowiska"
           fill
+          sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 800px"
         />
         {/* <div className="relative aspect-video w-full"></div> */}
 

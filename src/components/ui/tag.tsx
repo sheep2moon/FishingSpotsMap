@@ -14,7 +14,7 @@ const Tag = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        "flex w-fit items-center gap-0.5 rounded-md px-2 py-1 text-sm text-primary-300",
+        "flex w-fit items-center gap-0.5 rounded-md px-2 py-1 text-sm text-primary-700 dark:text-primary-300",
         className
       )}
       {...props}
