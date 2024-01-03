@@ -31,6 +31,7 @@ import {
 } from "../ui/tooltip";
 import { useSession } from "next-auth/react";
 import { useReportFormStore } from "../../zustand/report-form-store";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 type Reaction = (typeof ReactionType)[keyof typeof ReactionType];
 
@@ -126,25 +127,35 @@ const Comment = (props: CommentProps) => {
               </span>
             </div>
           </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="ghost" className="">
                 <IconDots />
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem
+            </PopoverTrigger>
+            <PopoverContent
+              align="end"
+              className="flex w-40 flex-col gap-1 p-2"
+            >
+              <Button
+                size="sm"
+                variant="outline"
                 onClick={() => newReport("COMMENT", props.comment.id)}
+                className=""
               >
                 Zgłoś
-              </DropdownMenuItem>
+              </Button>
               <CurrentUserOnly userId={props.comment.author.id}>
-                <DropdownMenuItem onClick={() => void handleDeleteComment()}>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => void handleDeleteComment()}
+                >
                   Usuń
-                </DropdownMenuItem>
+                </Button>
               </CurrentUserOnly>
-            </DropdownMenuContent>
-          </DropdownMenu>
+            </PopoverContent>
+          </Popover>
         </div>
       </CardHeader>
       <CardContent className="px-4 py-0">

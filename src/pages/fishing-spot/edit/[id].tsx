@@ -39,6 +39,7 @@ import { IconTag } from "@tabler/icons-react";
 import { FishTypeSelector } from "../../../components/fishing-spot-forms/fish-types-selector";
 import EditImagesForm from "../../../components/edit-spot/edit-images-form";
 import { ContactSpotForm } from "../../../components/fishing-spot-forms/contact-spot-form";
+import Link from "next/link";
 
 const SelectPositionMap = dynamic(
   () => import("../../../components/map/SelectPositionMap"),
@@ -147,7 +148,14 @@ const EditFishingSpot = () => {
           key as keyof RouterOutputs["fishery"]["getFishingSpot"]
         ]
       ) {
-        console.log("change!", key, value);
+        console.log(
+          "change!",
+          key,
+          value,
+          spotQuery.data?.[
+            key as keyof RouterOutputs["fishery"]["getFishingSpot"]
+          ]
+        );
         setIsEdited(true);
       }
     });
@@ -177,7 +185,14 @@ const EditFishingSpot = () => {
   return (
     <div className="mx-auto min-h-screen w-full max-w-screen-xl p-2 pt-16">
       <ViewHeader>
-        <ViewTitle>{spotQuery.data.name}</ViewTitle>
+        <ViewTitle>
+          <Link
+            className="font-semibold hover:underline"
+            href={`/fishing-spot/${spotQuery.data.id}`}
+          >
+            {spotQuery.data.name}
+          </Link>
+        </ViewTitle>
         <ViewSubtitle>tryb edycji</ViewSubtitle>
       </ViewHeader>
       <div className="flex items-center justify-end p-2">
