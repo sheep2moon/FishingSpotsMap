@@ -41,6 +41,7 @@ import EditImagesForm from "../../../components/edit-spot/edit-images-form";
 import { ContactSpotForm } from "../../../components/fishing-spot-forms/contact-spot-form";
 import Link from "next/link";
 import { ImagesSpotForm } from "../../../components/fishing-spot-forms/images-spot-form";
+import ConfirmationModal from "../../../components/confirmation-modal";
 
 const SelectPositionMap = dynamic(
   () => import("../../../components/map/SelectPositionMap"),
@@ -101,15 +102,17 @@ const EditFishingSpot = () => {
   const spotQuery = api.fishery.getFishingSpot.useQuery({ id }, {});
   const editableArea = useRef<HTMLDivElement>(null);
   const [selectedTab, setSelectedTab] = useState<EditableTab>(editableTabs[0]);
+  const [watchForEdit, setWatchForEdit] = useState(false);
   const { setField, setEditableFields, ...spotFields } = useEditSpotStore(
     (store) => store
   );
   const [isEdited, setIsEdited] = useState(false);
 
   useEffect(() => {
-    console.log(spotQuery.data);
-
-    if (spotQuery.isSuccess && spotQuery.data) resetFields();
+    if (spotQuery.isSuccess && spotQuery.data && !watchForEdit) {
+      resetFields();
+      setWatchForEdit(true);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [spotQuery.isSuccess]);
 
@@ -143,7 +146,11 @@ const EditFishingSpot = () => {
   };
 
   useEffect(() => {
-    Object.entries(spotFields).map(([key, value]) => {
+    if (!watchForEdit) return;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { images, ...watchedFields } = spotFields;
+    setIsEdited(false);
+    Object.entries(watchedFields).map(([key, value]) => {
       if (
         value !==
         spotQuery.data?.[
@@ -153,7 +160,7 @@ const EditFishingSpot = () => {
         setIsEdited(true);
       }
     });
-  }, [spotFields, spotQuery.data]);
+  }, [spotFields, spotQuery.data, watchForEdit]);
 
   const handleCancelEdit = () => {
     setIsEdited(false);
@@ -189,19 +196,32 @@ const EditFishingSpot = () => {
         </ViewTitle>
         <ViewSubtitle>tryb edycji</ViewSubtitle>
       </ViewHeader>
-      <div className="flex items-center justify-end p-2">
+      <div className="flex h-12 items-center justify-end">
         {isEdited ? <p>Wykryto zmiany</p> : <p>Brak zmian</p>}
         {isEdited && (
           <div className="flex items-center gap-2 px-2">
-            <Button onClick={handleCancelEdit} variant="destructive">
-              Odrzuć
-            </Button>
-            <Button
-              onClick={handleSaveChanges}
-              className="bg-info text-primary dark:bg-info dark:text-primary"
+            <ConfirmationModal
+              title="Na pewno?"
+              description="Chcesz odrzucić wszystkie zmiany?"
+              onConfirm={handleCancelEdit}
             >
-              Zapisz
-            </Button>
+              {(open) => <Button onClick={open}>Odrzuć</Button>}
+            </ConfirmationModal>
+
+            <ConfirmationModal
+              title="Potwierdź"
+              description="Dokonaj zmian w łowisku"
+              onConfirm={handleSaveChanges}
+            >
+              {(open) => (
+                <Button
+                  className="bg-info text-primary dark:bg-info dark:text-primary"
+                  onClick={open}
+                >
+                  Zapisz
+                </Button>
+              )}
+            </ConfirmationModal>
           </div>
         )}
       </div>
