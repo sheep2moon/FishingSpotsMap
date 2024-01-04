@@ -14,12 +14,6 @@ import { api, type RouterOutputs } from "../../lib/utils/api";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import AttachmentPreview from "../ui/attachment-preview";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
 import CurrentUserOnly from "../current-user-only";
 import { cn } from "../../lib/utils/cn";
 import { type NewCommentTarget } from "./comment-section";

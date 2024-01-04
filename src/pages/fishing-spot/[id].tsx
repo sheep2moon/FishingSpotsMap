@@ -46,7 +46,7 @@ const FishingSpot = () => {
             <span>Powrót do mapy</span>
             <IconMapSearch />
           </InternalLink>
-          <div className="ml-auto flex items-center gap-2">
+          <div className="ml-auto mr-2 flex items-center gap-2">
             <AuthOnly>
               <FollowSpot spotId={spotQuery.data.id} />
             </AuthOnly>
@@ -69,7 +69,7 @@ const FishingSpot = () => {
               {spotQuery.data.name}
             </CardTitle>
           </CardHeader>
-          <CardContent className="mt-8">
+          <CardContent className="mt-2 p-0">
             <ImageCarousel images={spotQuery.data.images} />
           </CardContent>
         </Card>

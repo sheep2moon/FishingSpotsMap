@@ -42,6 +42,8 @@
     "cmdk": "^0.2.0",
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.10",
+    "embla-carousel": "^8.0.0-rc18",
+    "embla-carousel-react": "^8.0.0-rc18",
     "framer-motion": "^10.16.4",
     "leaflet": "^1.9.4",
     "marked": "^9.0.0",

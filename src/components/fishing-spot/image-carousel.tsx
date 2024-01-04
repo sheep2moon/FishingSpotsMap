@@ -2,8 +2,14 @@ import React, { useState } from "react";
 import { type FSpotData } from "../../../schemas/fishing-spot.schema";
 import Image from "next/image";
 import { getSpotImageSrc } from "../../lib/utils/getImageSrc";
+import {
+  Carousel,
+  type CarouselApi,
+  CarouselContent,
+  CarouselItem,
+} from "../ui/carousel";
 import { Button } from "../ui/button";
-import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
+import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 
 type ImageCarouselProps = {
   images: Partial<FSpotData["images"]>;
@@ -13,62 +19,82 @@ const ImageCarousel = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & ImageCarouselProps
 >(({ images, ...props }, ref) => {
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const handleNextImage = () => {
-    setSelectedImageIndex((prev) =>
-      prev === images.length - 1 ? 0 : prev + 1
-    );
-  };
+  const [api, setApi] = useState<CarouselApi>();
+
   const handlePreviousImage = () => {
-    setSelectedImageIndex((prev) =>
-      prev === 0 ? images.length - 1 : prev - 1
-    );
+    api?.scrollPrev();
   };
+  const handleNextImage = () => {
+    api?.scrollNext();
+  };
+  const handleSelectImage = (index: number) => {
+    api?.scrollTo(index);
+  };
+
   return (
-    <div {...props} ref={ref}>
-      <div className="relative aspect-[16/10] max-h-[500px] w-full bg-primary-200 object-cover dark:bg-primary-800/10">
-        <Image
-          priority
-          alt="widok"
-          className="rounded-md object-contain"
-          fill
-          src={getSpotImageSrc(images[selectedImageIndex]?.id)}
-        />
+    <div className="w-full">
+      <Carousel
+        setApi={setApi}
+        {...props}
+        ref={ref}
+        className="mx-auto flex aspect-video w-screen max-w-sm justify-center sm:max-w-2xl sm:p-2"
+      >
+        <CarouselContent className="ml-0 h-full w-full">
+          {Array.from({ length: images.length }, (_, index) => {
+            const currentImage = images[index];
+            if (!currentImage) return <></>;
+            return (
+              <CarouselItem
+                // onClick={() => setSelectedImageIndex(index)}
+                className="relative aspect-video w-full"
+                key={currentImage.id}
+              >
+                <Image
+                  className="aspect-square rounded-sm object-contain"
+                  alt="widok"
+                  fill
+                  src={getSpotImageSrc(currentImage.id)}
+                />
+              </CarouselItem>
+            );
+          })}
+        </CarouselContent>
+        {/* <CarouselPrevious /> */}
+        {/* <CarouselNext /> */}
+      </Carousel>
+      <div className="mx-auto my-2 flex max-w-sm items-center justify-center gap-1 overflow-x-auto sm:max-w-2xl">
         <Button
           onClick={handlePreviousImage}
+          className="mr-2 h-10 w-10 rounded-full p-0"
           variant="ghost"
-          className="absolute left-2 top-1/2 -translate-y-1/2"
         >
-          <IconChevronLeft />
+          <IconArrowLeft className="h-8 w-8" />
         </Button>
-        <Button
-          onClick={handleNextImage}
-          variant="ghost"
-          className="absolute right-2 top-1/2 -translate-y-1/2"
-        >
-          <IconChevronRight />
-        </Button>
-      </div>
-      <div className="flex w-full justify-center gap-1 p-2">
         {Array.from({ length: images.length }, (_, index) => {
           const currentImage = images[index];
           if (!currentImage) return <></>;
           return (
             <div
-              onClick={() => setSelectedImageIndex(index)}
-              className="relative"
-              key={currentImage.id}
+              className="relative aspect-square w-20"
+              onClick={() => handleSelectImage(index)}
+              key={`img-preview-${index}`}
             >
               <Image
-                className="aspect-square rounded-sm object-cover"
-                alt="widok"
-                width={80}
-                height={80}
+                className="rounded-sm object-cover transition-transform hover:scale-[105%] "
+                alt=""
                 src={getSpotImageSrc(currentImage.id)}
+                fill
               />
             </div>
           );
         })}
+        <Button
+          onClick={handleNextImage}
+          className="ml-2 h-10 w-10 rounded-full p-0"
+          variant="ghost"
+        >
+          <IconArrowRight className="h-8 w-8" />
+        </Button>
       </div>
     </div>
   );

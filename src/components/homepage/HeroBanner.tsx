@@ -37,7 +37,7 @@ const HeroBanner = () => {
           <Image src="images/decorations/map-sheet.svg" alt="" fill />
           <InternalLink
             variant="accent"
-            className="absolute left-1/2 top-1/2 z-10 mt-8 -translate-x-1/2 gap-2 rounded-md bg-gradient-to-b from-primary-dark to-primary-950 p-6 text-xl text-primary-200 shadow-md shadow-secondary-200/20 ring-accent transition-all duration-75 hover:text-primary-50 hover:ring-2"
+            className="absolute left-1/2 top-1/2 z-10 mt-8 -translate-x-1/2 gap-2 whitespace-nowrap rounded-md bg-gradient-to-b from-primary-dark to-primary-950 p-6 text-xl text-primary-200 shadow-md shadow-secondary-200/20 ring-accent transition-all duration-75 hover:text-primary-50 hover:ring-2"
             href="/fishing-spots-map"
           >
             <IconMap2 />

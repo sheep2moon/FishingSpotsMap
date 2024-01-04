@@ -1,12 +1,12 @@
 import { type Review } from "@prisma/client";
 import React from "react";
 import StarRating from "../ui/star-rating";
-import Image from "next/image";
 import { api } from "../../lib/utils/api";
 import { Separator } from "../ui/separator";
 import { format } from "date-fns";
 import { Button } from "../ui/button";
 import { IconDots } from "@tabler/icons-react";
+import Avatar from "../ui/avatar";
 
 type ReviewsProps = {
   reviews: Review[];
@@ -36,14 +36,8 @@ const Review = ({ review }: { review: Review }) => {
   return (
     <div className="rounded-md border border-primary-200 bg-primary p-2 dark:border-primary-800 dark:bg-primary-950 sm:p-4">
       <div className="flex items-center gap-4">
-        <div className="relative aspect-square w-10 ">
-          <Image
-            src={userQuery.data?.image || ""}
-            fill
-            className="rounded-full"
-            alt="awatar"
-          />
-        </div>
+        <Avatar className="w-10" imageSrc={userQuery.data?.image || ""} />
+
         <div className="flex flex-col gap-1">
           <span className="font-bold">{userQuery.data?.name || "anonim"}</span>
           <StarRating disabled={true} rate={review.rate} />

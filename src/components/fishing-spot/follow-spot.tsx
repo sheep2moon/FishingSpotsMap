@@ -28,20 +28,24 @@ const FollowSpot = ({ spotId }: FollowSpotProps) => {
         (followedSpot) => followedSpot.id === spotId
       ) ? (
         <Button
+          size="sm"
           variant="outline"
           disabled={!!unfollowMutation.isLoading}
           onClick={() => void unfollowFishingSpot()}
+          className="gap-1 text-xs"
         >
-          <IconStarFilled className="text-amber-300" />
+          <IconStarFilled className="h-5 w-5 text-amber-300" />
           Obserwujesz
         </Button>
       ) : (
         <Button
+          size="sm"
           variant="outline"
           disabled={!!followMutation.isLoading}
           onClick={() => void followFishingSpot()}
+          className="gap-1 text-xs"
         >
-          <IconStar />
+          <IconStar className="h-5 w-5" />
           Obserwuj
         </Button>
       )}
