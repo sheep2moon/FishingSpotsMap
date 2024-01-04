@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import React, { useEffect, useRef, useState } from "react";
 import { authOptions } from "../../../server/auth";
 import { useRouter } from "next/router";
-import { RouterOutputs, api } from "../../../lib/utils/api";
+import { type RouterOutputs, api } from "../../../lib/utils/api";
 import LoadingSpinner from "../../../components/ui/loading-view";
 import {
   IconAdjustmentsHorizontal,
@@ -37,7 +37,6 @@ import dynamic from "next/dynamic";
 import PricingSpotForm from "../../../components/fishing-spot-forms/pricing-spot-form";
 import { IconTag } from "@tabler/icons-react";
 import { FishTypeSelector } from "../../../components/fishing-spot-forms/fish-types-selector";
-import EditImagesForm from "../../../components/edit-spot/edit-images-form";
 import { ContactSpotForm } from "../../../components/fishing-spot-forms/contact-spot-form";
 import Link from "next/link";
 import { ImagesSpotForm } from "../../../components/fishing-spot-forms/images-spot-form";
@@ -100,6 +99,7 @@ const EditFishingSpot = () => {
   const router = useRouter();
   const { id } = router.query as { id: string };
   const spotQuery = api.fishery.getFishingSpot.useQuery({ id }, {});
+  const updateMutation = api.fishery.updateFishery.useMutation();
   const editableArea = useRef<HTMLDivElement>(null);
   const [selectedTab, setSelectedTab] = useState<EditableTab>(editableTabs[0]);
   const [watchForEdit, setWatchForEdit] = useState(false);
@@ -167,8 +167,10 @@ const EditFishingSpot = () => {
     resetFields();
   };
 
-  const handleSaveChanges = () => {
-    console.log("save changes TODO");
+  const handleSaveChanges = async () => {
+    // TODO update images
+    await updateMutation.mutateAsync({ id, ...spotFields });
+    void router.push(`/fishing-spot/${id}`);
   };
 
   const handleSelectTab = (tab: EditableTab) => {
@@ -189,7 +191,7 @@ const EditFishingSpot = () => {
         <ViewTitle>
           <Link
             className="font-semibold hover:underline"
-            href={`/fishing-spot/${spotQuery.data.id}`}
+            href={`/fishing-spot/${id}`}
           >
             {spotQuery.data.name}
           </Link>
@@ -211,7 +213,7 @@ const EditFishingSpot = () => {
             <ConfirmationModal
               title="Potwierdź"
               description="Dokonaj zmian w łowisku"
-              onConfirm={handleSaveChanges}
+              onConfirm={() => void handleSaveChanges()}
             >
               {(open) => (
                 <Button

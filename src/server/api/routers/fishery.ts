@@ -163,6 +163,46 @@ export const fisheryRouter = createTRPCRouter({
         data: imagesData,
       });
     }),
+  updateFishery: publicProcedure
+    .input(
+      fishingSpotSchema.extend({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      await ctx.prisma.fishingSpot.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          name: input.name,
+          province: input.province,
+          city: input.city,
+          area: input.area,
+          contact_email: input.contact_email,
+          contact_instagram: input.contact_instagram,
+          contact_page: input.contact_page,
+          contact_phone: input.contact_phone,
+          night_fishing: input.night_fishing,
+          tent: input.tent,
+          accommodation: input.accommodation,
+          spinning: input.spinning,
+          lat: input.lat,
+          lng: input.lng,
+          description: input.description,
+          fish_types: JSON.stringify(input.fish_types),
+          prices: JSON.stringify(input.prices),
+        },
+      });
+      // const imagesData: Partial<Image>[] = input.images.map((image) => ({
+      //   ...image,
+      //   fishingSpotId: input.id,
+      //   userId: ctx.session?.user.id || "",
+      // }));
+      // await ctx.prisma.image.createMany({
+      //   data: imagesData,
+      // });
+    }),
   addReview: protectedProcedure
     .input(
       z.object({
