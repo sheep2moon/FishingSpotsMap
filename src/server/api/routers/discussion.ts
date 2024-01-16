@@ -28,18 +28,33 @@ export const discussionRouter = createTRPCRouter({
       if (!discussion) throw new TRPCClientError("No discussion found");
       return discussion;
     }),
-  getDiscussions: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.prisma.discussion.findMany({
-      include: {
-        tags: { include: { tag: { select: { name: true } } } },
-        comments: { select: { _count: true } },
-        author: { select: { name: true, image: true } },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-  }),
+  getDiscussions: publicProcedure
+    .input(
+      z.object({
+        tag: z.string().optional(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      return await ctx.prisma.discussion.findMany({
+        where: {
+          tags: {
+            some: {
+              tag: {
+                name: input.tag,
+              },
+            },
+          },
+        },
+        include: {
+          tags: { include: { tag: { select: { name: true } } } },
+          comments: { select: { _count: true } },
+          author: { select: { name: true, image: true } },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    }),
   createDiscussion: protectedProcedure
     .input(
       z.object({
