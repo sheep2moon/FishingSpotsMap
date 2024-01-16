@@ -11,16 +11,14 @@ const FollowSpot = ({ spotId }: FollowSpotProps) => {
   const followedSpotsQuery = api.users.getFollowedSpots.useQuery();
   const followMutation = api.users.followFishingSpot.useMutation();
   const unfollowMutation = api.users.unfollowFishingSpot.useMutation();
-  const userQuery = api.users.getPrivateUser.useQuery();
 
   const followFishingSpot = async () => {
     await followMutation.mutateAsync({ spotId });
-    await userQuery.refetch();
-    console.log("ee");
+    await followedSpotsQuery.refetch();
   };
   const unfollowFishingSpot = async () => {
     await unfollowMutation.mutateAsync({ spotId });
-    await userQuery.refetch();
+    await followedSpotsQuery.refetch();
   };
   return (
     <>

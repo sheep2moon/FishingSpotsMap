@@ -52,6 +52,7 @@ const FishingSpot = () => {
             </AuthOnly>
             <ModeratorOnly>
               <InternalLink
+                size="sm"
                 variant="destructive"
                 href={`/fishing-spot/edit/${spotQuery.data.id}`}
                 className="gap-2"
