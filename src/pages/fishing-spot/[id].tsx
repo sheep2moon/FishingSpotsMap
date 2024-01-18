@@ -90,13 +90,14 @@ const FishingSpot = () => {
           <CardContent>
             <div className="flex max-w-lg items-center gap-2">
               <InternalLink
+                variant="secondary"
                 className="w-full"
                 href={`/fishing-spots-map?flyTo=${spotQuery.data.lat},${spotQuery.data.lng}`}
               >
                 <IconMapSearch />
                 <span>Zobacz na mapie</span>
               </InternalLink>
-              <Button className="w-full">
+              <Button variant="secondary" className="w-full">
                 <IconNavigation />
                 Nawiguj
               </Button>
@@ -110,7 +111,11 @@ const FishingSpot = () => {
               <CardTitle>Podstawowe informacje</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-dark mt-8 flex flex-col gap-1 px-4">
+              <div className="text-dark flex flex-col gap-1 px-4">
+                <div className="flex items-center justify-between gap-3 rounded-sm  py-1">
+                  <span className="text-center">Powierzchnia</span>
+                  <span className="font-bold">{spotQuery.data.area}</span>
+                </div>
                 <div className="flex items-center justify-between gap-3 rounded-sm  py-1">
                   <span className="text-center">Nocleg</span>
                   <span className="font-bold">
@@ -147,7 +152,7 @@ const FishingSpot = () => {
               <div className="text-dark flex flex-wrap gap-1">
                 {spotQuery.data.fish_types.map((fishType) => (
                   <div
-                    className="rounded-sm border  px-2 py-1 dark:bg-primary-800"
+                    className="rounded-sm border border-primary-400/50  px-2 py-1"
                     key={fishType}
                   >
                     {fishType}
@@ -173,7 +178,7 @@ const FishingSpot = () => {
             <CardContent className="max-w-lg">
               {spotQuery.data.prices.map((price, index) => (
                 <div
-                  className="m-1 grid grid-cols-2 rounded-sm border px-2 py-1 dark:border-primary/20 dark:bg-primary-dark/30"
+                  className="m-1 grid grid-cols-2 rounded-sm border border-primary-400/50 px-2 py-1 dark:border-primary/20 dark:bg-primary-dark/30"
                   key={`${price.title}-${index}`}
                 >
                   <span>{price.title}</span>
