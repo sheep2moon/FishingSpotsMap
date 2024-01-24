@@ -51,6 +51,7 @@ const SearchSpots = () => {
           <DialogDescription>
             Możesz również wyszukać łowisk na
             <InternalLink
+              onClick={() => setIsOpen(false)}
               className="px-2 text-info dark:text-info"
               variant="link"
               href="/fishing-spots-map"

@@ -59,11 +59,12 @@ model Account {
 }
 
 model Report {
-    id          String           @id @default(cuid())
-    target_type ReportTargetType
-    target_id   String?
-    content     String           @db.Text
-    user_id     String?
+    id            String           @id @default(cuid())
+    target_type   ReportTargetType
+    target_id     String?
+    content       String           @db.Text
+    user_id       String?
+    contact_email String?
 }
 
 model Achievement {
