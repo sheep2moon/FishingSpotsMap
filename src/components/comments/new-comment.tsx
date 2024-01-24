@@ -49,9 +49,16 @@ const NewComment = (props: NewCommentProps) => {
 
   if (!session.data?.user)
     return (
-      <div className="mt-8 flex w-full flex-col items-center justify-center gap-2 p-4 font-bold">
-        <span>Aby dodawać komentarze musisz być zalogowany.</span>
-        <LoginButton />
+      <div
+        ref={newCommentRef}
+        className={cn(
+          "fixed bottom-0 left-1/2 z-10 flex w-full max-w-screen-xl -translate-x-1/2 gap-2 rounded-t-md border border-b-0 border-primary/20 border-secondary-900 bg-primary p-1 transition-all dark:bg-secondary-950"
+        )}
+      >
+        <div className="flex w-full items-center justify-center gap-8 p-1 font-bold">
+          <span>Aby dodawać komentarze musisz być zalogowany.</span>
+          <LoginButton />
+        </div>
       </div>
     );
 
