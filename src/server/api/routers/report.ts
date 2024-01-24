@@ -8,6 +8,7 @@ export const reportRouter = createTRPCRouter({
       z.object({
         content: z.string(),
         targetId: z.string().optional(),
+        contactEmail: z.string().optional(),
         targetType: z.enum([
           ReportTargetType.GLOBAL,
           ReportTargetType.CATCH,
@@ -23,6 +24,7 @@ export const reportRouter = createTRPCRouter({
           content: input.content,
           target_id: input.targetId,
           target_type: input.targetType,
+          contact_email: input.contactEmail,
         },
       });
     }),
