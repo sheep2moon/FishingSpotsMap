@@ -27,6 +27,7 @@ import Footer from "../../components/footer/footer";
 import FollowSpot from "../../components/fishing-spot/follow-spot";
 import NotAuthOnly from "../../components/not-auth-only";
 import { useDebugLog } from "../../hooks/useDebugLog";
+import LoginButton from "../../components/ui/login-button";
 
 const FishingSpot = () => {
   const router = useRouter();
@@ -200,9 +201,7 @@ const FishingSpot = () => {
             </AuthOnly>
             <NotAuthOnly>
               <div className="flex w-full justify-center">
-                <InternalLink variant="outline" href="auth/signin">
-                  Zaloguj się aby móc dodać recenzje
-                </InternalLink>
+                <LoginButton text="Zaloguj się aby dodać opinie." />
               </div>
             </NotAuthOnly>
 

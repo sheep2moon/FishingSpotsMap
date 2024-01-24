@@ -8,9 +8,16 @@ import {
 } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import { IconBrandDiscordFilled } from "@tabler/icons-react";
+import { useRouter } from "next/router";
 
 const SignIn = () => {
   const session = useSession();
+  const router = useRouter();
+
+  const handleSignIn = (method: "discord" | "google") => {
+    console.log(router.asPath, router);
+    if (method === "discord") void signIn("discord");
+  };
 
   if (session.data?.user)
     return (
@@ -32,7 +39,7 @@ const SignIn = () => {
           <Button
             variant="secondary"
             className="bg-indigo-600 text-primary dark:bg-indigo-600"
-            onClick={() => void signIn("discord")}
+            onClick={() => handleSignIn("google")}
           >
             za pomocą Discord
             <IconBrandDiscordFilled />

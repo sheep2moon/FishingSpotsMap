@@ -39,6 +39,20 @@ const ImageCarousel = React.forwardRef<
         ref={ref}
         className="mx-auto flex aspect-video w-screen max-w-sm justify-center sm:max-w-2xl sm:p-2"
       >
+        <Button
+          onClick={handlePreviousImage}
+          className="absolute -left-12 top-1/2 z-50 mr-2 hidden h-10 w-10 -translate-y-1/2 rounded-full p-0 lg:flex"
+          variant="ghost"
+        >
+          <IconArrowLeft className="h-8 w-8" />
+        </Button>
+        <Button
+          onClick={handleNextImage}
+          className="absolute -right-12 top-1/2 z-30 ml-2 hidden h-10 w-10 -translate-y-1/2 rounded-full p-0 lg:flex"
+          variant="ghost"
+        >
+          <IconArrowRight className="h-8 w-8" />
+        </Button>
         <CarouselContent className="ml-0 h-full w-full">
           {Array.from({ length: images.length }, (_, index) => {
             const currentImage = images[index];
@@ -62,14 +76,8 @@ const ImageCarousel = React.forwardRef<
         {/* <CarouselPrevious /> */}
         {/* <CarouselNext /> */}
       </Carousel>
+
       <div className="mx-auto my-2 flex max-w-sm items-center justify-center gap-1 overflow-x-auto sm:max-w-2xl">
-        <Button
-          onClick={handlePreviousImage}
-          className="mr-2 h-10 w-10 rounded-full p-0"
-          variant="ghost"
-        >
-          <IconArrowLeft className="h-8 w-8" />
-        </Button>
         {Array.from({ length: images.length }, (_, index) => {
           const currentImage = images[index];
           if (!currentImage) return <></>;
@@ -80,7 +88,7 @@ const ImageCarousel = React.forwardRef<
               key={`img-preview-${index}`}
             >
               <Image
-                className="rounded-sm object-cover transition-transform hover:scale-[105%] "
+                className="rounded-sm object-cover"
                 alt=""
                 src={getSpotImageSrc(currentImage.id)}
                 fill
@@ -88,13 +96,6 @@ const ImageCarousel = React.forwardRef<
             </div>
           );
         })}
-        <Button
-          onClick={handleNextImage}
-          className="ml-2 h-10 w-10 rounded-full p-0"
-          variant="ghost"
-        >
-          <IconArrowRight className="h-8 w-8" />
-        </Button>
       </div>
     </div>
   );
