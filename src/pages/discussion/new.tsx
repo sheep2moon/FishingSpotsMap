@@ -29,6 +29,7 @@ import { type Attachment } from "@prisma/client";
 import { getAttachmentSrc } from "../../lib/utils/getImageSrc";
 import { uploadFile } from "../../server/uploadFile";
 import AttachmentPreview from "../../components/ui/attachment-preview";
+import { useRouter } from "next/router";
 
 const discussionSchema = z.object({
   title: z.string().min(20, "Tytuł powinien mieć minimum 20 znaków"),
@@ -51,6 +52,7 @@ const NewDiscussion = () => {
       tags: [],
       title: "",
     });
+  const router = useRouter();
   const [errorMessages, setErrorMessages] = useState<Array<string>>([]);
   const tagsQuery = api.tags.getTags.useQuery();
   const { mutateAsync: createPresignedAttachmentUrl } =
@@ -117,14 +119,16 @@ const NewDiscussion = () => {
         });
       }
     }
-    await createDiscussion({
+    const createdDiscussion = await createDiscussion({
       attachments: dbAttachments,
       content: newDiscussionData.content,
       tags: newDiscussionData.tags,
       title: newDiscussionData.title,
     });
     setIsSubmitting(false);
-    console.log(newDiscussionData);
+    void router.push(
+      `http://192.168.1.76:3000/discussion/${createdDiscussion.id}`
+    );
 
     console.log("submit");
   };

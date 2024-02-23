@@ -64,20 +64,22 @@ const DiscussionPage = () => {
                 <Tag tagName={tagR.tag.name} key={tagR.tagId} />
               ))}
             </div>
-            <div className="mt-8 flex flex-col gap-2">
-              <span className="flex items-center gap-2 font-bold">
-                <IconPaperclip />
-                Załączniki
-              </span>
-              {discussionQuery.data.attachments.map((attachment) => (
-                <AttachmentPreview
-                  key={attachment.id}
-                  url={attachment.url}
-                  type={attachment.type}
-                  name={attachment.name}
-                />
-              ))}
-            </div>
+            {discussionQuery.data.attachments.length > 0 && (
+              <div className="mt-8 flex flex-col gap-2">
+                <span className="flex items-center gap-2 font-bold">
+                  <IconPaperclip />
+                  Załączniki
+                </span>
+                {discussionQuery.data.attachments.map((attachment) => (
+                  <AttachmentPreview
+                    key={attachment.id}
+                    url={attachment.url}
+                    type={attachment.type}
+                    name={attachment.name}
+                  />
+                ))}
+              </div>
+            )}
             <Separator className="my-8" />
             <Comments targetId={id} targetType="DISCUSSION" />
           </CardContent>

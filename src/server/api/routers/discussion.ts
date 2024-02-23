@@ -74,7 +74,7 @@ export const discussionRouter = createTRPCRouter({
     .mutation(async ({ input, ctx }) => {
       console.log(input);
 
-      await ctx.prisma.discussion.create({
+      const discussion = await ctx.prisma.discussion.create({
         data: {
           authorId: ctx.session.user.id,
           title: input.title,
@@ -89,6 +89,7 @@ export const discussionRouter = createTRPCRouter({
           },
         },
       });
+      return discussion;
     }),
   getRecentDiscussions: publicProcedure
     .input(

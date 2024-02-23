@@ -7,7 +7,7 @@ generator client {
 }
 
 datasource db {
-    provider     = "mysql"
+    provider     = "postgresql"
     url          = env("DATABASE_URL")
     relationMode = "prisma"
 }
@@ -72,7 +72,7 @@ model Achievement {
     name                 String
     description          String
     points               Int
-    max_level            Int               @db.TinyInt
+    max_level            Int
     level_multiplication Int
     icon_url             String
     userAchievements     UserAchievement[]
@@ -83,7 +83,7 @@ model UserAchievement {
     achievementId String
     progress      Int
     earnedAt      DateTime?
-    current_level Int         @db.TinyInt
+    current_level Int
     locked        Boolean     @default(false)
     user          User        @relation(fields: [userId], references: [id])
     achievement   Achievement @relation(fields: [achievementId], references: [id])
@@ -106,10 +106,10 @@ model Comment {
     discussion   Discussion?  @relation(fields: [discussionId], references: [id])
     Catch        Catch?       @relation(fields: [catchId], references: [id])
     replyToId    String?
-    replyTo      Comment?     @relation("ReplyingTo", fields: [replyToId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    replyTo      Comment?     @relation("ReplyingTo", fields: [replyToId], references: [id], onDelete: Restrict, onUpdate: Restrict)
     replies      Comment[]    @relation("ReplyingTo")
     parentId     String? // Referencja do nadrzędnego komentarza
-    parent       Comment?     @relation("CommentToComment", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    parent       Comment?     @relation("CommentToComment", fields: [parentId], references: [id], onDelete: Restrict, onUpdate: Restrict)
     childrens    Comment[]    @relation("CommentToComment")
     reactions    Reaction[]
 
