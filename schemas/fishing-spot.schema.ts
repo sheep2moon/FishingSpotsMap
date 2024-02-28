@@ -15,7 +15,8 @@ export const fishingSpotSchema = z.object({
   contact_page: z
     .string()
     .url("Adres URL strony łowiska nieprawidłowy")
-    .nullish(),
+    .nullish()
+    .or(z.literal("")),
   contact_phone: z
     .number()
     .refine(
@@ -23,7 +24,11 @@ export const fishingSpotSchema = z.object({
       "Numer telefonu powinien mieć 9 cyfr"
     )
     .nullish(),
-  contact_email: z.string().email("Email kontaktowy nieprawidłowy").nullish(),
+  contact_email: z
+    .string()
+    .email("Email kontaktowy nieprawidłowy")
+    .nullish()
+    .or(z.literal("")),
   contact_instagram: z
     .string()
     .url("Adres URL Instagrama nieprawidłowy")

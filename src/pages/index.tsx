@@ -7,17 +7,8 @@ import RecentDiscussions from "../components/homepage/recent-discussions";
 
 const Home = () => {
   return (
-    <div className="flex min-h-screen w-full flex-col items-center justify-center pt-16 text-black dark:bg-primary-950">
-      {/* <Image
-        src="images/decorations/wave-pattern.svg"
-        alt=""
-        width={0}
-        height={0}
-        sizes="100vw"
-        style={{ width: "100%" }}
-        className="relative -top-12 h-20 rotate-180 object-cover object-top sm:-top-8 lg:h-32 xl:h-40"
-      /> */}
-      <div className="mb-12 w-screen max-w-screen-xl">
+    <div className="flex min-h-screen w-full flex-col items-center justify-center bg-primary pt-14 text-black dark:bg-primary-950">
+      <div className="mb-12 w-screen max-w-screen-xl rounded-b-md bg-white px-2 pb-4 shadow-md dark:bg-primary-dark dark:shadow-black">
         <HeroBanner />
         <RecentFisheries />
         <RecentDiscussions />

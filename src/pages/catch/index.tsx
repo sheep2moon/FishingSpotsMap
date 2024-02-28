@@ -14,12 +14,12 @@ const CatchPage = () => {
   const session = useSession();
   const { data, isLoading } = api.catch.getCatches.useQuery();
   return (
-    <div className="mx-auto mt-16 flex w-full max-w-screen-xl flex-col gap-6 p-2 pb-16 text-xl">
+    <div className="mx-auto flex min-h-screen w-full max-w-screen-xl flex-col gap-6 bg-white p-2 pb-16 pt-16 text-xl shadow-md dark:bg-transparent">
       <ViewHeader>
         <ViewTitle>Zdobycze</ViewTitle>
         <ViewSubtitle>
           {session.data?.user ? (
-            <InternalLink href="/catch/new-catch">
+            <InternalLink className="text-xl" href="/catch/new-catch">
               <IconPlus />
               Dodaj własną zdobycz
             </InternalLink>
@@ -36,6 +36,11 @@ const CatchPage = () => {
             <CatchPreview key={fishCatch.id} fishCatch={fishCatch} />
           ))}
       </div>
+      {data?.length === 0 && (
+        <div className="flex w-full justify-center py-8 text-xl">
+          <h3>Brak zdobyczy w bazie.</h3>
+        </div>
+      )}
     </div>
   );
 };

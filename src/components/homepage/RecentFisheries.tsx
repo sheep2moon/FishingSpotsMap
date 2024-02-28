@@ -24,9 +24,9 @@ const RecentFisheries = () => {
         </h2>
         <Link
           href="/fishing-spot/list"
-          className="flex items-center gap-1 dark:text-primary"
+          className="flex items-center gap-1 text-primary-700 underline dark:text-primary"
         >
-          Więcej <IconChevronsRight />
+          przeglądaj łowiska <IconChevronsRight />
         </Link>
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
