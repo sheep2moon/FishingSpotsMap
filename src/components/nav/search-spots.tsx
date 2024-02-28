@@ -45,7 +45,7 @@ const SearchSpots = () => {
           <IconSearch />
         </Button>
       </DialogTrigger>
-      <DialogContent className="inset-0 top-0 z-[1001] w-screen max-w-none translate-x-0 translate-y-0 sm:bottom-auto sm:left-1/2 sm:top-16 sm:max-w-lg sm:-translate-x-1/2">
+      <DialogContent className="inset-0 top-0 w-screen max-w-none translate-x-0 translate-y-0 sm:bottom-auto sm:left-1/2 sm:top-16 sm:max-w-lg sm:-translate-x-1/2">
         <DialogHeader>
           <DialogTitle>Wyszukaj łowiska po nazwie</DialogTitle>
           <DialogDescription>
@@ -101,8 +101,8 @@ const SearchResultsContainer = ({
     return <div className="mt-4 text-center">Wprowadź minimum 3 znaki</div>;
   if (isLoading || typeof searchResults === "undefined")
     return (
-      <div className="relative m-auto h-20 w-20">
-        <LoadingSpinner />
+      <div className="relative m-auto h-20 w-20 py-12">
+        <LoadingSpinner size="sm" />
       </div>
     );
   if (searchResults.length === 0)
