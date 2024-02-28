@@ -36,9 +36,27 @@ const CommentSection = (props: CommentSectionProps) => {
 
   return (
     <>
+      {}
       <div className="mt-4 flex flex-col gap-2" ref={commentsContainer}>
         <div className="flex flex-col gap-2">
-          {commentsQuery.data ? (
+          {commentsQuery.isLoading && (
+            <>
+              {loadingArray(props.count).map((_, index) => (
+                <div
+                  key={`skeleton-${index}`}
+                  className="mt-4 flex flex-col rounded-md bg-primary-dark/40 p-2"
+                >
+                  <div className="flex items-center gap-4">
+                    <Skeleton className="aspect-square w-12 rounded-full " />
+                    <Skeleton className="h-10 w-44" />
+                    <Skeleton className="ml-auto h-8 w-28" />
+                  </div>
+                  <Skeleton className="mt-2 h-40 w-full" />
+                </div>
+              ))}
+            </>
+          )}
+          {commentsQuery.data && commentsQuery.data.length > 0 ? (
             commentsQuery.data.map((comment) => (
               <div key={comment.id} className="flex flex-col gap-2">
                 <Comment
@@ -62,21 +80,9 @@ const CommentSection = (props: CommentSectionProps) => {
               </div>
             ))
           ) : (
-            <>
-              {loadingArray(props.count).map((_, index) => (
-                <div
-                  key={`skeleton-${index}`}
-                  className="mt-4 flex flex-col rounded-md bg-primary-dark/40 p-2"
-                >
-                  <div className="flex items-center gap-4">
-                    <Skeleton className="aspect-square w-12 rounded-full " />
-                    <Skeleton className="h-10 w-44" />
-                    <Skeleton className="ml-auto h-8 w-28" />
-                  </div>
-                  <Skeleton className="mt-2 h-40 w-full" />
-                </div>
-              ))}
-            </>
+            <div className="text-center font-bold">
+              Zostań pierwszym komentującym
+            </div>
           )}
         </div>
       </div>

@@ -23,6 +23,7 @@ import { ContactSpotForm } from "../components/fishing-spot-forms/contact-spot-f
 import { cn } from "../lib/utils/cn";
 import { uploadFile } from "../server/uploadFile";
 import ErrorMessages from "../components/ui/error-messages";
+import { useRouter } from "next/router";
 
 const SelectPositionMap = dynamic(
   () => import("../components/map/SelectPositionMap"),
@@ -135,12 +136,13 @@ const AddFishingSpot = () => {
 export default AddFishingSpot;
 
 const FormSubmit = () => {
-  const { mutate: addFishery } = api.fishery.addFishery.useMutation();
+  const { mutateAsync: addFishery } = api.fishery.addFishery.useMutation();
   const { mutateAsync: createPresignedUrl } =
     api.files.createPresignedImageUrl.useMutation();
   const [errorMessages, setErrorMessages] = useState<Array<string>>([]);
   const [parent] = useAutoAnimate();
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async () => {
     setIsLoading(true);
@@ -175,7 +177,9 @@ const FormSubmit = () => {
       }
     }
 
-    addFishery({ ...newSpotData, images: dbImages });
+    const newSpotId = await addFishery({ ...newSpotData, images: dbImages });
+    spotData.resetFields();
+    void router.push(`/fishing-spot/${newSpotId}`);
     setIsLoading(false);
   };
 

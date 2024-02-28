@@ -111,7 +111,7 @@ const ImagesSpotForm = forwardRef<
                         Zdjęcie główne
                       </span>
                     )}
-                    <div className=" absolute right-2 top-2 flex justify-center gap-2 ">
+                    <div className=" absolute right-2 top-2 flex justify-center gap-2 text-primary dark:text-primary-dark">
                       {index !== 0 && (
                         <ImageOptionButton
                           tooltip="Ustaw jako główne"

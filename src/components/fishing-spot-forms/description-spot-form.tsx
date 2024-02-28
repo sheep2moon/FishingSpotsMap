@@ -73,7 +73,7 @@ const DescriptionSpotForm = React.forwardRef<
               <Button variant="outline">Edytuj opis</Button>
             </DialogTrigger>
           )}
-          <DialogContent className="z-[1000] h-screen max-w-none">
+          <DialogContent className="h-screen max-w-none">
             <DialogHeader className="h-fit">
               <DialogTitle className="text-3xl">
                 <IconFilePencil size="2rem" />

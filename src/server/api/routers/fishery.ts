@@ -162,6 +162,7 @@ export const fisheryRouter = createTRPCRouter({
       await ctx.prisma.image.createMany({
         data: imagesData,
       });
+      return newSpot.id;
     }),
   updateFishery: publicProcedure
     .input(

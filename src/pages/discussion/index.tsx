@@ -13,13 +13,14 @@ import LoadingView from "../../components/ui/loading-view";
 import { Button } from "../../components/ui/button";
 import { cn } from "../../lib/utils/cn";
 import Tag from "../../components/ui/tag";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 const Discussion = () => {
   const [selectedTag, setSelectedTag] = useState<string | undefined>(undefined);
   const discussionsQuery = api.discussion.getDiscussions.useQuery({
     tag: selectedTag,
   });
-
+  const [discussionContainerRef] = useAutoAnimate();
   const tagsQuery = api.tags.getTags.useQuery();
 
   const handleToggleTag = (tagName: string) => {
@@ -66,7 +67,10 @@ const Discussion = () => {
           ))}
         </div>
       </div>
-      <div className="grid grid-cols-1 gap-1 md:grid-cols-2">
+      <div
+        ref={discussionContainerRef}
+        className="grid grid-cols-1 gap-1 md:grid-cols-2"
+      >
         {discussionsQuery.data.map((discussion) => (
           <DiscussionCard discussion={discussion} key={discussion.id} />
         ))}

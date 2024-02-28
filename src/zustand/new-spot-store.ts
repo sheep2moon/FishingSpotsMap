@@ -10,6 +10,7 @@ import type {
 
 type NewSpotState = Omit<FSpotData, "images"> & {
   setField: <K extends keyof FSpotData>(key: K, value: FSpotData[K]) => void;
+  resetFields: () => void;
   images: FSpotImageWithFile[];
 };
 
@@ -23,7 +24,6 @@ export const useNewSpotStore = create<NewSpotState>((set) => ({
   night_fishing: false,
   images: [],
   spinning: false,
-  contact: "",
   lat: 0,
   lng: 0,
   area: "",
@@ -34,4 +34,25 @@ export const useNewSpotStore = create<NewSpotState>((set) => ({
   contact_page: undefined,
   fish_types: [],
   setField: (key, value) => set((state) => ({ ...state, [key]: value })),
+  resetFields: () =>
+    set({
+      name: "",
+      prices: [],
+      city: "",
+      province: "",
+      accommodation: false,
+      tent: false,
+      night_fishing: false,
+      images: [],
+      spinning: false,
+      lat: 0,
+      lng: 0,
+      area: "",
+      description: "",
+      contact_email: undefined,
+      contact_phone: undefined,
+      contact_instagram: undefined,
+      contact_page: undefined,
+      fish_types: [],
+    }),
 }));

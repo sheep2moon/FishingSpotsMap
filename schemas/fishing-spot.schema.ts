@@ -27,7 +27,8 @@ export const fishingSpotSchema = z.object({
   contact_instagram: z
     .string()
     .url("Adres URL Instagrama nieprawidłowy")
-    .nullish(),
+    .nullish()
+    .or(z.literal("")),
   fish_types: z.array(z.enum(fishTypeNames)),
   prices: z.array(z.object({ title: z.string(), value: z.string() })),
   images: z.array(
@@ -40,7 +41,7 @@ export const fishingSpotSchema = z.object({
   description: z
     .string()
     .min(50, "Opis powinien zawierać minimum 50 znaków")
-    .max(5000, "Opis powinien zawierać maksymalnie 8000 znaków"),
+    .max(50000, "Opis powinien zawierać maksymalnie 50 000 znaków"),
 });
 
 export type FSpotData = z.infer<typeof fishingSpotSchema>;

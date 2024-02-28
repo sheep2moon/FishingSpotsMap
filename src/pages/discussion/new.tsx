@@ -126,9 +126,7 @@ const NewDiscussion = () => {
       title: newDiscussionData.title,
     });
     setIsSubmitting(false);
-    void router.push(
-      `http://192.168.1.76:3000/discussion/${createdDiscussion.id}`
-    );
+    void router.push(`/discussion/${createdDiscussion.id}`);
 
     console.log("submit");
   };
