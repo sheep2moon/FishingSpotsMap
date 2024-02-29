@@ -1,24 +1,44 @@
-import React, { forwardRef, useState } from "react";
+import React, { forwardRef, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { v4 as uuidv4 } from "uuid";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { IconCamera, IconPencilMinus, IconX } from "@tabler/icons-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
-import { Input } from "../ui/input";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../../ui/card";
+import {
+  IconCamera,
+  IconGripVertical,
+  IconPencilMinus,
+  IconX,
+} from "@tabler/icons-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "../../ui/dialog";
+import { swapIndices } from "remeda";
+import { useDrag } from "@use-gesture/react";
+import { Input } from "../../ui/input";
 import { DialogDescription } from "@radix-ui/react-dialog";
-import { Button } from "../ui/button";
-import { type FSpotImageWithFile } from "../../../schemas/fishing-spot.schema";
-import { cn } from "../../lib/utils/cn";
+import { Button } from "../../ui/button";
+import { type FSpotImageWithFile } from "../../../../schemas/fishing-spot.schema";
+import { cn } from "../../../lib/utils/cn";
 import { IconPhotoStar } from "@tabler/icons-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../ui/tooltip";
-import ImageInput from "../ui/image-input";
-import { getSpotImageSrc } from "../../lib/utils/getImageSrc";
+} from "../../ui/tooltip";
+import ImageInput from "../../ui/image-input";
+import { getSpotImageSrc } from "../../../lib/utils/getImageSrc";
+import { useDebugLog } from "../../../hooks/useDebugLog";
+import { IconArrowsMove } from "@tabler/icons-react";
 
 type NewSpotImagesFormProps = {
   images: FSpotImageWithFile[];
@@ -30,16 +50,20 @@ const ImagesSpotForm = forwardRef<
   React.HTMLAttributes<HTMLDivElement> & NewSpotImagesFormProps
 >(({ images, setImages, ...props }, ref) => {
   const [imageContainerRef] = useAutoAnimate();
-  // const { images, setField } = useNewSpotStore((state) => state);
-  const [selectedImage, setSelectedImage] = useState<FSpotImageWithFile>();
-
+  // const [selectedImage, setSelectedImage] = useState<FSpotImageWithFile>();
+  // const [activeItem, setActiveItem] = useState<FSpotImageWithFile>();
+  const [activeRows, setActiveRows] = useState<[number | null, number | null]>([
+    null,
+    null,
+  ]);
   const onFileAdd = (file: File) => {
     setImages([...images, { comment: "", source: "", file, id: uuidv4() }]);
-    // setField("images", [
-    //   ...images,
-    //   { comment: "", source: "", file, id: uuidv4() },
-    // ]);
   };
+
+  // const handleDragStart = () => {};
+
+  // triggered when dragging ends
+  // const handleDragEnd = () => {};
 
   const handleDeleteImage = (imageIndex: number) => {
     const newImages = [...images];
@@ -48,25 +72,42 @@ const ImagesSpotForm = forwardRef<
     // setField("images", newImages);
   };
 
-  const onImageDetailsSubmit = (image: FSpotImageWithFile) => {
+  const onImageDetailsChange = (
+    index: number,
+    targetType: "source" | "comment",
+    value: string
+  ) => {
     const newImages = [...images];
-    const changedImageIndex = newImages.findIndex((i) => i.id === image.id);
-    newImages.splice(changedImageIndex, 1, image);
-    setImages(newImages);
-    // setField("images", newImages);
-  };
+    const editedImage = newImages.at(index);
+    if (editedImage) {
+      if (targetType === "comment") editedImage.comment = value;
+      if (targetType === "source") editedImage.source = value;
+      newImages.splice(index, 1, editedImage);
+      console.log(newImages);
 
-  const setMainImage = (imageIndex: number) => {
-    const newImages = [...images];
-    if (!newImages[0]) return;
-    const temp = newImages[imageIndex];
-    if (temp) {
-      newImages[imageIndex] = newImages[0];
-      newImages[0] = temp;
-      setImages(newImages);
-      // setField("images", newImages);
+      // setImages(newImages);
     }
   };
+
+  const bind = useDrag(({ args: [imageIndex], active, movement: [x, y] }) => {
+    // console.log(imageIndex, active, x, y);
+    const currentRow = Math.max(
+      0,
+      Math.min(images.length - 1, Math.round((imageIndex * 144 + y) / 144))
+    );
+    console.log(imageIndex, currentRow);
+    setActiveRows([imageIndex, currentRow]);
+    if (currentRow !== imageIndex) {
+      const newImages = [...images];
+      // console.log(newImages);
+      const newnew = swapIndices(newImages, imageIndex, currentRow);
+      // console.log(newnew);
+      if (!active) {
+        setImages(newnew);
+        setActiveRows([null, null]);
+      }
+    }
+  });
 
   return (
     <Card ref={ref} {...props}>
@@ -76,11 +117,70 @@ const ImagesSpotForm = forwardRef<
           Zdjęcia
         </CardTitle>
       </CardHeader>
-      <CardContent
-        ref={imageContainerRef}
-        className="grid grid-cols-2 gap-1 sm:grid-cols-4"
-      >
-        {images.length !== 6 && (
+      <CardContent>
+        <div ref={imageContainerRef} className="grid grid-cols-1 gap-2">
+          {images.map((image, index) => (
+            <div
+              key={image.id}
+              className={cn(
+                "group flex h-36 w-full touch-none items-center rounded-md bg-primary-100 pr-2 shadow-md shadow-primary-dark/20",
+                activeRows[0] === index && "ring-2 ring-info-800",
+                activeRows[1] !== activeRows[0] &&
+                  activeRows[1] === index &&
+                  "bg-info-200/50"
+              )}
+            >
+              <div className="relative aspect-square h-full overflow-hidden rounded-md border-primary-300 bg-white dark:border-primary-dark lg:aspect-video">
+                <Image
+                  className={cn(
+                    "pointer-events-none touch-none object-contain"
+                  )}
+                  fill
+                  alt=""
+                  src={
+                    image.file
+                      ? URL.createObjectURL(image.file)
+                      : getSpotImageSrc(image.id)
+                  }
+                />
+              </div>
+              <Button
+                {...bind(index)}
+                variant="ghost"
+                className="px-1.5 text-primary-600/70 hover:text-primary-700"
+                size="sm"
+              >
+                <IconGripVertical className="" />
+              </Button>
+              <div className="flex w-full flex-col gap-2">
+                <Input
+                  value={image.comment || ""}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    onImageDetailsChange(index, "comment", e.target.value)
+                  }
+                  placeholder="Komentarz"
+                />
+                <Input
+                  value={image.source || ""}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    onImageDetailsChange(index, "source", e.target.value)
+                  }
+                  placeholder="Źródło"
+                />
+              </div>
+              <Button
+                variant="ghost"
+                className="ml-auto px-1 hover:bg-rose-500/50"
+                size="sm"
+                onClick={() => handleDeleteImage(index)}
+              >
+                <IconX className="p-2" size="2.8rem" />
+              </Button>
+            </div>
+          ))}
+          <ImageInput className="h-36" onFileAdd={onFileAdd} />
+        </div>
+        {/* {images.length !== 6 && (
           <ImageInput className="" onFileAdd={onFileAdd} />
         )}
         {Array(images.length === 6 ? 6 : 5)
@@ -137,16 +237,16 @@ const ImagesSpotForm = forwardRef<
                 )}
               </div>
             );
-          })}
+          })} */}
       </CardContent>
-      {!!selectedImage && (
+      {/* {!!selectedImage && (
         <ImageDetailsDialogContent
           close={() => setSelectedImage(undefined)}
           isOpen={!!selectedImage}
           image={selectedImage}
           onSubmit={onImageDetailsSubmit}
         />
-      )}
+      )} */}
     </Card>
   );
 });
@@ -206,7 +306,7 @@ const ImageDetailsDialogContent = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={() => close()}>
-      <DialogContent className="z-[1001] h-full max-h-screen w-full max-w-full sm:h-auto sm:max-w-lg">
+      <DialogContent className="h-full max-h-screen w-full max-w-full sm:h-auto sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>Szczegóły zdjęcia</DialogTitle>
           <DialogDescription className="text-left">

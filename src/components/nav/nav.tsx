@@ -114,7 +114,7 @@ const Nav = () => {
             </DialogTrigger>
             <DialogContent
               closeButton={false}
-              className="top-14 z-[1001] m-0 h-screen w-screen translate-y-0 p-2"
+              className="top-14 m-0 h-screen w-screen translate-y-0 p-2"
             >
               <div className="mx-auto mt-16 flex h-full flex-col gap-2">
                 {links.map((link) => (
@@ -122,6 +122,7 @@ const Nav = () => {
                     key={link.href}
                     href={link.href}
                     className="center flex items-center gap-2 rounded-md p-2 dark:text-primary/60 dark:hover:bg-primary/10 dark:hover:text-primary/80"
+                    onClick={() => setMobileOpen(false)}
                   >
                     <div className="text-white">{link.icon}</div>
                     <span className="text-3xl">{link.text}</span>

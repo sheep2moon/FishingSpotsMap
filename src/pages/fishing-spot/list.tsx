@@ -1,6 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
-import LoadingSpinner from "../../components/ui/loading-view";
-import { Button } from "~/components/ui/button";
+import React, { useEffect, useState } from "react";
 import SortingMenu from "../../components/sorting-menu";
 import SpotsGrid, {
   type FisherySortingOption,
@@ -29,15 +27,16 @@ const SpotList = () => {
   );
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
-  const deboncedSearchQuery = useDebounce<string>(searchQuery, 600);
+  const { debouncedValue: deboncedSearchQuery, setInstantValue } =
+    useDebounce<string>(searchQuery, 600);
 
-  // Initial search query value from url params getting debounced,
-  // Optional idea - edit useDebounce hook to return setInstantValue method.
+  // Query url value from redirecting
   useEffect(() => {
     const query = router.query.search as string;
     if (query && query !== searchQuery) {
-      setSearchQuery(query);
+      setInstantValue(query);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query]);
 
   useEffect(() => {

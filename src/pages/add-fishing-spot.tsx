@@ -18,7 +18,7 @@ import {
   fishingSpotSchema,
 } from "../../schemas/fishing-spot.schema";
 import { DescriptionSpotForm } from "../components/fishing-spot-forms/description-spot-form";
-import { ImagesSpotForm } from "../components/fishing-spot-forms/images-spot-form";
+import { ImagesSpotForm } from "../components/fishing-spot-forms/images-spot-form/images-spot-form";
 import { ContactSpotForm } from "../components/fishing-spot-forms/contact-spot-form";
 import { cn } from "../lib/utils/cn";
 import { uploadFile } from "../server/uploadFile";

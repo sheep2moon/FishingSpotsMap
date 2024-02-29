@@ -39,7 +39,7 @@ import { IconTag } from "@tabler/icons-react";
 import { FishTypeSelector } from "../../../components/fishing-spot-forms/fish-types-selector";
 import { ContactSpotForm } from "../../../components/fishing-spot-forms/contact-spot-form";
 import Link from "next/link";
-import { ImagesSpotForm } from "../../../components/fishing-spot-forms/images-spot-form";
+import { ImagesSpotForm } from "../../../components/fishing-spot-forms/images-spot-form/images-spot-form";
 import ConfirmationModal from "../../../components/confirmation-modal";
 
 const SelectPositionMap = dynamic(

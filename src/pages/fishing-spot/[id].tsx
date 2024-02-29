@@ -26,14 +26,12 @@ import AuthOnly from "../../components/auth-only";
 import Footer from "../../components/footer/footer";
 import FollowSpot from "../../components/fishing-spot/follow-spot";
 import NotAuthOnly from "../../components/not-auth-only";
-import { useDebugLog } from "../../hooks/useDebugLog";
 import LoginButton from "../../components/ui/login-button";
 
 const FishingSpot = () => {
   const router = useRouter();
   const { id } = router.query as { id: string };
   const spotQuery = api.fishery.getFishingSpot.useQuery({ id });
-  useDebugLog(spotQuery.data);
   if (!spotQuery.data || spotQuery.isLoading) return <div>skeleton</div>;
   return (
     <div className="flex flex-col gap-8">
