@@ -32,7 +32,7 @@ const ConfirmationModal = (props: ConfirmationModalProps) => {
   };
   return (
     <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
-      <DialogTrigger>{props.children(open)}</DialogTrigger>
+      <DialogTrigger asChild>{props.children(open)}</DialogTrigger>
       <DialogContent>
         <DialogHeader>{props.title}</DialogHeader>
         <DialogDescription>{props.description}</DialogDescription>

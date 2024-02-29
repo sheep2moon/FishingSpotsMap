@@ -104,7 +104,7 @@ const ImagesSpotForm = forwardRef<
             >
               <div className="relative aspect-square h-full select-none overflow-hidden rounded-md border-primary-300 bg-white dark:border-primary-dark dark:bg-primary-800 lg:aspect-video">
                 <Image
-                  className={cn(" touch-none object-contain")}
+                  className={cn("touch-none object-contain")}
                   fill
                   alt=""
                   src={

@@ -138,8 +138,8 @@ const EditFishingSpot = () => {
         contact_instagram: spotQuery.data.contact_instagram,
         images: spotQuery.data.images.map((image) => ({
           id: image.id,
-          comment: image.comment,
-          source: image.source,
+          comment: image.comment || "",
+          source: image.source || "",
           file: null,
         })),
       });
@@ -150,6 +150,26 @@ const EditFishingSpot = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { images, ...watchedFields } = spotFields;
     setIsEdited(false);
+
+    // Check for images change.
+    if (spotQuery.data && images.length !== spotQuery.data.images.length)
+      setIsEdited(true);
+    for (let i = 0; i < images.length; i++) {
+      const editableImage = images[i];
+      const originalImage = spotQuery.data?.images[i];
+      if (editableImage && originalImage) {
+        if (
+          editableImage.id !== originalImage.id ||
+          editableImage.comment !== (originalImage.comment || "") ||
+          editableImage.source !== (originalImage.source || "")
+        ) {
+          console.log(originalImage, editableImage);
+
+          setIsEdited(true);
+          break;
+        }
+      }
+    }
     Object.entries(watchedFields).map(([key, value]) => {
       if (
         value !==

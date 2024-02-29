@@ -12,6 +12,8 @@ const ImageInput = React.forwardRef<
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const inputFile = e.currentTarget.files?.[0];
+    console.log(inputFile);
+
     if (inputFile) onFileAdd(inputFile);
   };
 
