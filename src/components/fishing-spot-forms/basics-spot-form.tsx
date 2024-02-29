@@ -26,8 +26,8 @@ const BasicsSpotForm = React.forwardRef<
     <CardContent className="space-y-3">
       <InputWithLabel
         label="Nazwa"
-        name="name"
-        id="name"
+        name="fishery_title"
+        id="fishery_title"
         value={name}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setName(e.target.value)
@@ -35,8 +35,8 @@ const BasicsSpotForm = React.forwardRef<
       />
       <InputWithLabel
         label="Miasto"
-        name="city"
-        id="city"
+        name="c1ty"
+        id="c1ty"
         value={city}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setCity(e.target.value)
@@ -51,12 +51,6 @@ const BasicsSpotForm = React.forwardRef<
           setProvince(e.target.value)
         }
       />
-      {/* <InputWithLabel
-          label="Kontakt"
-          name="contact"
-          value={contact}
-          onChange={handleInputChange}
-        /> */}
     </CardContent>
   </Card>
 ));

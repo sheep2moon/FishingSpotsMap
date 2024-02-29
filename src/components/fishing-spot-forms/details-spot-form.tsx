@@ -94,8 +94,8 @@ const DetailsSpotForm = React.forwardRef<
           <InputWithLabel
             className="mt-8"
             label="Powierzchnia łowiska"
-            name="area"
-            id="area"
+            name="spot_a"
+            id="spot_a"
             value={area}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setArea(e.target.value)

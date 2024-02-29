@@ -55,7 +55,7 @@ const AddFishingSpot = () => {
   } = useNewSpotStore((store) => store);
 
   return (
-    <div className="mx-auto mt-16 flex w-full max-w-screen-xl flex-col gap-6 p-2 pb-16 text-xl">
+    <div className="mx-auto mt-16 flex w-full max-w-screen-xl flex-col gap-6 p-0 pb-16 text-xl sm:p-2">
       <ViewHeader>
         <ViewTitle>
           {/* <IconMapPinPlus size="3rem" /> */}
@@ -72,8 +72,8 @@ const AddFishingSpot = () => {
           setField("lat", position.lat);
           setField("lng", position.lng);
         }}
-        setCity={(province) => setField("province", province)}
-        setProvince={(city) => setField("city", city)}
+        setCity={(city) => setField("city", city)}
+        setProvince={(province) => setField("province", province)}
       />
       <div className="grid gap-4 lg:grid-cols-2">
         <BasicsSpotForm
