@@ -204,6 +204,29 @@ export const fisheryRouter = createTRPCRouter({
       //   data: imagesData,
       // });
     }),
+  deleteFishingSpot: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const fishingSpot = await ctx.prisma.fishingSpot.findFirst({
+        where: {
+          id: input.id,
+        },
+      });
+      if (fishingSpot?.acceptedBy === ctx.session.user.id) {
+        await ctx.prisma.fishingSpot.delete({
+          where: {
+            id: input.id,
+          },
+        });
+        return true;
+      } else {
+        return false;
+      }
+    }),
   addReview: protectedProcedure
     .input(
       z.object({

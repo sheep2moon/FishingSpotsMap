@@ -12,6 +12,7 @@ import {
   IconMessagePin,
   IconPhone,
   IconPhotoEdit,
+  IconTrash,
 } from "@tabler/icons-react";
 import clsx from "clsx";
 import { IconGps } from "@tabler/icons-react";
@@ -41,6 +42,7 @@ import { ContactSpotForm } from "../../../components/fishing-spot-forms/contact-
 import Link from "next/link";
 import { ImagesSpotForm } from "../../../components/fishing-spot-forms/images-spot-form/images-spot-form";
 import ConfirmationModal from "../../../components/confirmation-modal";
+import { useSession } from "next-auth/react";
 
 const SelectPositionMap = dynamic(
   () => import("../../../components/map/SelectPositionMap"),
@@ -99,7 +101,9 @@ const EditFishingSpot = () => {
   const router = useRouter();
   const { id } = router.query as { id: string };
   const spotQuery = api.fishery.getFishingSpot.useQuery({ id }, {});
+  const session = useSession();
   const updateMutation = api.fishery.updateFishery.useMutation();
+  const deleteMutation = api.fishery.deleteFishingSpot.useMutation();
   const editableArea = useRef<HTMLDivElement>(null);
   const [selectedTab, setSelectedTab] = useState<EditableTab>(editableTabs[0]);
   const [watchForEdit, setWatchForEdit] = useState(false);
@@ -185,6 +189,11 @@ const EditFishingSpot = () => {
   const handleCancelEdit = () => {
     setIsEdited(false);
     resetFields();
+  };
+
+  const handleDeleteFishingSpot = async () => {
+    const success = await deleteMutation.mutateAsync({ id });
+    if (success) void router.push("/");
   };
 
   const handleSaveChanges = async () => {
@@ -275,6 +284,26 @@ const EditFishingSpot = () => {
                 {editableTab.name}
               </Button>
             ))}
+            {spotQuery.data.acceptedBy === session.data?.user.id && (
+              <div>
+                <ConfirmationModal
+                  title="Chcesz usunąć to łowisko?"
+                  description="Tej akcji nie można cofnąć!"
+                  onConfirm={() => void handleDeleteFishingSpot()}
+                >
+                  {(open) => (
+                    <Button
+                      variant="destructive"
+                      className="mt-6"
+                      onClick={open}
+                    >
+                      <IconTrash />
+                      Usuń łowisko
+                    </Button>
+                  )}
+                </ConfirmationModal>
+              </div>
+            )}
           </CardContent>
         </Card>
         <div ref={editableArea} className="min-h-full w-full">
