@@ -24,10 +24,10 @@ const Tabs = <T extends string>({
       {tabList.map((tab) => (
         <Button
           onClick={() => onTabSelect(tab.key)}
-          variant="secondary"
+          variant="outline"
           className={cn(
             "",
-            selectedTab === tab.key && "text-accent dark:text-accent"
+            selectedTab === tab.key && "border-accent dark:text-accent"
           )}
           key={tab.key}
         >
