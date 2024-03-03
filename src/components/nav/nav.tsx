@@ -35,7 +35,7 @@ import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import SignInDialog from "../signin-dialog";
 import LoginButton from "../ui/login-button";
 
-const links: { text: string; href: string; icon: React.ReactNode }[] = [
+export const links: { text: string; href: string; icon: React.ReactNode }[] = [
   // {
   //   text: "Strona Główna",
   //   href: "/",
