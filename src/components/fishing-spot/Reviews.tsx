@@ -17,7 +17,9 @@ const Reviews = ({ reviews }: ReviewsProps) => {
     <div className="mt-4 flex flex-col gap-2">
       <Separator />
       {reviews.length === 0 && (
-        <div className="p-2">To miejsca nie ma jeszcze żadnych opini.</div>
+        <div className="w-full p-2 text-center">
+          To miejsca nie ma jeszcze żadnych opini.
+        </div>
       )}
       {reviews.map((review) => (
         <Review key={review.id} review={review} />

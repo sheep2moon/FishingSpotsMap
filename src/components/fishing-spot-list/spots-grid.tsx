@@ -19,7 +19,7 @@ const SpotsGrid = (props: SpotsGridProps) => {
   const parent = useRef(null);
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage } =
     api.fishery.getFilteredFishingSpots.useInfiniteQuery(
-      { limit: 16, orderBy: props.orderBy.key, query: props.searchQuery },
+      { limit: 24, orderBy: props.orderBy.key, query: props.searchQuery },
       { getNextPageParam: (lastPage) => lastPage.nextCursor }
     );
 

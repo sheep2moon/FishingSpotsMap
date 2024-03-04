@@ -14,6 +14,7 @@ import { Button } from "../../components/ui/button";
 import { cn } from "../../lib/utils/cn";
 import Tag from "../../components/ui/tag";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { Separator } from "../../components/ui/separator";
 
 const Discussion = () => {
   const [selectedTag, setSelectedTag] = useState<string | undefined>(undefined);
@@ -39,7 +40,7 @@ const Discussion = () => {
   )
     return <LoadingView />;
   return (
-    <div className="mx-auto mt-16 flex w-full max-w-screen-xl flex-col gap-6 p-2 pb-16 text-xl">
+    <div className="mx-auto flex w-full max-w-screen-xl flex-col gap-6 p-2 pb-16 pt-16 text-xl">
       <ViewHeader>
         <ViewTitle>Dyskusje</ViewTitle>
         <ViewSubtitle>
@@ -57,7 +58,8 @@ const Discussion = () => {
               onClick={() => handleToggleTag(tag.name)}
               className={cn(
                 "",
-                selectedTag === tag.name && "dark:border-secondary"
+                selectedTag === tag.name &&
+                  "bg-secondary-300 dark:border-secondary"
               )}
               key={tag.id}
               variant="outline"
@@ -67,6 +69,7 @@ const Discussion = () => {
           ))}
         </div>
       </div>
+      <Separator></Separator>
       <div
         ref={discussionContainerRef}
         className="grid grid-cols-1 gap-1 md:grid-cols-2"
@@ -74,6 +77,9 @@ const Discussion = () => {
         {discussionsQuery.data.map((discussion) => (
           <DiscussionCard discussion={discussion} key={discussion.id} />
         ))}
+        {discussionsQuery.data.length === 0 && (
+          <div className="ml-4">Nie znaleziono.</div>
+        )}
       </div>
     </div>
   );

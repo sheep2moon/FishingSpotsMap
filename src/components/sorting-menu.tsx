@@ -31,14 +31,15 @@ const SortingMenu = <T extends SortingOption>(props: SortingMenuProps<T>) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuGroup>
+        <DropdownMenuGroup className="space-y-1">
           {props.options.map((option) => (
             <DropdownMenuItem
               onClick={() => props.setActiveOption(option)}
               key={option.key}
               className={cn(
                 "whitespace-nowrap",
-                props.activeOption.key === option.key && "bg-primary-800"
+                props.activeOption.key === option.key &&
+                  "bg-primary-200 dark:bg-primary-800"
               )}
             >
               {option.name}

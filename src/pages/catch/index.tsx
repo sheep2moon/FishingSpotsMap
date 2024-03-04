@@ -12,9 +12,9 @@ import { IconPlus } from "@tabler/icons-react";
 
 const CatchPage = () => {
   const session = useSession();
-  const { data, isLoading } = api.catch.getCatches.useQuery();
+  const { data } = api.catch.getCatches.useQuery();
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-screen-xl flex-col gap-6 bg-white p-2 pb-16 pt-16 text-xl shadow-md dark:bg-transparent">
+    <div className="mx-auto flex w-full max-w-screen-xl flex-col gap-6 p-2 pb-16 pt-16 text-xl">
       <ViewHeader>
         <ViewTitle>Zdobycze</ViewTitle>
         <ViewSubtitle>
