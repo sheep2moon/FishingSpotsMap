@@ -49,9 +49,11 @@ export const fisheryRouter = createTRPCRouter({
       })
     )
     .query(async ({ input, ctx }) => {
+      console.log(input.searchQuery);
+
       const res = await ctx.prisma.fishingSpot.findMany({
         where: {
-          name: { contains: input.searchQuery },
+          name: { contains: input.searchQuery, mode: "insensitive" },
         },
         take: 8,
       });
@@ -80,6 +82,7 @@ export const fisheryRouter = createTRPCRouter({
         where: {
           name: {
             contains: input.query,
+            mode: "insensitive",
           },
         },
       });

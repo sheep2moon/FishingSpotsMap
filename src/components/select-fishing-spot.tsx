@@ -23,17 +23,21 @@ const SelectFishingSpot = ({ onSpotSelect }: SelectFishingSpotProps) => {
   >(undefined);
   const [searchQuery, setSearchQuery] = useState("");
   const [open, setOpen] = useState(false);
-  const deboncedSearchQuery = useDebounce<string>(searchQuery, 600);
+  const debouncedQuery = useDebounce<string>(searchQuery, 600);
+
   const { data: searchResults, refetch } =
     api.fishery.searchFishingSpots.useQuery(
       {
-        searchQuery: deboncedSearchQuery,
+        searchQuery: debouncedQuery,
       },
       { enabled: false }
     );
+
   useEffect(() => {
-    if (deboncedSearchQuery.length >= 3) void refetch();
-  }, [deboncedSearchQuery, refetch]);
+    console.log(debouncedQuery);
+
+    if (debouncedQuery.length >= 3) void refetch();
+  }, [debouncedQuery]);
 
   const handleSelectValue = (fishingSpot: FishingSpot) => {
     setSelectedFishingSpot(fishingSpot);

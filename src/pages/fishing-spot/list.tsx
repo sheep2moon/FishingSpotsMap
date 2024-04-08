@@ -27,14 +27,13 @@ const SpotList = () => {
   );
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter();
-  const { debouncedValue: deboncedSearchQuery, setInstantValue } =
-    useDebounce<string>(searchQuery, 600);
+  const debouncedSearchQuery = useDebounce<string>(searchQuery, 600);
 
   // Query url value from redirecting
   useEffect(() => {
     const query = router.query.search as string;
     if (query && query !== searchQuery) {
-      setInstantValue(query);
+      setSearchQuery(query);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.query]);
@@ -45,6 +44,8 @@ const SpotList = () => {
 
   const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const search = e.target.value;
+    console.log(search);
+
     setSearchQuery(search);
     void router.push(
       {
@@ -73,7 +74,7 @@ const SpotList = () => {
           setActiveOption={setOrderBy}
         />
       </div>
-      <SpotsGrid searchQuery={deboncedSearchQuery} orderBy={orderBy} />
+      <SpotsGrid searchQuery={debouncedSearchQuery} orderBy={orderBy} />
     </div>
   );
 };
