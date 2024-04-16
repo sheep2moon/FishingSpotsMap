@@ -9,7 +9,7 @@
     @apply border-primary-950;
   }
   body {
-    @apply bg-gradient-to-t bg-primary-100 dark:from-primary-dark dark:to-primary-950 text-primary-dark dark:text-primary;
+    @apply  dark:bg-gradient-primary-dark bg-gradient-primary-light text-primary-dark dark:text-primary;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
@@ -28,7 +28,7 @@
   
 
 * {
-    @apply font-lato m-0 box-border p-0    
+    @apply  font-lato m-0 box-border p-0    
   }
   .leaflet-div-icon {
     @apply border-none bg-transparent

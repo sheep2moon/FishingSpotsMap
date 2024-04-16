@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { fileSchema } from "schemas/file.schema";
-import { z } from "zod";
+import { type z } from "zod";
 import { Button } from "~/components/ui/button";
 import { ViewHeader, ViewTitle } from "~/components/ui/view-header";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,7 +21,7 @@ import { catchSchema } from "../../../schemas/catch.schema";
 import { v4 as uuidv4 } from "uuid";
 import { api } from "../../lib/utils/api";
 import { uploadFile } from "../../server/uploadFile";
-import LoadingSpinner from "../../components/ui/loading-view";
+import { useRouter } from "next/router";
 
 type FormData = z.infer<typeof catchSchema>;
 
@@ -43,6 +42,7 @@ const NewCatch = () => {
   const { mutateAsync: createPresignedUrl } =
     api.files.createPresignedImageUrl.useMutation();
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const onSubmit = handleSubmit(async (data: FormData) => {
     setIsLoading(true);
@@ -60,7 +60,7 @@ const NewCatch = () => {
       }
     }
 
-    await createNewCatch({
+    const catchId = await createNewCatch({
       fishingSpotId: data.fishingSpotId,
       fishType: data.fishType,
       length: data.length,
@@ -70,6 +70,7 @@ const NewCatch = () => {
       images: imagesId,
     });
     setIsLoading(false);
+    void router.push(`/catch/${catchId}`);
   });
 
   const handleAddImage = (file: File) => {
@@ -90,12 +91,12 @@ const NewCatch = () => {
   }, [errors]);
 
   return (
-    <div className="mt-16 w-full max-w-screen-xl">
+    <div className="mt-16 w-full max-w-screen-xl rounded-md bg-primary-50  shadow-sm shadow-primary-500 dark:bg-primary-dark dark:shadow-primary-950">
       <div className="mx-auto max-w-4xl p-2">
         <ViewHeader>
           <ViewTitle>Dodaj zdobycz</ViewTitle>
         </ViewHeader>
-        <div>
+        <div className="p-4 ">
           <form onSubmit={onSubmit} className="flex flex-col gap-4">
             <div>
               <Label>Dodaj do 3 zdjęć</Label>

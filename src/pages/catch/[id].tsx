@@ -28,7 +28,7 @@ const CatchPage = () => {
   const { data, isLoading } = api.catch.getCatch.useQuery({ id });
   if (!data || isLoading) return <LoadingSpinner />;
   return (
-    <div className="mt-16 flex w-screen max-w-screen-xl flex-col gap-4 p-4 pb-24">
+    <div className="mt-16 flex w-screen max-w-screen-xl flex-col gap-4 p-4 pb-24 ">
       <InternalLink variant="link" href="/catch" className="self-start">
         <IconArrowLeft />
         Powrót do wszystkich połowów
@@ -64,8 +64,8 @@ const CatchPage = () => {
             />
           </div>
           <div className="my-2 mt-4 grid grid-cols-1 gap-1 text-lg lg:grid-cols-3">
-            <div className="flex flex-col items-center gap-2 rounded-sm bg-primary-950/50 px-4 pb-2 pt-1">
-              <div className="flex w-full items-center justify-center gap-2 border-b border-primary/0 font-thin text-primary/80">
+            <div className="flex flex-col items-center gap-2 rounded-sm px-4 pb-2 pt-1 dark:bg-primary-950/50">
+              <div className="flex w-full items-center justify-center gap-2 border-b border-primary/0 font-thin text-primary-dark dark:text-primary/80">
                 <IconFish />
                 <span>Ryba</span>
               </div>

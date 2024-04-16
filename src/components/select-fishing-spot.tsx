@@ -34,9 +34,8 @@ const SelectFishingSpot = ({ onSpotSelect }: SelectFishingSpotProps) => {
     );
 
   useEffect(() => {
-    console.log(debouncedQuery);
-
     if (debouncedQuery.length >= 3) void refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedQuery]);
 
   const handleSelectValue = (fishingSpot: FishingSpot) => {

@@ -48,6 +48,12 @@ export default {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      backgroundImage: {
+        "gradient-primary-light":
+          "linear-gradient(to top, rgb(204, 251, 241), rgb(224, 231, 255), rgb(224, 242, 254))",
+        "gradient-primary-dark":
+          "linear-gradient(to top, rgb(9,9,11), rgb(24,24,27), rgb(8, 47, 73))",
+      },
     },
   },
   plugins: [require("tailwind-scrollbar")],

@@ -60,5 +60,6 @@ export const catchRouter = createTRPCRouter({
         userId: ctx.session?.user.id || "",
       }));
       await ctx.prisma.image.createMany({ data: imagesData });
+      return newCatch.id;
     }),
 });
